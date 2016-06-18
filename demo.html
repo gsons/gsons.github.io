@@ -12,32 +12,26 @@
 </head>
 <body>
 
-<table cellspacing="0" class="storeArea" id="orderList">
-    <th colspan="7">订单列表</th>
-</table>
+<div id="divCustomers"></div>
+
 <script>
 $(document).ready(
 
 function(){
 
-   $.ajax({
+  
+$.getJSON("http://119.29.209.158/json/test.php?jsoncallback=?", function(data) {
+	
+	var html = '<ul>';
+	for(var i = 0; i < data.length; i++)
+	{
+		html += '<li>' + data[i] + '</li>';
+	}
+	html += '</ul>';
+	
+	$('#divCustomers').html(html); 
+});
 
-        url : "http://119.29.209.158/json/",
-        type : "post",
-        data : {},
-        dataType : "json",
-        async:false,
-        success : function(res) {
-           console.log(res);
-            $("body").html("<img src='" +
-            res.src +
-            "'>");
-
-        },
-        error:function(){
-            alert("哦no,网络连接失败了");
-        }
-    });
 
 }
 );
