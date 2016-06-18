@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+      <script src="js/jquery-1.12.3.min.js"></script>
+    <link href="css/css.css" rel="stylesheet" type="text/css"/>
+    <link href="css/style.css" rel="stylesheet" type="text/css"/>
+    <style type="text/css">
+
+    </style>
+    <title></title>
+</head>
+<body>
+
+<table cellspacing="0" class="storeArea" id="orderList">
+    <th colspan="7">订单列表</th>
+</table>
+<script>
+$(document).ready(
+
+function(){
+
+   $.ajax({
+
+        url : "http://119.29.209.158/json/",
+        type : "get",
+        data : {},
+        dataType : "json",
+        async:false,
+        success : function(res) {
+           console.log(res);
+            $("body").html("<img src='" +
+            res.src +
+            "'>");
+
+        },
+        error:function(){
+            alert("哦no,网络连接失败了");
+        }
+    });
+
+}
+);
+ 
+
+</script>
+</body>
+</html>
