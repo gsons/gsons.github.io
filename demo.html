@@ -12,23 +12,21 @@
 </head>
 <body>
 
+<body>
 <div id="divCustomers"></div>
-
 <script>
-$(document).ready(
-
-function(){
-
-  
 $.getJSON("http://119.29.209.158/json/test.php?jsoncallback=?", function(data) {
-	  console.log(data);
+	
+	var html = '<ul>';
+	for(var i = 0; i < data.length; i++)
+	{
+		html += '<li>' + data[i] + '</li>';
+	}
+	html += '</ul>';
+	
+	$('#divCustomers').html(html); 
 });
-
-
-}
-);
- 
-
 </script>
+</body>
 </body>
 </html>
