@@ -16,7 +16,7 @@
 <div id="divCustomers"></div>
 <script>
 $.getJSON("http://119.29.209.158/json/test.php?jsoncallback=?", function(data) {
-	
+	console.log(data);
 	var html = '<ul>';
 	for(var i = 0; i < data.length; i++)
 	{
