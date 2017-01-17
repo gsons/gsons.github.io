@@ -29,8 +29,8 @@ html,body{
 	margin:auto;
 	}
 #music .play{
-	animation: music 2s linear  infinite;
-   -webkit-animation: music 2s linear  infinite;
+-webkit-animation:music 2s linear  infinite;
+animation:music 2s linear  infinite ;
 }
 #music >img:last-of-type{
 	position:absolute;
