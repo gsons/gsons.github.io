@@ -5,11 +5,31 @@ window.onload=function(){
 	var page3=document.getElementById("page3");
 	var music=document.getElementById("audio");
 	var audio=document.getElementsByTagName("audio")[0];
-	
+		 var images = new Array()
+	// 初始化
+	preload(
+                "./image/music_disc.png",
+                "./image/music_pointer.png",
+                "./image/p1_bg.jpg",
+                "./image/p1_imooc.png",
+                "./image/p1_lantern.png",
+                "./image/p2_2016.png",
+                "./image/p2_bg.jpg",
+                "./image/p2_circle_inner.png",
+                "./image/p2_circle_middle.png",
+                "./image/p2_circle_outer.png",
+                "./image/p3_bg.jpg",
+                "./image/p3_blessing.png",
+                "./image/p3_couplet_first.png",
+                "./image/p3_couplet_second.png",
+                "./image/p3_logo.png",
+                "./image/p3_title.png"
+            );
 	loding.style.display="none";
 	page1.style.display="block";
 	music.setAttribute("class","play");
 		audio.play();
+
 	page1.addEventListener("touchstart",function(){
 		page1.style.display="none";
 		page2.style.display="block";
@@ -32,4 +52,12 @@ window.onload=function(){
 			this.setAttribute("class","");
 		}
 	},false);
+
+            function preload() {
+                for (i = 0; i < preload.arguments.length; i++) {
+                    images[i] = new Image()
+                    images[i].src = preload.arguments[i]
+                }
+            }
+            
 }
