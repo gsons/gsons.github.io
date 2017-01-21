@@ -145,27 +145,53 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-hello" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-php递归" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="https:/gsons.github.io/2017/01/21/hello/">&#39;hello&#39;</a>
-    </h1>
-  
-
-        
-        <a href="https:/gsons.github.io/2017/01/21/hello/" class="archive-article-date">
-  	<time datetime="2017-01-21T04:03:50.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-01-21</time>
-</a>
-        
-      </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <h3 id="什么叫递归？"><a href="#什么叫递归？" class="headerlink" title="什么叫递归？"></a>什么叫递归？</h3><p> 举一个通俗的例子：</p>
+<blockquote>
+<p>有一个8俩重的苹果要你切成重量相等的若干份，每一份的重量不能大于1俩。</p>
+</blockquote>
+<p>你肯定会想到这样做：</p>
+<blockquote>
+<ol>
+<li>第一刀先把一个苹果切成重量均等的2份A1和A2；</li>
+<li>再把其中的一份A1切成重量均等的两份A11和A12， 把A2切成均等的两份A21和A22；</li>
+<li>把A11切成均等的两份……</li>
+<li>直到每一小份都小于等于1俩为止。</li>
+</ol>
+</blockquote>
+<p>以上的例子就是递归一个模型，把一个大的事物化成若干个小的事物，每一次使用的方法都相同。</p>
+<p>程序自身调用自身的编程技巧称为递归（ recursion）。递归有直接递归和间接递归<br>直接递归：函数在执行过程中调用本身。<br>间接递归：函数在执行过程中调用其它函数再经过这些函数调用本身。<br>递归有四个特性：</p>
+<blockquote>
+<ol>
+<li>必须有可最终达到的终止条件，否则程序将陷入无穷循环；</li>
+<li>子问题在规模上比原问题小，或更接近终止条件；</li>
+<li>子问题可通过再次递归调用求解或因满足终止条件而直接求解；</li>
+<li>子问题的解应能组合为整个问题的解。</li>
+</ol>
+</blockquote>
+<p>上面的例子中也满足以上的四点性质：</p>
+<blockquote>
+<ol>
+<li>终止条件是每一份的重量不能大于1俩；</li>
+<li>每一次切的大小都比上一次小；</li>
+<li>每一次切的方式都相同，所以子问题可递归调用；</li>
+<li>最终切成的每一小份也就是要求的解。</li>
+</ol>
+</blockquote>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"> <span class="meta">&lt;?php</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">cutApple</span><span class="params">($w,$t)</span></span>&#123;</div><div class="line">	<span class="keyword">if</span>($w&lt;<span class="number">1</span>)&#123;</div><div class="line">		<span class="keyword">echo</span> <span class="string">"已经切完了"</span>;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">else</span>&#123;</div><div class="line">		<span class="keyword">echo</span> <span class="string">"第"</span>.$t.<span class="string">"次切割,每份重量是:"</span>.($w/<span class="number">2</span>).<span class="string">"&lt;br&gt;"</span>;</div><div class="line">		$t+=<span class="number">1</span>;</div><div class="line">		cutApple($w/<span class="number">2</span>,$t);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>结果:</p>
+<blockquote>
+<p>第1次切割,每份重量是:7.5<br>第2次切割,每份重量是:3.75<br>第3次切割,每份重量是:1.875<br>第4次切割,每份重量是:0.9375<br>已经切完了</p>
+</blockquote>
+<p>####再举一个通俗的例子：</p>
+<blockquote>
+<p>试求等差数列的和:1+2+3+4+…+98+100;<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * 等差数列求和</div><div class="line"> * <span class="doctag">@param</span> [int] $n [第一个数]</div><div class="line"> * <span class="doctag">@param</span> [int] $m [第二个数]</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">add</span><span class="params">($n,$m)</span></span>&#123;</div><div class="line">	<span class="keyword">if</span>(!is_int($n)||!is_int($m)) </div><div class="line">		<span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">	<span class="keyword">static</span> $sum=<span class="number">0</span>;</div><div class="line">	$sum+=$n;</div><div class="line">	$n++;</div><div class="line">	<span class="keyword">if</span>($n&gt;$m) <span class="keyword">return</span> $sum;</div><div class="line">	<span class="keyword">return</span> add($n,$m);</div><div class="line">&#125;</div><div class="line"><span class="keyword">echo</span> add(<span class="number">1</span>,<span class="number">100</span>);</div></pre></td></tr></table></figure></p>
+</blockquote>
+
       
 
       
@@ -177,7 +203,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="https:/gsons.github.io/2017/01/21/hello/">展开全文 >></a>
+          <a class="article-more-a" href="https:/gsons.github.io/2017/01/21/php递归/">展开全文 >></a>
         </p>
       
 
