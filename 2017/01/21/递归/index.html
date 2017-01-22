@@ -40,7 +40,7 @@
 
 
 以上的例子就是递归一个模型，把一个大的事物化成若干个小的">
-<meta property="og:updated_time" content="2017-01-21T09:50:54.591Z">
+<meta property="og:updated_time" content="2017-01-22T03:25:14.955Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="递归">
 <meta name="twitter:description" content="什么叫递归？ 举一个通俗的例子：
@@ -243,10 +243,10 @@
 <blockquote>
 <p>第1次切割,每份重量是:7.5<br>第2次切割,每份重量是:3.75<br>第3次切割,每份重量是:1.875<br>第4次切割,每份重量是:0.9375<br>已经切完了</p>
 </blockquote>
-<p>####再举一个通俗的例子：</p>
-<blockquote>
-<p>试求等差数列的和:1+2+3+4+…+98+100;<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * 等差数列求和</div><div class="line"> * <span class="doctag">@param</span> [int] $n [第一个数]</div><div class="line"> * <span class="doctag">@param</span> [int] $m [第二个数]</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">add</span><span class="params">($n,$m)</span></span>&#123;</div><div class="line">	<span class="keyword">if</span>(!is_int($n)||!is_int($m)) </div><div class="line">		<span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">	<span class="keyword">static</span> $sum=<span class="number">0</span>;</div><div class="line">	$sum+=$n;</div><div class="line">	$n++;</div><div class="line">	<span class="keyword">if</span>($n&gt;$m) <span class="keyword">return</span> $sum;</div><div class="line">	<span class="keyword">return</span> add($n,$m);</div><div class="line">&#125;</div><div class="line"><span class="keyword">echo</span> add(<span class="number">1</span>,<span class="number">100</span>);</div></pre></td></tr></table></figure></p>
+<h4 id="再举一个通俗的例子："><a href="#再举一个通俗的例子：" class="headerlink" title="再举一个通俗的例子："></a>再举一个通俗的例子：</h4><blockquote>
+<p>试求等差数列的和:1+2+3+4+…+98+100;</p>
 </blockquote>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * 等差数列求和</div><div class="line"> * <span class="doctag">@param</span> [int] $n [第一个数]</div><div class="line"> * <span class="doctag">@param</span> [int] $m [第二个数]</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">add</span><span class="params">($n,$m)</span></span>&#123;</div><div class="line">	<span class="keyword">if</span>(!is_int($n)||!is_int($m)) </div><div class="line">		<span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">	<span class="keyword">static</span> $sum=<span class="number">0</span>;</div><div class="line">	$sum+=$n;</div><div class="line">	$n++;</div><div class="line">	<span class="keyword">if</span>($n&gt;$m) <span class="keyword">return</span> $sum;</div><div class="line">	<span class="keyword">return</span> add($n,$m);</div><div class="line">&#125;</div><div class="line"><span class="keyword">echo</span> add(<span class="number">1</span>,<span class="number">100</span>);</div></pre></td></tr></table></figure>
 
       
 
@@ -341,8 +341,8 @@
 <nav id="article-nav">
   
   
-    <a href="https:/gsons.github.io/2017/01/21/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Hello World</div>
+    <a href="https:/gsons.github.io/2017/01/21/hexo博客/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Hexo博客</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -513,7 +513,7 @@
     
     	<section class="tools-section tools-section-me" q-show="aboutme">
   	  	
-  	  		<div class="aboutme-wrap" id="js-aboutme">I builds web applications. is a standards and accessibility supporter. a scripting and database guy. and a PHP junkie.</div>
+  	  		<div class="aboutme-wrap" id="js-aboutme">&lt;div style=&quot;padding:20px&quot;&gt;I builds web applications. is a standards and accessibility supporter. a scripting and database guy. and a PHP junkie.&lt;/div&gt;</div>
   	  	
     	</section>
     

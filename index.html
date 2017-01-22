@@ -202,10 +202,10 @@
 <blockquote>
 <p>第1次切割,每份重量是:7.5<br>第2次切割,每份重量是:3.75<br>第3次切割,每份重量是:1.875<br>第4次切割,每份重量是:0.9375<br>已经切完了</p>
 </blockquote>
-<p>####再举一个通俗的例子：</p>
-<blockquote>
-<p>试求等差数列的和:1+2+3+4+…+98+100;<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * 等差数列求和</div><div class="line"> * <span class="doctag">@param</span> [int] $n [第一个数]</div><div class="line"> * <span class="doctag">@param</span> [int] $m [第二个数]</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">add</span><span class="params">($n,$m)</span></span>&#123;</div><div class="line">	<span class="keyword">if</span>(!is_int($n)||!is_int($m)) </div><div class="line">		<span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">	<span class="keyword">static</span> $sum=<span class="number">0</span>;</div><div class="line">	$sum+=$n;</div><div class="line">	$n++;</div><div class="line">	<span class="keyword">if</span>($n&gt;$m) <span class="keyword">return</span> $sum;</div><div class="line">	<span class="keyword">return</span> add($n,$m);</div><div class="line">&#125;</div><div class="line"><span class="keyword">echo</span> add(<span class="number">1</span>,<span class="number">100</span>);</div></pre></td></tr></table></figure></p>
+<h4 id="再举一个通俗的例子："><a href="#再举一个通俗的例子：" class="headerlink" title="再举一个通俗的例子："></a>再举一个通俗的例子：</h4><blockquote>
+<p>试求等差数列的和:1+2+3+4+…+98+100;</p>
 </blockquote>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * 等差数列求和</div><div class="line"> * <span class="doctag">@param</span> [int] $n [第一个数]</div><div class="line"> * <span class="doctag">@param</span> [int] $m [第二个数]</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">add</span><span class="params">($n,$m)</span></span>&#123;</div><div class="line">	<span class="keyword">if</span>(!is_int($n)||!is_int($m)) </div><div class="line">		<span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">	<span class="keyword">static</span> $sum=<span class="number">0</span>;</div><div class="line">	$sum+=$n;</div><div class="line">	$n++;</div><div class="line">	<span class="keyword">if</span>($n&gt;$m) <span class="keyword">return</span> $sum;</div><div class="line">	<span class="keyword">return</span> add($n,$m);</div><div class="line">&#125;</div><div class="line"><span class="keyword">echo</span> add(<span class="number">1</span>,<span class="number">100</span>);</div></pre></td></tr></table></figure>
 
       
 
@@ -236,19 +236,19 @@
 
 
   
-    <article id="post-hello-world" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-hexo博客" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="https:/gsons.github.io/2017/01/21/hello-world/">Hello World</a>
+      <a class="article-title" href="https:/gsons.github.io/2017/01/21/hexo博客/">Hexo博客</a>
     </h1>
   
 
         
-        <a href="https:/gsons.github.io/2017/01/21/hello-world/" class="archive-article-date">
+        <a href="https:/gsons.github.io/2017/01/21/hexo博客/" class="archive-article-date">
   	<time datetime="2017-01-21T03:50:54.902Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-01-21</time>
 </a>
         
@@ -277,7 +277,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="https:/gsons.github.io/2017/01/21/hello-world/">展开全文 >></a>
+          <a class="article-more-a" href="https:/gsons.github.io/2017/01/21/hexo博客/">展开全文 >></a>
         </p>
       
 
@@ -451,7 +451,7 @@
     
     	<section class="tools-section tools-section-me" q-show="aboutme">
   	  	
-  	  		<div class="aboutme-wrap" id="js-aboutme">I builds web applications. is a standards and accessibility supporter. a scripting and database guy. and a PHP junkie.</div>
+  	  		<div class="aboutme-wrap" id="js-aboutme">&lt;div style=&quot;padding:20px&quot;&gt;I builds web applications. is a standards and accessibility supporter. a scripting and database guy. and a PHP junkie.&lt;/div&gt;</div>
   	  	
     	</section>
     
