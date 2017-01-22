@@ -1,12 +1,24 @@
 $(document).ready(function(){
 	var p1=initpage1();
 	var p2=initpage2();
+	var p3=initpage3();
+	var p4=initpage4();
 	p1.show();
 	p1.click(function(){
 		p1.hide();
 		p2.show();
 		p2.addClass("flippage-cutCard-top-upward ");
 	});
+	p2.click(function(){
+	p2.hide();
+	p3.show();
+	p3.addClass("flippage-cutCard-top-upward ");
+});
+	p3.click(function(){
+	p3.hide();
+	p4.show();
+	p4.addClass("flippage-cutCard-top-upward ");
+});
 	/**
 	 * 初始化page1
 	 * @return {[void]} [description]
@@ -41,20 +53,79 @@ $(document).ready(function(){
 	 * @return {[void]} [description]
 	 */
 	  function initpage2(){
-	var text_jin1=new Item("text_jin","./image/text_jin.png",176,189,100,120,"zoomInDown 1.2s",0);
-	var text_jin2=new Item("text_ji","./image/text_ji.png",87,123,180,270,"zoomInUp 1.4s",0);
-	var text_jin3=new Item("text_he","./image/text_he.png",148,211,80,320,"zoomInUp 1.6s",0);
-	var text_jin4=new Item("text_sui","./image/text_sui.png",235,272,100,380,"scaleInCenter .5s",0);
+	var text_1=new Item("text_jin","./image/text_jin.png",176,189,100,120,"zoomInDown 1.2s",0);
+	var text_2=new Item("text_ji","./image/text_ji.png",87,123,180,270,"zoomInUp 1.4s",0);
+	var text_3=new Item("text_he","./image/text_he.png",148,211,80,320,"zoomInUp 1.6s",0);
+	var text_4=new Item("text_sui","./image/text_sui.png",235,272,100,380,"scaleInCenter .5s",0);
+	var text_4=new Item("text_sui","./image/text_sui.png",235,272,100,380,"scaleInCenter .5s",0);
+	var couplet1=new Item("couplet1","./image/couplet.png",130,480,0,130,"scaleInCenter .5s",0);
+	var couplet2=new Item("couplet2","./image/couplet.png",130,480,280,130,"scaleInCenter .5s",0);
+	var couplet_1=new Item("couplet_1","./image/couplet_1.png",57,480,40,130,"scaleInCenter .5s linear 1s",0);
+	var couplet_2=new Item("couplet_2","./image/couplet_2.png",57,480,320,130,"scaleInCenter .5s linear 1s",0);
      var bg= new BgItem("bg","./image/p2_bg.jpg","120%","",0)
-            var snow= new BgItem("snow","./image/snow.gif","120%","",1);
+        var snow= new BgItem("snow","./image/snow.gif","120%","",1);
         var p2=new Page("page2");
      p2.addBgItem(bg);
      p2.addBgItem(snow);
-	 p2.addElement(text_jin1);
-	 p2.addElement(text_jin2);
-	 p2.addElement(text_jin3);
-	 p2.addElement(text_jin4);
+	 p2.addElement(text_1);
+	 p2.addElement(text_2);
+	 p2.addElement(text_3);
+	 p2.addElement(text_4);
+	 p2.addElement(couplet1);
+	 p2.addElement(couplet2);
+	  p2.addElement(couplet_1);
+	  p2.addElement(couplet_2);
 	 return $("#"+p2.id);
+	 }
+
+	function initpage3(){
+	var text_1=new Item("text_jin","./image/text_jin.png",176,189,100,120,"zoomInDown 1.2s",0);
+	var text_2=new Item("text_ji","./image/text_ji.png",87,123,180,270,"zoomInUp 1.4s",0);
+	var text_3=new Item("text_he","./image/text_he.png",148,211,80,320,"zoomInUp 1.6s",0);
+	var text_4=new Item("text_sui","./image/text_sui.png",235,272,100,380,"scaleInCenter .5s",0);
+	var text_4=new Item("text_sui","./image/text_sui.png",235,272,100,380,"scaleInCenter .5s",0);
+	var couplet1=new Item("couplet1","./image/couplet.png",130,480,0,130,"scaleInCenter .5s",0);
+	var couplet2=new Item("couplet2","./image/couplet.png",130,480,280,130,"scaleInCenter .5s",0);
+	var couplet_1=new Item("couplet_1","./image/couplet_1.png",57,480,40,130,"scaleInCenter .5s linear",0);
+	var couplet_2=new Item("couplet_2","./image/couplet_2.png",57,480,320,130,"scaleInCenter .5s linear",0);
+	var blessing=new Item("blessing","./image/p3_blessing.png",120,120,135,600,"rotate 2.5s linear infinite",2);
+     var bg= new BgItem("bg","./image/p3_bg.jpg","120%","",0)
+    var snow= new BgItem("snow","./image/snow.gif","120%","",1);
+    var p3=new Page("page3");
+     p3.addBgItem(bg);
+     p3.addBgItem(snow);
+	 p3.addElement(text_1);
+	 p3.addElement(text_2);
+	 p3.addElement(text_3);
+	 p3.addElement(text_4);
+	 p3.addElement(couplet1);
+	 p3.addElement(couplet2);
+	  p3.addElement(couplet_1);
+	   p3.addElement(blessing);
+	   p3.addElement(couplet_2);
+	 return $("#"+p3.id);
+	 }
+	function initpage4(){
+	var text_1=new Item("p4_happy","./image/happy.png",283,58,70,120,"zoomInDown 1.2s",0);
+	var text_2=new Item("spring","./image/spring.png",188,36,100,200,"zoomInUp 1.4s",0);
+	var people=new Item("people","./image/people.png",400,390,0,340,"zoomInUp 1.4s",0);
+      var bg= new BgItem("bg","./image/p1_bg.jpg","120%","",0);
+       var snow= new BgItem("snow","./image/snow.gif","100%","",1);
+        var p4=new Page("page4");
+     p4.addBgItem(bg);
+     p4.addBgItem(snow);
+      var lantern=[];
+		for(var i=0;i<5;i++){
+			lantern[i]=new Item("lantern"+i,"./image/lantern.png",65,62,i*80,10,"swingLR 5s linear infinite",0);
+			p4.addElement(lantern[i]);
+		}
+	 p4.addElement(text_1);
+	 p4.addElement(text_2);
+	  p4.addElement(people);
+	 return $("#"+p4.id);
+	 }
+	 function addFixedItem(){
+	 	
 	 }
 	/**
 	 * 页面构造函数

@@ -24,6 +24,14 @@
 		animation-fill-mode: both !important;
 		animation-iteration-count:1;
 	}
+   @keyframes rotate{
+		from{transform: rotate(0deg);}
+		to{transform: rotate(360deg);}
+	}
+	@-webkit-keyframes rotate{
+		from{transform: rotate(0deg);}
+		to{transform: rotate(360deg);}
+	}
 	/*上淡入*/
 	.fadeInDown{
 		-webkit-animation-name:fadeInDown !important;
