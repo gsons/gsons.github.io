@@ -3,7 +3,30 @@ $(document).ready(function(){
 	var p2=initpage2();
 	var p3=initpage3();
 	var p4=initpage4();
+	var audio=$("audio")[0];
 	p1.show();
+/*	$("#audio").click(function(){
+	$(this).addClass("musicplay");
+	if(audio.paused){
+		audio.play();
+		$(this).addClass("musicplay");
+	}
+	else{
+		audio.pause();
+		$(this).removeClass("musicplay");
+	}
+});*/
+		$("#audio").click(function(){
+	$(this).addClass("musicplay");
+	if(audio.paused){
+		audio.play();
+		$(this).addClass("musicplay");
+	}
+	else{
+		audio.pause();
+		$(this).removeClass("musicplay");
+	}
+});
 	p1.click(function(){
 		p1.hide();
 		p2.show();
