@@ -4,19 +4,11 @@ $(document).ready(function(){
 	var p3=initpage3();
 	var p4=initpage4();
 	var audio=$("audio")[0];
+	//显示page1
 	p1.show();
-/*	$("#audio").click(function(){
-	$(this).addClass("musicplay");
-	if(audio.paused){
-		audio.play();
-		$(this).addClass("musicplay");
-	}
-	else{
-		audio.pause();
-		$(this).removeClass("musicplay");
-	}
-});*/
-		$("#audio").click(function(){
+	//适配手机
+	$("html").css("font-size",screen.width*100/412+"px");
+	$("#audio").click(function(){
 	$(this).addClass("musicplay");
 	if(audio.paused){
 		audio.play();
@@ -27,21 +19,24 @@ $(document).ready(function(){
 		$(this).removeClass("musicplay");
 	}
 });
+
 	p1.click(function(){
 		p1.hide();
 		p2.show();
 		p2.addClass("flippage-cutCard-top-upward ");
 	});
+
 	p2.click(function(){
 	p2.hide();
 	p3.show();
 	p3.addClass("flippage-cutCard-top-upward ");
-});
+   });
+
 	p3.click(function(){
 	p3.hide();
 	p4.show();
 	p4.addClass("flippage-cutCard-top-upward ");
-});
+   });
 	/**
 	 * 初始化page1
 	 * @return {[void]} [description]
@@ -182,10 +177,10 @@ $(document).ready(function(){
 		$("#"+this.id).append("<div class='"+item.mclass+"'></div>");
 		$("#"+this.id+" ."+item.mclass).css("position","absolute");
 		$("#"+this.id+" ."+item.mclass).css("z-index",item.z_index);
-		$("#"+this.id+" ."+item.mclass).css("left",item.left+"px");
-		$("#"+this.id+" ."+item.mclass).css("top",item.top+"px");
-		$("#"+this.id+" ."+item.mclass).css("width",item.width+"px");
-		$("#"+this.id+" ."+item.mclass).css("height",item.height+"px");
+		$("#"+this.id+" ."+item.mclass).css("left",item.left+"rem");
+		$("#"+this.id+" ."+item.mclass).css("top",item.top+"rem");
+		$("#"+this.id+" ."+item.mclass).css("width",item.width+"rem");
+		$("#"+this.id+" ."+item.mclass).css("height",item.height+"rem");
 		$("#"+this.id+" ."+item.mclass).css("background","url('"+item.imgsrc+"') no-repeat center center");
 		$("#"+this.id+" ."+item.mclass).css("background-size","100%");
 		if(item.animation!="")$("#"+this.id+" ."+item.mclass).css("animation",item.animation);
@@ -227,10 +222,10 @@ $(document).ready(function(){
 	function Item(mclass,imgsrc,width,height,left,top,animation,z_index){		
 		this.imgsrc=imgsrc;
 		this.mclass=mclass;
-		this.width=width;
-		this.height=height;
-		this.left=left;
-		this.top=top;
+		this.width=width/100;
+		this.height=height/100;
+		this.left=left/100;
+		this.top=top/100;
 		this.animation=animation;
 		this.z_index=z_index;
 	}
