@@ -24,6 +24,12 @@
 		animation-fill-mode: both !important;
 		animation-iteration-count:1;
 	}
+	/**
+	 * 自定义
+	 */
+	.rotate-right{
+		animation: rotate-right 2s;
+	}
    @keyframes rotate{
 		from{transform: rotate(0deg);}
 		to{transform: rotate(360deg);}
@@ -32,6 +38,11 @@
 		from{transform: rotate(0deg);}
 		to{transform: rotate(360deg);}
 	}
+
+	@-webkit-keyframes rotate-right{0%{-webkit-transform:perspective(1200px) rotateX(180deg);opacity:1} 100%{-webkit-transform:perspective(1200px) rotateX(0deg);opacity:0.5}}
+@-webkit-keyframes rotate-right-back{0%{-webkit-transform:perspective(1200px) rotateY(-90deg);opacity:0.5} 100%{-webkit-transform:perspective(1200px) rotateY(0deg);opacity:1}}
+	
+
 	/*上淡入*/
 	.fadeInDown{
 		-webkit-animation-name:fadeInDown !important;

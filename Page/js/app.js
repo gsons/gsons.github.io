@@ -7,7 +7,9 @@ $(document).ready(function(){
 	//显示page1
 	p1.show();
 	//适配手机
-	$("html").css("font-size",screen.width*100/412+"px");
+	 var fontsize=screen.width*100/412;
+	//var fontsize2=screen.height*100/732;
+	$("html").css("font-size",fontsize+"px");
 	$("#audio").click(function(){
 	$(this).addClass("musicplay");
 	if(audio.paused){
@@ -23,13 +25,13 @@ $(document).ready(function(){
 	p1.click(function(){
 		p1.hide();
 		p2.show();
-		p2.addClass("flippage-cutCard-top-upward ");
+		p2.addClass("rotate-right");
 	});
 
 	p2.click(function(){
 	p2.hide();
 	p3.show();
-	p3.addClass("flippage-cutCard-top-upward ");
+	p3.addClass("flippage-normalTranslateInUp");
    });
 
 	p3.click(function(){
@@ -47,7 +49,7 @@ $(document).ready(function(){
 	var text_3=new Item("text_he","./image/text_he.png",148,211,80,320,"zoomInUp 1.6s",0);
 	var text_4=new Item("text_sui","./image/text_sui.png",235,272,100,380,"scaleInCenter .9s",0);
 	var cloud1=new Item("cloud1","./image/cloud1.png",162,80,0,280,"shake 7.5s linear infinite .3s",0);
-	var cloud2=new Item("cloud2","./image/cloud2.png",162,80,300,580,"shake 7.5s linear infinite .3s",0);
+	var cloud2=new Item("cloud2","./image/cloud2.png",162,80,300,550,"shake 7.5s linear infinite .3s",0);
       var bg= new BgItem("bg","./image/p1_bg.jpg","120%","",0);
        var snow= new BgItem("snow","./image/snow.gif","100%","",1);
         var p1=new Page("page1");
@@ -76,10 +78,10 @@ $(document).ready(function(){
 	var text_3=new Item("text_he","./image/text_he.png",148,211,80,320,"zoomInUp 1.6s",0);
 	var text_4=new Item("text_sui","./image/text_sui.png",235,272,100,380,"scaleInCenter .5s",0);
 	var text_4=new Item("text_sui","./image/text_sui.png",235,272,100,380,"scaleInCenter .5s",0);
-	var couplet1=new Item("couplet1","./image/couplet.png",130,480,0,130,"scaleInCenter .5s",0);
-	var couplet2=new Item("couplet2","./image/couplet.png",130,480,280,130,"scaleInCenter .5s",0);
-	var couplet_1=new Item("couplet_1","./image/couplet_1.png",57,480,40,130,"scaleInCenter .5s linear 1s",0);
-	var couplet_2=new Item("couplet_2","./image/couplet_2.png",57,480,320,130,"scaleInCenter .5s linear 1s",0);
+	var couplet1=new Item("couplet1","./image/couplet.png",130,500,0,120,"scaleInCenter .5s",0);
+	var couplet2=new Item("couplet2","./image/couplet.png",130,500,280,120,"scaleInCenter .5s",0);
+	var couplet_1=new Item("couplet_1","./image/couplet_1.png",57,450,40,140,"scaleInCenter .5s linear 1s",0);
+	var couplet_2=new Item("couplet_2","./image/couplet_2.png",57,450,320,140,"scaleInCenter .5s linear 1s",0);
      var bg= new BgItem("bg","./image/p2_bg.jpg","120%","",0)
         var snow= new BgItem("snow","./image/snow.gif","120%","",1);
         var p2=new Page("page2");
@@ -97,16 +99,15 @@ $(document).ready(function(){
 	 }
 
 	function initpage3(){
-	var text_1=new Item("text_jin","./image/text_jin.png",176,189,100,120,"zoomInDown 1.2s",0);
-	var text_2=new Item("text_ji","./image/text_ji.png",87,123,180,270,"zoomInUp 1.4s",0);
-	var text_3=new Item("text_he","./image/text_he.png",148,211,80,320,"zoomInUp 1.6s",0);
-	var text_4=new Item("text_sui","./image/text_sui.png",235,272,100,380,"scaleInCenter .5s",0);
-	var text_4=new Item("text_sui","./image/text_sui.png",235,272,100,380,"scaleInCenter .5s",0);
-	var couplet1=new Item("couplet1","./image/couplet.png",130,480,0,130,"scaleInCenter .5s",0);
-	var couplet2=new Item("couplet2","./image/couplet.png",130,480,280,130,"scaleInCenter .5s",0);
-	var couplet_1=new Item("couplet_1","./image/couplet_1.png",57,480,40,130,"scaleInCenter .5s linear",0);
-	var couplet_2=new Item("couplet_2","./image/couplet_2.png",57,480,320,130,"scaleInCenter .5s linear",0);
-	var blessing=new Item("blessing","./image/p3_blessing.png",120,120,135,600,"rotate 2.5s linear infinite",2);
+	var text_1=new Item("text_jin","./image/text_jin.png",176,189,100,120-80,"zoomInDown 1.2s",0);
+	var text_2=new Item("text_ji","./image/text_ji.png",87,123,180,270-80,"zoomInUp 1.4s",0);
+	var text_3=new Item("text_he","./image/text_he.png",148,211,80,320-80,"zoomInUp 1.6s",0);
+	var text_4=new Item("text_sui","./image/text_sui.png",235,272,100,380-80,"scaleInCenter .5s",0);
+	var couplet1=new Item("couplet1","./image/couplet.png",130,500,0,120-80,"scaleInCenter .5s",0);
+	var couplet2=new Item("couplet2","./image/couplet.png",130,500,280,120-80,"scaleInCenter .5s",0);
+	var couplet_1=new Item("couplet_1","./image/couplet_1.png",57,480,40,120-80,"scaleInCenter .5s linear",0);
+	var couplet_2=new Item("couplet_2","./image/couplet_2.png",57,480,320,120-80,"scaleInCenter .5s linear",0);
+    var blessing=new Item("blessing","./image/p3_blessing.png",120,120,135,510,"rotate 2.5s linear infinite",2);
      var bg= new BgItem("bg","./image/p3_bg.jpg","120%","",0)
     var snow= new BgItem("snow","./image/snow.gif","120%","",1);
     var p3=new Page("page3");
@@ -126,7 +127,8 @@ $(document).ready(function(){
 	function initpage4(){
 	var text_1=new Item("p4_happy","./image/happy.png",283,58,70,120,"zoomInDown 1.2s",0);
 	var text_2=new Item("spring","./image/spring.png",188,36,100,200,"zoomInUp 1.4s",0);
-	var people=new Item("people","./image/people.png",400,390,0,340,"zoomInUp 1.4s",0);
+	//
+	var people=new Item("people","./image/people.png",400,390,0,screen.height-screen.width*400/412,"zoomInUp 1.4s",0);
       var bg= new BgItem("bg","./image/p1_bg.jpg","120%","",0);
        var snow= new BgItem("snow","./image/snow.gif","100%","",1);
         var p4=new Page("page4");
