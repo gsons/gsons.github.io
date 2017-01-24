@@ -1,12 +1,5 @@
- if(!isPhone()){
- 	$("body").text("");
- 	alert("请在手机上打开该网页,1s后自动跳转跳转");
- 	setTimeout(function(){window.location.href="https://gsons.github.io"},1000);
- 	exit;
- 	
- }
-$(document).ready(function(){
 
+$(document).ready(function(){
 	var p1=initpage1();
 	var audio=$("audio")[0];
 	//显示page1
@@ -116,7 +109,7 @@ $("#prev").click(function(){
 	 sequence_active(p1,items,times,0);
 	 p1.addElement(cloud1);
 	 p1.addElement(cloud2);
-	 return $("#"+p1.id);
+	 return p1;
 	 }
 	 /**
 	 * 初始化page2
@@ -143,9 +136,9 @@ $("#prev").click(function(){
 	var text_1=new Item("text_jin","./image/text_jin.png",176,189,100,100,"zoomInDown 1.4s",0);
 	var text_2=new Item("text_ji","./image/text_ji.png",87,123,180,250,"zoomInUp 1.4s",0);
 	var text_3=new Item("text_he","./image/text_he.png",148,211,80,300,"zoomInUp 1.4s",0);
-	var text_4=new Item("text_sui","./image/text_sui.png",235,272,100,360,"scaleInCenter 1s",0);
-	var couplet1=new Item("couplet1","./image/couplet.png",130,500,0,100,"scaleInCenter .5s",0);
-	var couplet2=new Item("couplet2","./image/couplet.png",130,500,280,100,"scaleInCenter .5s",0);
+	var text_4=new Item("text_sui","./image/text_sui.png",235,272,100,360,"rollInDown 1.4s",0);
+	var couplet1=new Item("couplet1","./image/couplet.png",130,500,0,100,"rotateInRight .5s",0);
+	var couplet2=new Item("couplet2","./image/couplet.png",130,500,280,100,"rotateInLeft .5s",0);
 	var couplet_1=new Item("couplet_1","./image/couplet_1.png",57,460,40,115,"scaleInCenter .5s linear",0);
 	var couplet_2=new Item("couplet_2","./image/couplet_2.png",57,460,320,115,"scaleInCenter .5s linear",0);
      var bg= new BgItem("bg","./image/p3_bg.jpg","120%","",0)
@@ -154,7 +147,7 @@ $("#prev").click(function(){
      p3.addBgItem(bg);
      p3.addBgItem(snow);
 	  var items=[text_1,text_2,text_3,text_4,couplet1,couplet_1,couplet2,couplet_2];//定义item数组
-	  var times=[500,200,200,200,400,400,400,400];//定义时间间隔数组
+	  var times=[1400,300,300,300,600,600,600,600];//定义时间间隔数组
 	 sequence_active(p3,items,times,0);
 	 return $("#"+p3.id);
 	 }
@@ -167,7 +160,7 @@ $("#prev").click(function(){
 	var text_1=new Item("p4_happy","./image/happy.png",283,58,70,120,"zoomInDown 1.2s",0);
 	var text_2=new Item("spring","./image/spring.png",188,36,100,200,"zoomInUp 1.4s",0);
 	var blessing=new Item("blessing","./image/p3_blessing.png",130,130,150,250,"rotate 1.4s linear infinite",0);
-	var people=new Item("people","./image/people.png",400,390,0,0,"zoomInUp 1.4s",0);
+	var people=new Item("people","./image/people.png",400,390,0,screen.height-screen.width*400/412,"zoomInUp 1.4s",0);
       var bg= new BgItem("bg","./image/p1_bg.jpg","120%","",0);
        var snow= new BgItem("snow","./image/snow.gif","100%","",1);
         var p4=new Page("page4");
@@ -224,25 +217,17 @@ $("#prev").click(function(){
 		$("#"+this.id+" ."+item.mclass).css("height",item.height+"rem");
 		$("#"+this.id+" ."+item.mclass).css("background","url('"+item.imgsrc+"') no-repeat center center");
 		$("#"+this.id+" ."+item.mclass).css("background-size","100%");
+		//$("#"+this.id+" ."+item.mclass).hide();
 		if(item.animation!="")$("#"+this.id+" ."+item.mclass).css("animation",item.animation);
 	 }
-	 /**
-	 * 串行动作
-	 * @param  {[type]} page  [description]
-	 * @param  {[type]} items [description]
-	 * @param  {Number} i     [description]
-	 * @return {[type]}       [description]
-	 */
-	/*this.sequence_active=function (items,i=0){
-		if(i==items.length) {i=0;return;}
-		setTimeout(function(){
-			this.addElement(items[i]);this.sequence_active(items,i+1);
-		},200);
-	}*/
+
 	//显示页面
-   this.show=function(){
-   	 $("#"+this.id).show();
-   }
+   this.show=function(){ 
+   	$("#"+this.id).show(); 	
+   	}
+
+
+   
    //隐藏页面
    this.hide=function(){
    	 $("#"+this.id).hide();
@@ -299,17 +284,4 @@ $("#prev").click(function(){
 		page.addElement(items[i]);sequence_active(page,items,times,i+1);
 	},times[i]);
    }
-
-   function isPhone() {
-    var flag = false;
-    var userAgentInfo = navigator.userAgent;
-    var Agents = ["Android", "iPhone", "SymbianOS", "Windows Phone", "iPad", "iPod"];
-    for (var i = 0; i < Agents.length; i++) {
-        if (userAgentInfo.indexOf(Agents[i]) > 0) {
-            flag = true;
-            break;
-        }
-    }
-    return flag;
-}
 
