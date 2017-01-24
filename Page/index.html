@@ -2,11 +2,10 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Document</title>
+	<title>金鸡贺岁,财运滚滚</title>
 	<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
 	 <link rel="stylesheet" type="text/css" href="css/animation.css">
 	<script src="js/jquery-2.1.1.min.js"></script>
-	
 	<link rel="prefetch" href="./image/p1_bg.jpg" /> 
 	<link rel="prefetch" href="./image/p2_bg.jpg" /> 
 	<link rel="prefetch" href="./image/p3_bg.jpg" /> 
@@ -61,6 +60,32 @@
 			border-radius:50%;
 			border:4px solid #F00;
 		}
+		   #next{
+		position: fixed;
+			z-index: 999;
+			top:0;
+			bottom: 0;
+			margin:auto;
+			right: 0rem;
+			width:0.52rem;
+			height:0.38rem;
+			background:url("./image/next.png") no-repeat center center;
+			animation: next 1s linear infinite;
+			-webkit-animation: next 1s linear infinite;
+		}
+	     #prev{
+			position: fixed;
+			z-index: 999;
+			top:0;
+			bottom: 0;
+			left: 0;
+			margin:auto;
+			width:0.52rem;
+			height:0.38rem;
+			background:url("./image/prev.png") no-repeat center center;
+			animation: prev 1s linear infinite;
+			-webkit-animation: prev 1s linear infinite;
+		}
 		#music >img:first-of-type{
 			 position:absolute;
 			 width:80%;
@@ -84,12 +109,39 @@
 			animation: rotate 1s linear infinite;
 			-webkit-animation: rotate 1s linear infinite;
 		}
+
+	   #page2 .lantern{
+	 	box-sizing: border-box;
+	 	font-size: 0.23rem;
+	 	font-weight: bold;
+	 	color: #FFF;
+	 	text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 40px #ff00de, 0 0 70px #ff00de;
+	 }
+	 
+	 #page2 .lantern:before{
+
+	 	content: "........恭喜发财";
+	 	text-align: center;
+	 	padding:0.1rem;
+	 	position:absolute;
+	 	left:0;
+	 	right:0;
+	 	top:-0.2rem;
+	 	bottom: 0;
+	 	margin: auto;
+	 	width: 1rem;
+	 	height:1rem;
+	 	opacity:.65;
+	 	background: #f00;
+	 	box-shadow: 0 0 0.25rem 0.25rem #f00;
+	 	border-radius: 50%;
+	 	z-index: -1;
+	 	 animation: lantern .4s linear  infinite;
+	   -webkit-animation: lantern .6s linear  infinite;
+	 }
 		</style>
 </head>
 <body>
-<!-- <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=100% height=110 src="http://music.163.com/outchain/player?type=1&id=34986028&auto=1&height=90"
-></iframe>
- -->
    <audio autoplay ="true">
     <source src="http://m2.music.126.net/qX9rgjw29VyYndcSxMh8Fw==/5727356069162437.mp3" type="audio/mpeg">
 </audio> 
@@ -98,6 +150,7 @@
 	<img src="image/music_disc.png" alt="disc" id="audio" class="musicplay">
 	<img src="image/music_pointer.png" alt="pointer">
 	</div>
-</body>
-		<script src="js/app.js"></script>
+	<div id="prev"></div>
+	<div id="next"></div>
+</body>	<script src="js/app.js"></script>
 </html>
