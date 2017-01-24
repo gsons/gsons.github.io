@@ -120,7 +120,6 @@ $("#prev").click(function(){
     var snow= new BgItem("snow","./image/snow.gif","120%","",1);
     var imooc=new Item("blessing","./image/p2_imooc.png",89,106,175,500," rubberJelly 2s linear 1s",0);
     var p2=new Page("page2");
-    $("#page2").append("<div class='lantern'></div>");
      p2.addBgItem(bg);
      p2.addBgItem(snow);
       p2.addElement(imooc);
