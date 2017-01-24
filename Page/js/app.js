@@ -10,8 +10,7 @@ $(document).ready(function(){
 	//适配手机
 	 var fontsize=screen.width*100/412;
 	$("html").css("font-size",fontsize+"px");
-
-
+	
 	$("#audio").click(function(){
 	$(this).addClass("musicplay");
 	if(audio.paused){
@@ -88,7 +87,7 @@ $("#prev").click(function(){
 		}
 	 var items=[text_1,text_2,text_3,text_4];//定义item数组
 	  var times=[0,300,300,300];//定义时间间隔数组
-	 sequence_active(p1,items,times);
+	 sequence_active(p1,items,times,0);
 	 p1.addElement(cloud1);
 	 p1.addElement(cloud2);
 	 return $("#"+p1.id);
@@ -132,7 +131,7 @@ $("#prev").click(function(){
      p3.addBgItem(snow);
 	  var items=[text_1,text_2,text_3,text_4,couplet1,couplet_1,couplet2,couplet_2];//定义item数组
 	  var times=[5000,200,200,200,600,600,600,600];//定义时间间隔数组
-	 sequence_active(p3,items,times);
+	 sequence_active(p3,items,times,0);
 	 return $("#"+p3.id);
 	 }
 
@@ -270,9 +269,10 @@ $("#prev").click(function(){
 	 * @param  {Number} i     [时间间隔]
 	 * @return {[array]}       [遍历数组]
 	 */
-	function sequence_active(page,items,times,i=0){
+	function sequence_active(page,items,times,i){
 	if(i==items.length) {i=0;return;}
 	setTimeout(function(){
 		page.addElement(items[i]);sequence_active(page,items,times,i+1);
 	},times[i]);
    }
+
