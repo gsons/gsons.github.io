@@ -1,9 +1,6 @@
 
 $(document).ready(function(){
 	var p1=initpage1();
-	var p2=initpage2();
-	var p3=initpage3();
-	var p4=initpage4();
 	var audio=$("audio")[0];
 	//显示page1
 	p1.show();
@@ -32,8 +29,19 @@ $("#next").click(function(){
 		$("#page"+currentpage).hide();
 		currentpage++;
 		if(currentpage==4) $("#next").hide();
+		switch(currentpage){
+			case 2:
+			 initpage2();
+			break;
+			case 3:
+			 initpage3();
+			break;
+			case 4:
+			 initpage4();
+			break;
+		}
 		$("#page"+currentpage).show();
-
+		
 		if(currentpage==2)
 		$("#page"+currentpage).addClass("flippage-normalTranslateInUp");
 	    else if(currentpage==3)
@@ -50,6 +58,17 @@ $("#prev").click(function(){
 		$("#page"+currentpage).hide();
 		currentpage--;
 		if(currentpage==1) $("#prev").hide();
+			switch(currentpage){
+			case 2:
+			 initpage2();
+			break;
+			case 3:
+			 initpage3();
+			break;
+			case 4:
+			 initpage4();
+			break;
+		}
 		$("#page"+currentpage).show();
 
 
@@ -97,17 +116,14 @@ $("#prev").click(function(){
 	 * @return {[void]} [description]
 	 */
 	  function initpage2(){
-	var lantern=new Item("lantern","./image/p1_lantern.png",150,390,140,0,"rubberJelly .5s",0);
     var bg= new BgItem("bg","./image/p3_bg.jpg","120%","",0)
     var snow= new BgItem("snow","./image/snow.gif","120%","",1);
     var imooc=new Item("blessing","./image/p2_imooc.png",89,106,175,500," rubberJelly 2s linear 1s",0);
     var p2=new Page("page2");
+    $("#page2").append("<div class='lantern'></div>");
      p2.addBgItem(bg);
      p2.addBgItem(snow);
       p2.addElement(imooc);
-     p2.addElement(lantern);
-       p2.addElement(lantern);
-        p2.addElement(lantern);
 	 return $("#"+p2.id);
 	 }
 
@@ -130,7 +146,7 @@ $("#prev").click(function(){
      p3.addBgItem(bg);
      p3.addBgItem(snow);
 	  var items=[text_1,text_2,text_3,text_4,couplet1,couplet_1,couplet2,couplet_2];//定义item数组
-	  var times=[5000,200,200,200,600,600,600,600];//定义时间间隔数组
+	  var times=[1000,200,200,200,600,600,600,600];//定义时间间隔数组
 	 sequence_active(p3,items,times,0);
 	 return $("#"+p3.id);
 	 }
