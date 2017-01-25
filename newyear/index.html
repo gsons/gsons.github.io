@@ -5,6 +5,12 @@
 	<title>金鸡贺岁,财运滚滚</title>
 	<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
 	 <link rel="stylesheet" type="text/css" href="css/animation.css">
+	 	<script>
+		if(screen.width>700) {
+		alert("请在手机上打开该网页,Thank You!");
+	  window.location="https://gsons.github.io";
+     }
+	</script>
 	<script src="js/jquery-2.1.1.min.js"></script>
 	<link rel="prefetch" href="./image/p1_bg.jpg" /> 
 	<link rel="prefetch" href="./image/p2_bg.jpg" /> 
@@ -148,6 +154,31 @@
 	 	 animation: lantern .4s linear  infinite;
 	   -webkit-animation: lantern .6s linear  infinite;
 	 }
+
+	/* //烟花部分*/
+
+ul,li{text-indent:0;text-decoration:none;margin:0;padding:0}
+img{border:0}
+/*body{background-color:#000;color:#999;font:100%/18px helvetica, arial, sans-serif}*/
+canvas{cursor:crosshair;display:block;left:0;position:fixed;top:0;z-index:20}
+#header img{width:100%; height:20%;}
+#bg img{width:100%; height:80%;}
+#header,#bg{position:fixed;left:0;right:0;z-index:10}
+#header{top:0}
+#bg{position:fixed;z-index:1;}
+/*audio{position:fixed;display:none;bottom:0;left:0;right:0;width:100%;z-index:5}*/
+.en-markup-crop-options {
+    top: 18px !important;
+    left: 50% !important;
+    margin-left: -100px !important;
+    width: 200px !important;
+    border: 2px rgba(255,255,255,.38) solid !important;
+    border-radius: 4px !important;
+}
+.en-markup-crop-options div div:first-of-type {
+    margin-left: 0px !important;
+}
+
 		</style>
 </head>
 <body>
@@ -161,5 +192,6 @@
 	</div>
 	<div id="prev"></div>
 	<div id="next"></div>
+<script src="./js/firework.js"></script>
 </body>	<script src="js/app.js"></script>
 </html>
