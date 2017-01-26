@@ -1,0 +1,197 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>金鸡贺岁,财运滚滚</title>
+	<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+	 <link rel="stylesheet" type="text/css" href="css/animation.css">
+	<script src="js/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript">
+      function IsPC() {
+    var userAgentInfo = navigator.userAgent;
+    var Agents = ["Android", "iPhone",
+                "SymbianOS", "Windows Phone",
+                "iPad", "iPod"];
+    var flag = true;
+    for (var v = 0; v < Agents.length; v++) {
+        if (userAgentInfo.indexOf(Agents[v]) > 0) {
+            flag = false;
+            break;
+        }
+    }
+    return flag;
+}
+			if(IsPC()) {
+				$("body").hide();
+		alert("请确保在手机上打开该网页,并且使用竖屏,Thank You...");
+		
+	  window.location="https://gsons.github.io";
+     }
+	</script>
+	<script type="text/javascript" src="js/jquery.fireworks.js"></script>
+	<link rel="prefetch" href="./image/p1_bg.jpg" /> 
+	<link rel="prefetch" href="./image/p2_bg.jpg" /> 
+	<link rel="prefetch" href="./image/p3_bg.jpg" /> 
+	<link rel="prefetch" href="./image/p5_bg.jpg" /> 
+	<link rel="prefetch" href="./image/cloud1.png" />
+	<link rel="prefetch" href="./image/cloud2.png" /> 
+	<link rel="prefetch" href="./image/couplet.png" />  
+	<link rel="prefetch" href="./image/couplet_1.png" /> 
+	<link rel="prefetch" href="./image/couplet_2.png" /> 
+	<link rel="prefetch" href="./image/happy.png" /> 
+	<link rel="prefetch" href="./image/lantern.png" /> 
+	<link rel="prefetch" href="./image/music_disc.png" /> 
+	<link rel="prefetch" href="./image/music_pointer.png" /> 
+	<link rel="prefetch" href="./image/p3_blessing.png" /> 
+	<link rel="prefetch" href="./image/p5_car_l.png" /> 
+	<link rel="prefetch" href="./image/p5_car_r.png" /> 
+	<link rel="prefetch" href="./image/p5_fire.png" /> 
+	<link rel="prefetch" href="./image/p5_home.png" />  
+	<link rel="prefetch" href="./image/prev.png" /> 
+	<link rel="prefetch" href="./image/next.png" /> 
+	<link rel="prefetch" href="./image/people.png" /> 
+	<link rel="prefetch" href="./image/snow.gif" /> 
+	<link rel="prefetch" href="./image/spring.png" /> 
+    <link rel="prefetch" href="./image/text_jin.png" /> 
+	<link rel="prefetch" href="./image/text_ji.png" /> 
+	<link rel="prefetch" href="./image/text_he.png" /> 
+	<link rel="prefetch" href="./image/text_sui.png" /> 
+	<link rel="prefetch" href="./image/p1_lantern.png"/> 
+	<link rel="prefetch" href="./image/p2_imooc.png" /> 
+		<style type="text/css">
+			/*reset*/
+		*{
+			margin: 0;
+			padding:0;
+		}
+		html,body{
+			height:100%;
+			overflow: hidden;
+		}
+		/*page*/
+		 .page{
+		 	height: 100%;
+		 	width: 100%;
+		 	position: absolute;
+		 }
+		.page .bg{
+		 	height: 100%;
+		 	width: 100%;
+		 	position: absolute;
+		 }
+		 /*music*/
+		#music{
+			position: fixed;
+			z-index: 999;
+			top:0.10rem;
+			right:0.10rem;
+			width:0.45rem;
+			height:0.45rem;
+			background:#FFF;
+			border-radius:50%;
+			border:4px solid #F00;
+		}
+		   #next{
+		position: fixed;
+			z-index: 999;
+			top:0;
+			bottom: 0;
+			margin:auto;
+			right: 0rem;
+			width:0.52rem;
+			height:0.38rem;
+			background:url("./image/next.png") no-repeat center center;
+			animation: next 1s linear infinite;
+			-webkit-animation: next 1s linear infinite;
+		}
+	     #prev{
+			position: fixed;
+			z-index: 999;
+			top:0;
+			bottom: 0;
+			left: 0;
+			margin:auto;
+			width:0.52rem;
+			height:0.38rem;
+			background:url("./image/prev.png") no-repeat center center;
+			animation: prev 1s linear infinite;
+			-webkit-animation: prev 1s linear infinite;
+		}
+		#music >img:first-of-type{
+			 position:absolute;
+			 width:80%;
+			top:0px;
+			left:0px;
+			right:0px;
+			bottom:0px; 
+			margin:auto;
+			}
+		#music .play{
+			animation: music 2s linear  infinite;
+		   -webkit-animation: music 2s linear  infinite;
+		}
+		#music >img:last-of-type{
+			position:absolute;
+			top:24%;
+			right:5%;
+			width: 28.421%;
+		}
+		.musicplay{
+			animation: rotate 1s linear infinite;
+			-webkit-animation: rotate 1s linear infinite;
+		}
+
+	   #page2 .lantern{
+	 	box-sizing: border-box;
+	 	font-size: 0.23rem;
+	 	font-weight: bold;
+	 	color: #FFF;
+	 	background-size: 100%;
+	 	text-shadow: 0 0 0.05rem #fff;
+	 }
+	 
+	 #page2 .lantern:before{
+	 	content: "恭喜发财";
+	 	text-align: center;
+	 	padding:0.1rem;
+	 	position:absolute;
+	 	left:0;
+	 	right:0;
+	 	top:-0.2rem;
+	 	bottom: 0;
+	 	margin: auto;
+	 	width: 1rem;
+	 	height:1rem;
+	 	opacity:.65;
+	 	background: #f00;
+	 	box-shadow: 0 0 0.25rem 0.25rem #f00;
+	 	border-radius: 50%;
+	 	z-index: -1;
+	 	 animation: lantern .4s linear  infinite;
+	   -webkit-animation: lantern .6s linear  infinite;
+	 }
+	 #myfireworks{
+	 	z-index: 20;
+	  position:absolute;
+			 width:100%;
+			 height: 100%;
+			top:0px;
+			left:0px;	
+	 }
+		</style>
+</head>
+<body>
+   <audio autoplay ="true">
+    <source src="http://m2.music.126.net/qX9rgjw29VyYndcSxMh8Fw==/5727356069162437.mp3" type="audio/mpeg">
+</audio> 
+<div id="music">
+
+	<img src="image/music_disc.png" alt="disc" id="audio" class="musicplay">
+	<img src="image/music_pointer.png" alt="pointer">
+	</div>
+	<div id="prev"></div>
+	<div id="next"></div>
+     
+</body>	
+<script src="js/app.js"></script>
+</html>
