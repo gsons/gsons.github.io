@@ -247,7 +247,9 @@ $("#prev").click(function(){
        	    for(var i=0;i<12;i++){
 			this.pg_fire[i]=new Item("pg_fire"+i,"./image/p5_fire.png",46,33,412*Math.random(),250*Math.random(),"fire  1s linear "+5*Math.random()+"s infinite",0);
 			this.pg.addElement(this.pg_fire[i]);
+				
 		}
+		 $("#page5 .p5_home").css({"top":"","bottom":"0rem"});
        }
      
       this.show=function(){
