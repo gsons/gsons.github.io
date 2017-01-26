@@ -28,6 +28,7 @@ $("#next").click(function(){
 		$("#page"+currentpage).hide();
 		currentpage++;
 		if(currentpage==totalpage) {
+			$("#prev").hide();
 			$("#next").hide();}
 		switch(currentpage){
 			case 2:
