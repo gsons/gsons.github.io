@@ -132,7 +132,7 @@
             return Math.floor(Math.random() * (max - min + 1)) + min;
           }(0, 2);
           audio.src = sounds[randomNumber].prefix + sounds[randomNumber].data;
-          audio.play();
+            if(PlayLoop) audio.play();
         }
 
         var count = Math.random() * 10 + 80;
@@ -188,6 +188,7 @@
     };
 
     var loop = function() {
+          if(!PlayLoop) return;
         // update screen size
         if (SCREEN_WIDTH != window.innerWidth) {
             canvas.width = SCREEN_WIDTH = window.innerWidth;
@@ -262,7 +263,8 @@
     };
 
     var launch = function() {
-        launchFrom(SCREEN_WIDTH / 2);
+        if(PlayLoop)launchFrom(SCREEN_WIDTH / 2);
+        else rockets=[];
     };
 
     // Append the canvas and start the loops

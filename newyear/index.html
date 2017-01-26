@@ -1,17 +1,20 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
 	<title>金鸡贺岁,财运滚滚</title>
 	<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
 	 <link rel="stylesheet" type="text/css" href="css/animation.css">
-	  	<script>
-		if(screen.width>700) {
-		alert("请在手机上打开该网页,Thank You!");
+	  <link rel="icon" href="http://litten.me/assets/img/favicon.ico">
+	<script src="js/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript">
+		var PlayLoop=false;
+			if(screen.width>700||window.orientation ==90|| window.orientation ==-90) {
+		alert("请确保在手机上打开该网页,并且使用竖屏,Thank You...");
 	  window.location="https://gsons.github.io";
      }
 	</script>
-	<script src="js/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="js/jquery.fireworks.js"></script>
 	<link rel="prefetch" href="./image/p1_bg.jpg" /> 
 	<link rel="prefetch" href="./image/p2_bg.jpg" /> 
 	<link rel="prefetch" href="./image/p3_bg.jpg" /> 
@@ -29,7 +32,7 @@
 	<link rel="prefetch" href="./image/p5_car_l.png" /> 
 	<link rel="prefetch" href="./image/p5_car_r.png" /> 
 	<link rel="prefetch" href="./image/p5_fire.png" /> 
-	<link rel="prefetch" href="./image/p5_home.png" /> 
+	<link rel="prefetch" href="./image/p5_home.png" />  
 	<link rel="prefetch" href="./image/prev.png" /> 
 	<link rel="prefetch" href="./image/next.png" /> 
 	<link rel="prefetch" href="./image/people.png" /> 
@@ -153,6 +156,14 @@
 	 	 animation: lantern .4s linear  infinite;
 	   -webkit-animation: lantern .6s linear  infinite;
 	 }
+	 #myfireworks{
+	 	z-index: 20;
+	  position:absolute;
+			 width:100%;
+			 height: 100%;
+			top:0px;
+			left:0px;	
+	 }
 		</style>
 </head>
 <body>
@@ -166,5 +177,6 @@
 	</div>
 	<div id="prev"></div>
 	<div id="next"></div>
+
 </body>	<script src="js/app.js"></script>
 </html>

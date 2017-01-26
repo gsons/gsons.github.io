@@ -1,22 +1,20 @@
-
 $(document).ready(function(){
-	var totalpage=5;//总页码数
+	var totalpage=6;//总页码数
 	var p1=initpage1();
-	var audio=$("audio")[0];
+	var musicaudio=$("audio")[0];
 	//显示page1
 	p1.show();
 	//适配手机
 	 var fontsize=screen.width*100/412;
-	$("html").css("font-size",fontsize+"px");
-	
+	$("html").css("font-size",fontsize+"px");	 
 	$("#audio").click(function(){
 	$(this).addClass("musicplay");
-	if(audio.paused){
-		audio.play();
+	if(musicaudio.paused){
+		musicaudio.play();
 		$(this).addClass("musicplay");
 	}
 	else{
-		audio.pause();
+		musicaudio.pause();
 		$(this).removeClass("musicplay");
 	}
 });
@@ -29,7 +27,8 @@ $("#next").click(function(){
 	if(currentpage<totalpage) {
 		$("#page"+currentpage).hide();
 		currentpage++;
-		if(currentpage==totalpage) $("#next").hide();
+		if(currentpage==totalpage) {
+			$("#next").hide();}
 		switch(currentpage){
 			case 2:
 			 initpage2();
@@ -43,21 +42,30 @@ $("#next").click(function(){
 			case 5:
 			 initpage5();
 			break;
+			case 6:
+			 initpage6();
+			break;
 		}
 		$("#page"+currentpage).show();
-		
 		if(currentpage==2)
 		$("#page"+currentpage).addClass("flippage-normalTranslateInUp");
 	    else if(currentpage==3)
 		$("#page"+currentpage).addClass("rotate-right");
 	    else if(currentpage==4)
 		$("#page"+currentpage).addClass("flippage-cutCard-top-upward ");
-	  	      else if(currentpage==5)
-		$("#page"+currentpage).addClass("rotate-right");	}
+	      else if(currentpage==5)
+		$("#page"+currentpage).addClass("rotate-right");
+	     else if(currentpage==6)
+		$("#page"+currentpage).addClass("flippage-fadeIn");
+	}
 
 });
 
 $("#prev").click(function(){
+	PlayLoop=false;
+	 $("#myfireworks").html("");
+        $("#myfireworks").remove();
+
 	$("#next").show();
 	if(currentpage>1) {
 		$("#page"+currentpage).hide();
@@ -76,16 +84,19 @@ $("#prev").click(function(){
 			case 4:
 			 initpage4();
 			break;
+			case 5:
+			 initpage5();
+			break;
 		}
 		$("#page"+currentpage).show();
-
-
 		if(currentpage==2)
 		$("#page"+currentpage).addClass("flippage-normalTranslateInUp");
 	    else if(currentpage==3)
 		$("#page"+currentpage).addClass("rotate-right");
 	    else if(currentpage==4)
 		$("#page"+currentpage).addClass("flippage-cutCard-top-upward ");
+	 else if(currentpage==5)
+		$("#page"+currentpage).addClass("rotate-right");
 	}
 	});
 	});
@@ -193,31 +204,56 @@ $("#prev").click(function(){
 	 }	
 
 	 /**
-	  * [initpage4 description]
+	  * [initpage5 description]
 	  * @return {[type]} [description]
 	  */
 	 	function initpage5(){
-	var car_l=new Item("car_l","./image/p5_car_l.png",436,330,300,300,"car_l 2.5s forwards",0);
+	var car_l=new Item("car_l","./image/p5_car_l.png",436,330,300,300,"car_l 2.5s forwards",21);
 	var car_r=new Item("car_r","./image/p5_car_r.png",189,141,-200,200,"car_r 2s linear forwards",0);
-	var p5_home=new Item("p5_home","./image/p5_home.png",400,200,0,540,"p5_home 6s linear forwards",0);
+	var p5_home=new Item("p5_home","./image/p5_home.png",400,200,0,540,"p5_home 6s linear forwards",22);
       var bg= new BgItem("bg","./image/p5_bg.jpg","130%","",0);
        var snow= new BgItem("snow","./image/snow.gif","100%","",1);
         var p5=new Page("page5");
         	$("#"+p5.id).html("");
      p5.addBgItem(bg);
      p5.addBgItem(snow);
-
-         var p5_fire=[];
-		for(var i=0;i<22;i++){
-			p5_fire[i]=new Item("p5_fire"+i,"./image/p5_fire.png",46,33,412*Math.random(),330*Math.random(),"fire  1s linear "+5*Math.random()+"s infinite",0);
+      var p5_fire=[];
+		for(var i=0;i<12;i++){
+			p5_fire[i]=new Item("p5_fire"+i,"./image/p5_fire.png",46,33,412*Math.random(),250*Math.random(),"fire  1s linear "+5*Math.random()+"s infinite",0);
 			p5.addElement(p5_fire[i]);
 		}
 		p5.addElement(p5_home);
 		 $(".p5_home").css({"top":"","bottom":"0rem"});
+		 $(".fire_container").css({"top":"","bottom":"0rem"});
       var items=[car_l,car_r];
       var times=[6500,1000];
       sequence_active(p5,items,times,0);
 	 return $("#"+p5.id);
+	 }
+	 	 /**
+	  * [initpage6 description]
+	  * @return {[type]} [description]
+	  */
+	 	function initpage6(){
+	var p6_home=new Item("p6_home","./image/p5_home.png",400,200,0,540,"",22);
+	 var bg= new BgItem("bg","./image/p5_bg.jpg","130%","",0);
+        var p6=new Page("page6");
+       $("#myfireworks").html("");
+        $("#myfireworks").remove();
+		p6.addElement(p6_home);
+		p6.addBgItem(bg)	;
+		$(".p6_home").css({"top":"","bottom":"0rem"});
+		$("#page6").append("<div id='myfireworks'></div>  ");
+		PlayLoop=true;
+			setTimeout(function(){ 
+		$('#myfireworks').fireworks({ 
+		  sound: true, // 声音效果
+		  opacity: 0,
+		  width: '100%', 
+		  height: '100%',
+		}); 
+      },1200);
+	    return $("#"+p6.id);
 	 }
 	/**
 	 * 页面构造函数

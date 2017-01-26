@@ -2683,8 +2683,8 @@
 .flippage-fadeIn{
 	-webkit-animation-name: flippage-fadeIn;
 	        animation-name: flippage-fadeIn;
-	-webkit-animation-duration: 0.7s;
-	animation-duration: 0.7s;
+	-webkit-animation-duration: 1.7s;
+	animation-duration: 1.7s;
 	-webkit-animation-fill-mode: both;
 	animation-fill-mode: both;
 	-webkit-animation-timing-function: ease;
