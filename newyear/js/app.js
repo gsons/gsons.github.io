@@ -5,8 +5,8 @@ $(document).ready(function(){
 	//显示page1
 	p1.show();
 	//适配手机
-	 var fontsize=screen.width*100/412;
-	$("html").css("font-size",fontsize+"px");	 
+    adapt(412,100);
+
 	$("#audio").click(function(){
 	$(this).addClass("musicplay");
 	if(musicaudio.paused){
@@ -29,7 +29,8 @@ $("#next").click(function(){
 		currentpage++;
 		if(currentpage==totalpage) {
 			$("#prev").hide();
-			$("#next").hide();}
+			$("#next").hide();
+		}
 		switch(currentpage){
 			case 2:
 			 initpage2();
@@ -364,3 +365,23 @@ $("#prev").click(function(){
 		page.addElement(items[i]);sequence_active(page,items,times,i+1);
 	},times[i]);
    }
+
+   // 『REM』手机屏幕适配，兼容更改过默认字体大小的安卓用户
+function adapt(designWidth, rem2px) { 
+//  designWidth：‘设计图宽度‘   1rem==rem2px+‘px‘                     
+    var d = window.document.createElement('div');
+    d.style.width = '1rem';
+    d.style.display = "none";
+    var head = window.document.getElementsByTagName('head')[0];
+    head.appendChild(d);
+    var defaultFontSize = parseFloat(window.getComputedStyle(d, null).getPropertyValue('width'));
+    d.remove();
+    document.documentElement.style.fontSize = window.innerWidth / designWidth * rem2px / defaultFontSize * 100 + '%';
+    var st = document.createElement('style');
+// 适应横屏、竖屏
+    var portrait = "@media screen and (min-width: " + window.innerWidth + "px) {html{font-size:" + ((window.innerWidth / (designWidth / rem2px) / defaultFontSize) * 100) + "%;}}";
+    var landscape = "@media screen and (min-width: " + window.innerHeight + "px) {html{font-size:" + ((window.innerHeight / (designWidth / rem2px) / defaultFontSize) * 100) + "%;}}"
+    st.innerHTML = portrait + landscape;
+    head.appendChild(st);
+    return defaultFontSize
+}
