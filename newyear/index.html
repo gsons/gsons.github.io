@@ -8,9 +8,24 @@
 	  <link rel="icon" href="http://litten.me/assets/img/favicon.ico">
 	<script src="js/jquery-2.1.1.min.js"></script>
 	<script type="text/javascript">
+function IsPC() {
+    var userAgentInfo = navigator.userAgent;
+    var Agents = ["Android", "iPhone",
+                "SymbianOS", "Windows Phone",
+                "iPad", "iPod"];
+    var flag = true;
+    for (var v = 0; v < Agents.length; v++) {
+        if (userAgentInfo.indexOf(Agents[v]) > 0) {
+            flag = false;
+            break;
+        }
+    }
+    return flag;
+}
 		var PlayLoop=false;
-			if(screen.width>700||window.orientation ==90|| window.orientation ==-90) {
+			if(IsPC()) {
 		alert("请确保在手机上打开该网页,并且使用竖屏,Thank You...");
+		$("body").hide();
 	  window.location="https://gsons.github.io";
      }
 	</script>
