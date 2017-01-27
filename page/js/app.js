@@ -261,7 +261,9 @@ $("#prev").click(function(){
         for (var i in mitems) {
         	$("#page5"+" ."+mitems[i].mclass).show();
         }
-
+        for(var i in this.pg_fire){
+        	$("#page5"+" ."+this.pg_fire[i].mclass).show();
+        }
        }
        this.addItems();
 	 }

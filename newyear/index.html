@@ -24,8 +24,8 @@ function IsPC() {
 }
 		var PlayLoop=false;
 			if(IsPC()) {
+				$("body").hide();
 		alert("请确保在手机上打开该网页,并且使用竖屏,Thank You...");
-		$("body").hide();
 	  window.location="https://gsons.github.io";
      }
 	</script>
@@ -182,16 +182,14 @@ function IsPC() {
 		</style>
 </head>
 <body>
+</body>	<script src="js/app.js"></script>
    <audio autoplay ="true">
     <source src="http://m2.music.126.net/qX9rgjw29VyYndcSxMh8Fw==/5727356069162437.mp3" type="audio/mpeg">
 </audio> 
 <div id="music">
-
 	<img src="image/music_disc.png" alt="disc" id="audio" class="musicplay">
 	<img src="image/music_pointer.png" alt="pointer">
 	</div>
 	<div id="prev"></div>
 	<div id="next"></div>
-
-</body>	<script src="js/app.js"></script>
 </html>
