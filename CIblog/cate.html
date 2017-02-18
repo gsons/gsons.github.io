@@ -1,0 +1,149 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CIblog后台管理系统</title>
+    <script type="text/javascript" src="static/js/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="static/js/app.js"></script>
+   <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css"/>
+        <script src="static/js/bootstrap.min.css"></script>
+        <script src="static/js/simplemde.min.js"></script>
+        <link rel="stylesheet" href="static/css/simplemde.min.css"/>
+    <link rel="stylesheet" href="static/css/app.css"/>
+</head>
+<body>
+<header class="headerbar">
+   <div class="logo">
+   <img src="static/image/logo.png" alt="StartBlog"></div>
+   <div class="headerbarsub clearfix">
+    <a id="sidebartoggle" class="menu pull-left" href="#"><span class="glyphicon glyphicon-list"></span></a>
+   	<a class="exit pull-right" href="index.php/admin/home/userExit"><span class="glyphicon glyphicon-log-out">退出</span></a>
+   </div>
+</header>
+ <!-- sidebar -->
+<div class="sidebar">
+	<div class="accountInfo">
+			<img class="headicon" src="static/image/author.jpg" alt="">
+		 <div class="username"><span class="glyphicon glyphicon-user"></span>root</div>
+		  <a href="userset.html" class="usersetting"><span class="glyphicon glyphicon-pencil">账号设置</span></a>
+	</div>
+        <div class="menu-panel">
+<a class="list-group-item active">
+Dashboard
+</a>
+<a href="index.html" class="list-group-item"><span class="glyphicon glyphicon-home"></span>&nbsp;&nbsp;首页</a>
+<a href="site.html" class="list-group-item"><span class="glyphicon glyphicon-cog"></span>&nbsp;&nbsp;站点设置</a>
+<a href="article.html" class="list-group-item"><span class="glyphicon glyphicon-book"></span>&nbsp;&nbsp;文章管理</a>
+<a href="cate.html" class="list-group-item"><span class="glyphicon glyphicon-th-large"></span>&nbsp;&nbsp;类别管理</a>
+<a href="tag.html" class="list-group-item m-active"><span class="glyphicon glyphicon-tag"></span>&nbsp;&nbsp;标签管理</a>
+<a href="javascript:;" id="extensiontool"class="list-group-item"><span class="glyphicon glyphicon-wrench"></span>&nbsp;&nbsp;扩展工具 <span id="icon-down" class="glyphicon glyphicon-chevron-down pull-right"></span></a>
+ <div id="extensiontool-content" style="display:none">
+     <a href="copyessay.html" class="list-group-item">>&nbsp;&nbsp;&nbsp;&nbsp;文章备份</a>
+     <a href="friendlink.html" class="list-group-item">>&nbsp;&nbsp;&nbsp;&nbsp;友情链接</a>
+     <a href="addLink.html" class="list-group-item">>&nbsp;&nbsp;&nbsp;&nbsp;添加链接</a>
+ </div>
+<a href="feedback.html" class="list-group-item"><span class="   glyphicon glyphicon-random"></span>&nbsp;&nbsp;问题反馈</a>
+</div>
+
+</div><!-- 类别管理 -->
+<div class="m-content">
+    <div class="container-fluid">
+        <div class="row menutool">
+            <div class="index"><span class="glyphicon glyphicon-th-large">&nbsp;类别管理</span></div>
+            <p class="menutool-info">新增、删除文章类别</p>
+        </div>
+        <div class="row m-category">
+            <div class="col-sm-4">
+                <form class="form-inline" role="form" method="post" action="http://localhost/CIblog/index.php/admin/Category/doAddCate">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="请输入类别名称"
+                        name="category">
+
+                    </div>
+                    <div class="form-group">
+
+                        <input type="submit" class="form-control btn btn-default btn-block" value="新增">
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row m-category">
+            <div class="table-responsive">
+                <div class="col-sm-12">
+                    <table class="table">
+
+                        <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>分类</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                                                <tr>
+                            <td>17</td>
+
+                            <td>杂七杂八</td>
+                            <td>
+
+                                <a href="http://localhost/CIblog/index.php/admin/Category/doDelCate/17" class="del"><span class="glyphicon glyphicon-trash"></span>删除</a></td>
+                        </tr>
+                                                <tr>
+                            <td>18</td>
+
+                            <td>web前端</td>
+                            <td>
+
+                                <a href="http://localhost/CIblog/index.php/admin/Category/doDelCate/18" class="del"><span class="glyphicon glyphicon-trash"></span>删除</a></td>
+                        </tr>
+                                                <tr>
+                            <td>12</td>
+
+                            <td>php</td>
+                            <td>
+
+                                <a href="http://localhost/CIblog/index.php/admin/Category/doDelCate/12" class="del"><span class="glyphicon glyphicon-trash"></span>删除</a></td>
+                        </tr>
+                                                <tr>
+                            <td>13</td>
+
+                            <td>java</td>
+                            <td>
+
+                                <a href="http://localhost/CIblog/index.php/admin/Category/doDelCate/13" class="del"><span class="glyphicon glyphicon-trash"></span>删除</a></td>
+                        </tr>
+                                                <tr>
+                            <td>14</td>
+
+                            <td>jquery</td>
+                            <td>
+
+                                <a href="http://localhost/CIblog/index.php/admin/Category/doDelCate/14" class="del"><span class="glyphicon glyphicon-trash"></span>删除</a></td>
+                        </tr>
+                                                <tr>
+                            <td>15</td>
+
+                            <td>CIblog</td>
+                            <td>
+
+                                <a href="http://localhost/CIblog/index.php/admin/Category/doDelCate/15" class="del"><span class="glyphicon glyphicon-trash"></span>删除</a></td>
+                        </tr>
+                                                <tr>
+                            <td>16</td>
+
+                            <td>Makedown</td>
+                            <td>
+
+                                <a href="http://localhost/CIblog/index.php/admin/Category/doDelCate/16" class="del"><span class="glyphicon glyphicon-trash"></span>删除</a></td>
+                        </tr>
+                                                </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
