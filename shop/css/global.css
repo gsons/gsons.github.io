@@ -1,0 +1,61 @@
+/*全局样式初始化*/
+
+body, div, dl, dt, dd, ul, li, ol, 
+h1, h2, h3, h4, h5, h6, pre, form,
+fieldset, input, textarea, p, blockquote, th, td
+{
+	padding: 0;
+	margin: 0;	
+}
+
+html, body{
+	width: 100%;
+	height: 100%;
+}
+
+body{
+	background-color: #fff;
+	padding-top: 0;
+	min-width: 960px;
+	/*padding: 60px 0 396px 0;*/
+	/*padding-bottom: 396px;*/
+	position: relative;
+	height: auto;
+	min-height: 100%;
+	display: block;
+}
+
+body{
+	text-align: left;
+}
+
+body, textarea, select, input{
+	font-family: "Arial","Hiragino Sans GB", \5fae\8f6f\96c5\9ed1, "Helvetica", "sans-serif";
+	font-size: 14px;
+	color: #444;
+}
+
+div{
+	display: block;
+}
+
+a{
+	text-decoration: none;
+	color: #333;
+}
+
+a, button{
+	cursor: pointer;
+}
+
+map{
+	display: inline;
+}
+
+p{
+	display: block;
+}
+
+ul, li, dl, ol{
+	list-style: none;
+}

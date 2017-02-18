@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>注册页面</title>
+	</head>
+	<link rel="stylesheet" href="css/register.css" />
+	<script type="text/javascript" src="js/jquery-3.1.0.js" ></script>
+	<script type="text/javascript" src="js/register.js" ></script>
+	<body>
+		<!--
+        	描述：头部
+        -->
+		<div class="header">
+			<div class="header-in">
+				<a href="#" target="_blank">
+					<div class="logo"></div>
+				</a>
+				<div class="block">
+					已有账号?去<a id="btn_Login" href="">登录</a>
+				</div>
+			</div>
+		</div>
+
+		<!--
+        	描述：主体
+        -->
+		<div class="container_main">
+			<div class="top_title">Register</div>
+			<!-- input -->
+			<div class="opr">
+				<div>
+					<!--账号栏-->
+					<div class="opr-input firstelem">
+						<label class="opr-label">账号:</label>
+						<input id="username" class="i-inpt" value="" placeholder="用户账号名" name="userName" type="text" />
+						<div class="u-tip">
+							<div class="u-clear" id="username"> </div>
+						</div>
+						<!--错误提示1-->
+						<table class="popb" id="username_err">
+							<tbody>
+								<tr>
+									<td class="b-i"><i class="i-err" id="errOrright1"></i></td>
+									<td class="b-p" id="p-err1">账号须由6-18个字符组成</td>
+								</tr>
+							</tbody>
+						</table>
+						<!--错误提示2-->
+						<!--<div id="input_right" class="i-right"></div>-->
+					</div>
+					<!--密码栏-->
+					<div class="opr-input">
+						<label class="opr-label">密码:</label>
+						<input id="password1" class="i-inpt" value="" placeholder="6-16位密码 , 区分大小写" name="password" type="password" />
+						<div class="u-tip">
+							<div class="u-clear" id="password1"> </div>
+						</div>
+						<!--错误提示1-->
+						<table class="popb" id="password1_err">
+							<tbody>
+								<tr>
+									<td class="b-i"><i class="i-err" id="errOrright2"></i></td>
+									<td class="b-p" id="p-err2">密码须由6-16个字符组成，区分大小写</td>
+								</tr>
+							</tbody>
+						</table>
+						<!--错误提示2-->
+						<!--<div id="input_right" class="i-right"></div>-->
+					</div>
+					<!--确认密码栏-->
+					<div class="opr-input">
+						<label class="opr-label">确认密码:</label>
+						<input id="password2" class="i-inpt" value="" placeholder="再次输入密码" name="password2" type="password" />
+						<div class="u-tip">
+							<div class="u-clear" id="password2"> </div>
+						</div>
+						<!--错误提示1-->
+						<table class="popb" id="password2_err">
+							<tbody>
+								<tr>
+									<td class="b-i"><i class="i-err" id="errOrright3"></i></td>
+									<td class="b-p" id="p-err3">两次输入密码不一致</td>
+								</tr>
+							</tbody>
+						</table>
+						<!--错误提示2-->
+						<!--<div id="input_right" class="i-right"></div>-->
+					</div>
+					<!--验证码-->
+					<div class="opr-input" >
+						<label class="opr-label" >验证码:</label>
+						<input id="validcode" class="i-inpt" value="" placeholder="请输入验证码" name="validcode" type="text" maxlength="4"/>
+						<img class="img-code" title="换一换" id="imgAuthCode" src="testValidCodeServlet" onclick="this.src= 'testValidCodeServlet?date'+new Date();">
+						<div class="u-tip code-tip">
+							<div class="u-clear" id="validcode"> </div>
+						</div>
+						<!--错误提示1-->
+						<table class="popb" id="validcode_err">
+							<tbody>
+								<tr>
+									<td class="b-i"><i class="i-err" id="errOrright4"></i></td>
+									<td class="b-p" id="p-err4">验证码错误</td>
+								</tr>
+							</tbody>
+						</table>
+						<!--<div id="input_right" class="i-right"></div>-->
+					</div>
+					<!--手机号-->
+					<div class="opr-input">
+						<label class="opr-label">手机号:</label>
+						<input id="phone" class="i-inpt" value="" placeholder="11位手机号" name="phoneNumber" type="text" />
+						<div class="u-tip">
+							<div class="u-clear" id="phone"> </div>
+						</div>
+						<!--错误提示1-->
+						<table class="popb" id="phone_err">
+							<tbody>
+								<tr>
+									<td class="b-i"><i class="i-err" id="errOrright5"></i></td>
+									<td class="b-p" id="p-err5">格式不对</td>
+								</tr>
+							</tbody>
+						</table>
+						<!--错误提示2-->
+						<!--<div id="input_right" class="i-right"></div>-->
+					</div>
+					<div style="height: 58px;" class="u-input">
+          				<label class="opr-label">&nbsp;</label>
+            			<button class="b-btn">注 册</button>
+        			</div>
+        			<div class="opr-input">
+        				<label class="opr-label"></label>
+        				<span class="tip">用户注册即代表同意<a href="#" target="_blank">《服务条款》</a>和<a href="#" target="_blank">《个人信息利用政策》</a></span>
+        			</div>
+				</div>
+			</div>
+		</div>
+
+		<!--
+        	描述：尾部
+        -->
+		<div class="footer">
+			<div class="header-in">
+				<div class="cp">
+					<p>
+						<a href="http://corp.163.com/eng/about/overview.html" target="_blank">About Us</a>-
+						<a href="http://gb.corp.163.com/gb/about/overview.html" target="_blank">团队简介</a>-
+						<a href="http://gb.corp.163.com/gb/contactus.html" target="_blank">联系方式</a>-
+						<a href="http://reg.163.com/help/help_oauth2.html?v=20141215" target="_blank">技术认证</a>-
+						<a href="http://corp.163.com/gb/job/job.html" target="_blank">团队信息</a>-
+						<a href="http://help.163.com/" target="_blank">客户服务</a>-
+						<a href="http://gb.corp.163.com/gb/legal.html" target="_blank">相关法律</a>-
+						<a href="http://emarketing.biz.163.com/" target="_blank">网络营销</a>
+					</p>
+					<p>***公司版权所有 ©GSON</p>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
