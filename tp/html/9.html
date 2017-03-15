@@ -1,0 +1,95 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+	<head>
+		<meta charset="GB2312">
+		<title>开发规范</title>
+		<link rel="stylesheet" href="../images/css/book.css">
+		<link rel="stylesheet" href="../images/prettify/prettify.css">
+		<script type="text/javascript" src="../images/js/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="../images/prettify/prettify.js"></script>
+		<script type="text/javascript">
+			$(function(){	
+				$(window).resize(function(){
+					$('.book-content').css('min-height', $(window).height() - 130);
+				}).resize();
+				
+				var $code = $(".book-content pre");
+				$code.each(function(){
+					var $this = $(this), $code = $this.children("code"), lang = $code.attr("class");
+					$this.addClass("prettyprint linenums");
+					lang && $this.addClass("lang-" + lang);					
+				});
+				
+				//调用高亮插件，高亮代码
+				prettyPrint();
+				
+				//解决表格存在边距的问题
+				$("table").attr({"cellspacing":"0", "cellpadding":"0"});
+				
+				//快捷键翻页
+				$(document).keydown(function(event){
+					if(event.keyCode == 37){ //上一页
+						$(".book-title .prev span").click();
+					} else if(event.keyCode == 39) {//下一页
+						$(".book-title .next span").click();
+					}
+				});
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div class="book-title">
+			<h1>开发规范</h1>
+            <div class="page"><a title="上一页" class="prev" href="8.html"><span>上一页</span></a><a title="下一页" class="next" href="10.html"><span>下一页</span></a></div>
+            <div class="description"></div>
+		</div>
+		<div class="book-content"><h2>命名规范</h2>
+
+<p>使用ThinkPHP开发的过程中应该尽量遵循下列命名规范：</p>
+
+<blockquote>
+  <ul>
+  <li>类文件都是以.class.php为后缀（这里是指的ThinkPHP内部使用的类库文件，不代表外部加载的类库文件），使用驼峰法命名，并且首字母大写，例如 <code>DbMysql.class.php</code>；  </li>
+  <li>类的命名空间地址和所在的路径地址一致，例如 <code>Home\Controller\UserController</code>类所在的路径应该是 <code>Application/Home/Controller/UserController.class.php</code>；  </li>
+  <li>确保文件的命名和调用大小写一致，是由于在类Unix系统上面，对大小写是敏感的（而ThinkPHP在调试模式下面，即使在Windows平台也会严格检查大小写）；  </li>
+  <li>类名和文件名一致（包括上面说的大小写一致），例如 <code>UserController</code>类的文件命名是<code>UserController.class.php</code>， InfoModel类的文件名是<code>InfoModel.class.php</code>， 并且不同的类库的类命名有一定的规范；  </li>
+  <li>函数、配置文件等其他类库文件之外的一般是以<code>.php</code>为后缀（第三方引入的不做要求）；  </li>
+  <li>函数的命名使用小写字母和下划线的方式，例如 <code>get_client_ip</code>；  </li>
+  <li>方法的命名使用驼峰法，并且首字母小写或者使用下划线“&#95;”，例如 <code>getUserName</code>，<code>_parseType</code>，通常下划线开头的方法属于私有方法；  </li>
+  <li>属性的命名使用驼峰法，并且首字母小写或者使用下划线“&#95;”，例如 <code>tableName</code>、<code>_instance</code>，通常下划线开头的属性属于私有属性；  </li>
+  <li>以双下划线“&#95;_”打头的函数或方法作为魔法方法，例如 <code>__call</code> 和 <code>__autoload</code>；  </li>
+  <li>常量以大写字母和下划线命名，例如 <code>HAS_ONE</code>和 <code>MANY_TO_MANY</code>；  </li>
+  <li>配置参数以大写字母和下划线命名，例如<code>HTML_CACHE_ON</code>；  </li>
+  <li>语言变量以大写字母和下划线命名，例如<code>MY_LANG</code>，以下划线打头的语言变量通常用于系统语言变量，例如 <code>_CLASS_NOT_EXIST_</code>；  </li>
+  <li>对变量的命名没有强制的规范，可以根据团队规范来进行；  </li>
+  <li>ThinkPHP的模板文件默认是以<code>.html</code> 为后缀（可以通过配置修改）；  </li>
+  <li>数据表和字段采用小写加下划线方式命名，并注意字段名不要以下划线开头，例如 <code>think_user</code> 表和 <code>user_name</code>字段是正确写法，类似 <code>_username</code> 这样的数据表字段可能会被过滤。  </li>
+  </ul>
+</blockquote>
+
+<p>特例：在ThinkPHP里面，有一个函数命名的特例，就是单字母大写函数，这类函数通常是某些操作的快捷定义，或者有特殊的作用。例如：A、D、S、L 方法等等，他们有着特殊的含义，后面会有所了解。</p>
+
+<blockquote>
+  <p>由于ThinkPHP默认全部使用UTF-8编码，所以请确保你的程序文件采用UTF-8编码格式保存，并且去掉BOM信息头（去掉BOM头信息有很多方式，不同的编辑器都有设置方法，也可以用工具进行统一检测和处理），否则可能导致很多意想不到的问题。</p>
+</blockquote>
+
+<h2>开发建议</h2>
+
+<p>在使用ThinkPHP进行开发的过程中，我们给出如下建议，会让你的开发变得更轻松：</p>
+
+<blockquote>
+  <ul>
+  <li>遵循框架的命名规范和目录规范；</li>
+  <li>开发过程中尽量开启调试模式，及早发现问题；</li>
+  <li>多看看日志文件，查找隐患问题；</li>
+  <li>养成使用I函数获取输入变量的好习惯；</li>
+  <li>更新或者环境改变后遇到问题首要问题是清空Runtime目录；</li>
+  </ul>
+</blockquote>
+</div>
+		<div class="book-footer">
+			<div class="page"><a title="上一页" class="prev" href="8.html"><span>上一页</span></a><a title="下一页" class="next" href="10.html"><span>下一页</span></a></div>
+		</div>
+	</body>
+</html>

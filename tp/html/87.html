@@ -1,0 +1,108 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+	<head>
+		<meta charset="GB2312">
+		<title>组合查询</title>
+		<link rel="stylesheet" href="../images/css/book.css">
+		<link rel="stylesheet" href="../images/prettify/prettify.css">
+		<script type="text/javascript" src="../images/js/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="../images/prettify/prettify.js"></script>
+		<script type="text/javascript">
+			$(function(){	
+				$(window).resize(function(){
+					$('.book-content').css('min-height', $(window).height() - 130);
+				}).resize();
+				
+				var $code = $(".book-content pre");
+				$code.each(function(){
+					var $this = $(this), $code = $this.children("code"), lang = $code.attr("class");
+					$this.addClass("prettyprint linenums");
+					lang && $this.addClass("lang-" + lang);					
+				});
+				
+				//调用高亮插件，高亮代码
+				prettyPrint();
+				
+				//解决表格存在边距的问题
+				$("table").attr({"cellspacing":"0", "cellpadding":"0"});
+				
+				//快捷键翻页
+				$(document).keydown(function(event){
+					if(event.keyCode == 37){ //上一页
+						$(".book-title .prev span").click();
+					} else if(event.keyCode == 39) {//下一页
+						$(".book-title .next span").click();
+					}
+				});
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div class="book-title">
+			<h1>组合查询</h1>
+            <div class="page"><a title="上一页" class="prev" href="86.html"><span>上一页</span></a><a title="下一页" class="next" href="88.html"><span>下一页</span></a></div>
+            <div class="description"></div>
+		</div>
+		<div class="book-content"><p>组合查询的主体还是采用数组方式查询，只是加入了一些特殊的查询支持，包括字符串模式查询（<code>_string</code>）、复合查询（<code>_complex</code>）、请求字符串查询（<code>_query</code>），混合查询中的特殊查询每次查询只能定义一个，由于采用数组的索引方式，索引相同的特殊查询会被覆盖。</p>
+
+<h2>一、字符串模式查询</h2>
+
+<p>数组条件可以和字符串条件（采用_string 作为查询条件）混合使用，例如：</p>
+
+<pre><code>$User = M("User"); // 实例化User对象
+$map['id'] = array('neq',1);
+$map['name'] = 'ok';
+$map['_string'] = 'status=1 AND score&gt;10';
+$User-&gt;where($map)-&gt;select(); 
+</code></pre>
+
+<p>最后得到的查询条件就成了：</p>
+
+<pre><code>( `id` != 1 ) AND ( `name` = 'ok' ) AND ( status=1 AND score&gt;10 )
+</code></pre>
+
+<h2>二、请求字符串查询方式</h2>
+
+<p>请求字符串查询是一种类似于URL传参的方式，可以支持简单的条件相等判断。</p>
+
+<pre><code>$map['id'] = array('gt','100');
+$map['_query'] = 'status=1&amp;score=100&amp;_logic=or';
+</code></pre>
+
+<p>得到的查询条件是：</p>
+
+<pre><code>`id`&gt;100 AND (`status` = '1' OR `score` = '100')
+</code></pre>
+
+<h2>三、复合查询</h2>
+
+<p>复合查询相当于封装了一个新的查询条件，然后并入原来的查询条件之中，所以可以完成比较复杂的查询条件组装。
+例如：</p>
+
+<pre><code>$where['name']  = array('like', '%thinkphp%');
+$where['title']  = array('like','%thinkphp%');
+$where['_logic'] = 'or';
+$map['_complex'] = $where;
+$map['id']  = array('gt',1);
+</code></pre>
+
+<p>查询条件是</p>
+
+<pre><code>( id &gt; 1) AND ( ( name like '%thinkphp%') OR ( title like '%thinkphp%') )
+</code></pre>
+
+<p>复合查询使用了_complex作为子查询条件来定义，配合之前的查询方式，可以非常灵活的制定更加复杂的查询条件。
+很多查询方式可以相互转换，例如上面的查询条件可以改成：</p>
+
+<pre><code>$where['id'] = array('gt',1);
+$where['_string'] = ' (name like "%thinkphp%")  OR ( title like "%thinkphp") ';
+</code></pre>
+
+<p>最后生成的SQL语句是一致的。</p>
+</div>
+		<div class="book-footer">
+			<div class="page"><a title="上一页" class="prev" href="86.html"><span>上一页</span></a><a title="下一页" class="next" href="88.html"><span>下一页</span></a></div>
+		</div>
+	</body>
+</html>

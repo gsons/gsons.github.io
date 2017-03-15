@@ -1,0 +1,106 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+	<head>
+		<meta charset="GB2312">
+		<title>分布式数据库支持</title>
+		<link rel="stylesheet" href="../images/css/book.css">
+		<link rel="stylesheet" href="../images/prettify/prettify.css">
+		<script type="text/javascript" src="../images/js/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="../images/prettify/prettify.js"></script>
+		<script type="text/javascript">
+			$(function(){	
+				$(window).resize(function(){
+					$('.book-content').css('min-height', $(window).height() - 130);
+				}).resize();
+				
+				var $code = $(".book-content pre");
+				$code.each(function(){
+					var $this = $(this), $code = $this.children("code"), lang = $code.attr("class");
+					$this.addClass("prettyprint linenums");
+					lang && $this.addClass("lang-" + lang);					
+				});
+				
+				//调用高亮插件，高亮代码
+				prettyPrint();
+				
+				//解决表格存在边距的问题
+				$("table").attr({"cellspacing":"0", "cellpadding":"0"});
+				
+				//快捷键翻页
+				$(document).keydown(function(event){
+					if(event.keyCode == 37){ //上一页
+						$(".book-title .prev span").click();
+					} else if(event.keyCode == 39) {//下一页
+						$(".book-title .next span").click();
+					}
+				});
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div class="book-title">
+			<h1>分布式数据库支持</h1>
+            <div class="page"><a title="上一页" class="prev" href="53.html"><span>上一页</span></a><a title="下一页" class="next" href="55.html"><span>下一页</span></a></div>
+            <div class="description"></div>
+		</div>
+		<div class="book-content"><p>ThinkPHP内置了分布式数据库的支持，包括主从式数据库的读写分离，但是分布式数据库必须是相同的数据库类型。</p>
+
+<p>配置<code>DB_DEPLOY_TYPE</code> 为1 可以采用分布式数据库支持。如果采用分布式数据库，定义数据库配置信息的方式如下：</p>
+
+<pre><code>//分布式数据库配置定义
+'DB_DEPLOY_TYPE'=&gt; 1, // 设置分布式数据库支持
+'DB_TYPE'       =&gt; 'mysql', //分布式数据库类型必须相同
+'DB_HOST'       =&gt; '192.168.0.1,192.168.0.2',
+'DB_NAME'       =&gt; 'thinkphp', //如果相同可以不用定义多个
+'DB_USER'       =&gt; 'user1,user2',
+'DB_PWD'        =&gt; 'pwd1,pwd2',
+'DB_PORT'       =&gt; '3306',
+'DB_PREFIX'     =&gt; 'think_',
+</code></pre>
+
+<p>连接的数据库个数取决于DB_HOST定义的数量，所以即使是两个相同的IP也需要重复定义，但是其他的参数如果存在相同的可以不用重复定义，例如：</p>
+
+<pre><code>'DB_PORT'=&gt;'3306,3306'
+</code></pre>
+
+<p>和</p>
+
+<pre><code>'DB_PORT'=&gt;'3306'
+</code></pre>
+
+<p>等效。</p>
+
+<pre><code>'DB_USER'=&gt;'user1', 
+'DB_PWD'=&gt;'pwd1', 
+</code></pre>
+
+<p>和</p>
+
+<pre><code>'DB_USER'=&gt;'user1,user1', 
+'DB_PWD'=&gt;'pwd1,pwd1',
+</code></pre>
+
+<p>等效。</p>
+
+<p>还可以设置分布式数据库的读写是否分离，默认的情况下读写不分离，也就是每台服务器都可以进行读写操作，对于主从式数据库而言，需要设置读写分离，通过下面的设置就可以：</p>
+
+<pre><code>'DB_RW_SEPARATE'=&gt;true,
+</code></pre>
+
+<p>在读写分离的情况下，默认第一个数据库配置是主服务器的配置信息，负责写入数据，如果设置了<code>DB_MASTER_NUM</code>参数，则可以支持多个主服务器写入。其它的都是从数据库的配置信息，负责读取数据，数量不限制。每次连接从服务器并且进行读取操作的时候，系统会随机进行在从服务器中选择。</p>
+
+<p>还可以设置<code>DB_SLAVE_NO</code> 指定某个服务器进行读操作。</p>
+
+<p>调用模型的CURD操作的话，系统会自动判断当前执行的方法的读操作还是写操作，如果你用的是原生SQL，那么需要注意系统的默认规则：
+<strong>写操作必须用模型的execute方法，读操作必须用模型的query方法</strong>，否则会发生主从读写错乱的情况。</p>
+
+<blockquote>
+  <p>注意：主从数据库的数据同步工作不在框架实现，需要数据库考虑自身的同步或者复制机制。</p>
+</blockquote>
+</div>
+		<div class="book-footer">
+			<div class="page"><a title="上一页" class="prev" href="53.html"><span>上一页</span></a><a title="下一页" class="next" href="55.html"><span>下一页</span></a></div>
+		</div>
+	</body>
+</html>

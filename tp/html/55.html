@@ -1,0 +1,213 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+	<head>
+		<meta charset="GB2312">
+		<title>连贯操作</title>
+		<link rel="stylesheet" href="../images/css/book.css">
+		<link rel="stylesheet" href="../images/prettify/prettify.css">
+		<script type="text/javascript" src="../images/js/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="../images/prettify/prettify.js"></script>
+		<script type="text/javascript">
+			$(function(){	
+				$(window).resize(function(){
+					$('.book-content').css('min-height', $(window).height() - 130);
+				}).resize();
+				
+				var $code = $(".book-content pre");
+				$code.each(function(){
+					var $this = $(this), $code = $this.children("code"), lang = $code.attr("class");
+					$this.addClass("prettyprint linenums");
+					lang && $this.addClass("lang-" + lang);					
+				});
+				
+				//调用高亮插件，高亮代码
+				prettyPrint();
+				
+				//解决表格存在边距的问题
+				$("table").attr({"cellspacing":"0", "cellpadding":"0"});
+				
+				//快捷键翻页
+				$(document).keydown(function(event){
+					if(event.keyCode == 37){ //上一页
+						$(".book-title .prev span").click();
+					} else if(event.keyCode == 39) {//下一页
+						$(".book-title .next span").click();
+					}
+				});
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div class="book-title">
+			<h1>连贯操作</h1>
+            <div class="page"><a title="上一页" class="prev" href="54.html"><span>上一页</span></a><a title="下一页" class="next" href="56.html"><span>下一页</span></a></div>
+            <div class="description"></div>
+		</div>
+		<div class="book-content"><p>ThinkPHP模型基础类提供的连贯操作方法（也有些框架称之为链式操作），可以有效的提高数据存取的代码清晰度和开发效率，并且支持所有的CURD操作。</p>
+
+<p>使用也比较简单， 假如我们现在要查询一个User表的满足状态为1的前10条记录，并希望按照用户的创建时间排序 ，代码如下：</p>
+
+<pre><code>$User-&gt;where('status=1')-&gt;order('create_time')-&gt;limit(10)-&gt;select();
+</code></pre>
+
+<p>这里的<code>where</code>、<code>order</code>和<code>limit</code>方法就被称之为连贯操作方法，除了select方法必须放到最后一个外（因为select方法并不是连贯操作方法），连贯操作的方法调用顺序没有先后，例如，下面的代码和上面的等效：</p>
+
+<pre><code>$User-&gt;order('create_time')-&gt;limit(10)-&gt;where('status=1')-&gt;select();
+</code></pre>
+
+<p>如果不习惯使用连贯操作的话，还支持直接使用参数进行查询的方式。例如上面的代码可以改写为：</p>
+
+<pre><code>$User-&gt;select(array('order'=&gt;'create_time','where'=&gt;'status=1','limit'=&gt;'10'));
+</code></pre>
+
+<p>使用数组参数方式的话，索引的名称就是连贯操作的方法名称。其实不仅仅是查询方法可以使用连贯操作，包括所有的CURD方法都可以使用，例如：</p>
+
+<pre><code>$User-&gt;where('id=1')-&gt;field('id,name,email')-&gt;find(); 
+$User-&gt;where('status=1 and id=1')-&gt;delete();
+</code></pre>
+
+<p>连贯操作通常只有一个参数，并且仅在当此查询或者操作有效，完成后会自动清空连贯操作的所有传值（有个别特殊的连贯操作有多个参数，并且会记录当前的传值）。简而言之，连贯操作的结果不会带入以后的查询。</p>
+
+<p>系统支持的连贯操作方法有：
+<table>
+<thead>
+<tr>
+  <th>连贯操作</th>
+  <th>作用</th>
+  <th>支持的参数类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>where*</td>
+  <td>用于查询或者更新条件的定义</td>
+  <td>字符串、数组和对象</td>
+</tr>
+<tr>
+  <td>table</td>
+  <td>用于定义要操作的数据表名称</td>
+  <td>字符串和数组</td>
+</tr>
+<tr>
+  <td>alias</td>
+  <td>用于给当前数据表定义别名</td>
+  <td>字符串</td>
+</tr>
+<tr>
+  <td>data</td>
+  <td>用于新增或者更新数据之前的数据对象赋值</td>
+  <td>数组和对象</td>
+</tr>
+<tr>
+  <td>field</td>
+  <td>用于定义要查询的字段（支持字段排除）</td>
+  <td>字符串和数组</td>
+</tr>
+<tr>
+  <td>order</td>
+  <td>用于对结果排序</td>
+  <td>字符串和数组</td>
+</tr>
+<tr>
+  <td>limit</td>
+  <td>用于限制查询结果数量</td>
+  <td>字符串和数字</td>
+</tr>
+<tr>
+  <td>page</td>
+  <td>用于查询分页（内部会转换成limit）</td>
+  <td>字符串和数字</td>
+</tr>
+<tr>
+  <td>group</td>
+  <td>用于对查询的group支持</td>
+  <td>字符串</td>
+</tr>
+<tr>
+  <td>having</td>
+  <td>用于对查询的having支持</td>
+  <td>字符串</td>
+</tr>
+<tr>
+  <td>join*</td>
+  <td>用于对查询的join支持</td>
+  <td>字符串和数组</td>
+</tr>
+<tr>
+  <td>union*</td>
+  <td>用于对查询的union支持</td>
+  <td>字符串、数组和对象</td>
+</tr>
+<tr>
+  <td>distinct</td>
+  <td>用于查询的distinct支持</td>
+  <td>布尔值</td>
+</tr>
+<tr>
+  <td>lock</td>
+  <td>用于数据库的锁机制</td>
+  <td>布尔值</td>
+</tr>
+<tr>
+  <td>cache</td>
+  <td>用于查询缓存</td>
+  <td>支持多个参数</td>
+</tr>
+<tr>
+  <td>relation</td>
+  <td>用于关联查询（需要关联模型支持）</td>
+  <td>字符串</td>
+</tr>
+<tr>
+  <td>result</td>
+  <td>用于返回数据转换</td>
+  <td>字符串</td>
+</tr>
+<tr>
+  <td>validate</td>
+  <td>用于数据自动验证</td>
+  <td>数组</td>
+</tr>
+<tr>
+  <td>auto</td>
+  <td>用于数据自动完成</td>
+  <td>数组</td>
+</tr>
+<tr>
+  <td>filter</td>
+  <td>用于数据过滤</td>
+  <td>字符串</td>
+</tr>
+<tr>
+  <td>scope*</td>
+  <td>用于命名范围</td>
+  <td>字符串、数组</td>
+</tr>
+<tr>
+  <td>bind*</td>
+  <td>用于数据绑定操作</td>
+  <td>数组或多个参数</td>
+</tr>
+<tr>
+  <td>token</td>
+  <td>用于令牌验证</td>
+  <td>布尔值</td>
+</tr>
+<tr>
+  <td>comment</td>
+  <td>用于SQL注释</td>
+  <td>字符串</td>
+</tr>
+</tbody>
+</table></p>
+
+<blockquote>
+  <p>所有的连贯操作都返回当前的模型实例对象（this），其中带*标识的表示支持多次调用。</p>
+</blockquote>
+</div>
+		<div class="book-footer">
+			<div class="page"><a title="上一页" class="prev" href="54.html"><span>上一页</span></a><a title="下一页" class="next" href="56.html"><span>下一页</span></a></div>
+		</div>
+	</body>
+</html>

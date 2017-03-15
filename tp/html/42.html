@@ -1,0 +1,162 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+	<head>
+		<meta charset="GB2312">
+		<title>跳转和重定向</title>
+		<link rel="stylesheet" href="../images/css/book.css">
+		<link rel="stylesheet" href="../images/prettify/prettify.css">
+		<script type="text/javascript" src="../images/js/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="../images/prettify/prettify.js"></script>
+		<script type="text/javascript">
+			$(function(){	
+				$(window).resize(function(){
+					$('.book-content').css('min-height', $(window).height() - 130);
+				}).resize();
+				
+				var $code = $(".book-content pre");
+				$code.each(function(){
+					var $this = $(this), $code = $this.children("code"), lang = $code.attr("class");
+					$this.addClass("prettyprint linenums");
+					lang && $this.addClass("lang-" + lang);					
+				});
+				
+				//调用高亮插件，高亮代码
+				prettyPrint();
+				
+				//解决表格存在边距的问题
+				$("table").attr({"cellspacing":"0", "cellpadding":"0"});
+				
+				//快捷键翻页
+				$(document).keydown(function(event){
+					if(event.keyCode == 37){ //上一页
+						$(".book-title .prev span").click();
+					} else if(event.keyCode == 39) {//下一页
+						$(".book-title .next span").click();
+					}
+				});
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div class="book-title">
+			<h1>跳转和重定向</h1>
+            <div class="page"><a title="上一页" class="prev" href="41.html"><span>上一页</span></a><a title="下一页" class="next" href="43.html"><span>下一页</span></a></div>
+            <div class="description"></div>
+		</div>
+		<div class="book-content"><h2>页面跳转</h2>
+
+<p>在应用开发中，经常会遇到一些带有提示信息的跳转页面，例如操作成功或者操作错误页面，并且自动跳转到另外一个目标页面。系统的\Think\Controller类内置了两个跳转方法success和error，用于页面跳转提示，而且可以支持ajax提交。</p>
+
+<p>使用方法很简单，举例如下：</p>
+
+<pre><code>$User = M('User'); //实例化User对象
+$result = $User-&gt;add($data); 
+if($result){
+    //设置成功后跳转页面的地址，默认的返回页面是$_SERVER['HTTP_REFERER']
+    $this-&gt;success('新增成功', 'User/list');
+} else {
+    //错误页面的默认跳转页面是返回前一页，通常不需要设置
+    $this-&gt;error('新增失败');
+}
+</code></pre>
+
+<p>success和error方法的第一个参数表示提示信息，第二个参数表示跳转地址，第三个参数是跳转时间（单位为秒），例如：</p>
+
+<pre><code>// 操作完成3秒后跳转到 /Article/index
+$this-&gt;success('操作完成','/Article/index',3);
+// 操作失败5秒后跳转到 /Article/error
+$this-&gt;error('操作失败','/Article/error',5);
+</code></pre>
+
+<p>跳转地址是可选的，success方法的默认跳转地址是<code>$_SERVER["HTTP_REFERER"]</code>，error方法的默认跳转地址是<code>javascript:history.back(-1);</code>。</p>
+
+<blockquote>
+  <p>默认的等待时间success方法是1秒，error方法是3秒</p>
+</blockquote>
+
+<p><code>success</code>和<code>error</code>方法都可以对应的模板，默认的设置是两个方法对应的模板都是：</p>
+
+<pre><code>//默认错误跳转对应的模板文件
+'TMPL_ACTION_ERROR' =&gt; THINK_PATH . 'Tpl/dispatch_jump.tpl',
+//默认成功跳转对应的模板文件
+'TMPL_ACTION_SUCCESS' =&gt; THINK_PATH . 'Tpl/dispatch_jump.tpl',
+</code></pre>
+
+<p>也可以使用项目内部的模板文件</p>
+
+<pre><code>//默认错误跳转对应的模板文件
+'TMPL_ACTION_ERROR' =&gt; 'Public:error';
+//默认成功跳转对应的模板文件
+'TMPL_ACTION_SUCCESS' =&gt; 'Public:success';
+</code></pre>
+
+<p>模板文件可以使用模板标签，并且可以使用下面的模板变量：
+<table>
+<thead>
+<tr>
+  <th>变量</th>
+  <th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>$msgTitle</td>
+  <td>操作标题</td>
+</tr>
+<tr>
+  <td>$message</td>
+  <td>页面提示信息</td>
+</tr>
+<tr>
+  <td>$status</td>
+  <td>操作状态 1表示成功 0 表示失败 具体还可以由项目本身定义规则</td>
+</tr>
+<tr>
+  <td>$waitSecond</td>
+  <td>跳转等待时间 单位为秒</td>
+</tr>
+<tr>
+  <td>$jumpUrl</td>
+  <td>跳转页面地址</td>
+</tr>
+</tbody>
+</table></p>
+
+<p>success和error方法会自动判断当前请求是否属于Ajax请求，如果属于Ajax请求则会调用ajaxReturn方法返回信息。
+ajax方式下面，success和error方法会封装下面的数据返回：</p>
+
+<pre><code>$data['info']   =   $message; // 提示信息内容
+$data['status'] =   $status;  // 状态 如果是success是1 error 是0
+$data['url']    =   $jumpUrl; // 成功或者错误的跳转地址
+</code></pre>
+
+<h2>重定向</h2>
+
+<p>Controller类的redirect方法可以实现页面的重定向功能。</p>
+
+<p>redirect方法的参数用法和U函数的用法一致（参考<a href="#url_build">URL生成</a>部分），例如：</p>
+
+<pre><code>//重定向到New模块的Category操作
+$this-&gt;redirect('New/category', array('cate_id' =&gt; 2), 5, '页面跳转中...');
+</code></pre>
+
+<p>上面的用法是停留5秒后跳转到New模块的category操作，并且显示页面跳转中字样，重定向后会改变当前的URL地址。</p>
+
+<p>如果你仅仅是想重定向要一个指定的URL地址，而不是到某个模块的操作方法，可以直接使用<code>redirect</code>函数重定向，例如：</p>
+
+<pre><code>//重定向到指定的URL地址
+redirect('/New/category/cate_id/2', 5, '页面跳转中...')
+</code></pre>
+
+<p>Redirect函数的第一个参数是一个URL地址。</p>
+
+<blockquote>
+  <p>控制器的redirect方法和redirect函数的区别在于前者是用URL规则定义跳转地址，后者是一个纯粹的URL地址。</p>
+</blockquote>
+</div>
+		<div class="book-footer">
+			<div class="page"><a title="上一页" class="prev" href="41.html"><span>上一页</span></a><a title="下一页" class="next" href="43.html"><span>下一页</span></a></div>
+		</div>
+	</body>
+</html>

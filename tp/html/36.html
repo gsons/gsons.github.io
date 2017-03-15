@@ -1,0 +1,93 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+	<head>
+		<meta charset="GB2312">
+		<title>前置和后置操作</title>
+		<link rel="stylesheet" href="../images/css/book.css">
+		<link rel="stylesheet" href="../images/prettify/prettify.css">
+		<script type="text/javascript" src="../images/js/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="../images/prettify/prettify.js"></script>
+		<script type="text/javascript">
+			$(function(){	
+				$(window).resize(function(){
+					$('.book-content').css('min-height', $(window).height() - 130);
+				}).resize();
+				
+				var $code = $(".book-content pre");
+				$code.each(function(){
+					var $this = $(this), $code = $this.children("code"), lang = $code.attr("class");
+					$this.addClass("prettyprint linenums");
+					lang && $this.addClass("lang-" + lang);					
+				});
+				
+				//调用高亮插件，高亮代码
+				prettyPrint();
+				
+				//解决表格存在边距的问题
+				$("table").attr({"cellspacing":"0", "cellpadding":"0"});
+				
+				//快捷键翻页
+				$(document).keydown(function(event){
+					if(event.keyCode == 37){ //上一页
+						$(".book-title .prev span").click();
+					} else if(event.keyCode == 39) {//下一页
+						$(".book-title .next span").click();
+					}
+				});
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div class="book-title">
+			<h1>前置和后置操作</h1>
+            <div class="page"><a title="上一页" class="prev" href="35.html"><span>上一页</span></a><a title="下一页" class="next" href="37.html"><span>下一页</span></a></div>
+            <div class="description"></div>
+		</div>
+		<div class="book-content"><p>前置和后置操作指的是在执行某个操作方法之前和之后会自动调用的方法，不过仅对访问控制器有效。</p>
+
+<blockquote>
+  <p>其他的分层控制器层和内部调用控制器的情况下前置和后置操作是无效的。</p>
+</blockquote>
+
+<p>系统会检测当前操作是否具有前置和后置操作，如果存在就会按照顺序执行，前置和后置操作的定义方式如下：</p>
+
+<pre><code>&lt;?php
+namespace Home\Controller;
+use Think\Controller;
+class IndexController extends Controller{
+    //前置操作方法
+    public function _before_index(){
+        echo 'before&lt;br/&gt;';
+    }
+    public function index(){
+        echo 'index&lt;br/&gt;';
+    }
+    //后置操作方法
+    public function _after_index(){
+        echo 'after&lt;br/&gt;';
+    }
+}
+</code></pre>
+
+<p>如果我们访问
+<code>http://serverName/index.php/Home/Index/index</code></p>
+
+<p>结果会输出</p>
+
+<pre><code>before
+index
+after
+</code></pre>
+
+<blockquote>
+  <p><strong>前置和后置操作的注意事项如下：</strong><br />
+  1. 如果当前的操作并没有定义操作方法，而是直接渲染模板文件，那么如果定义了前置和后置方法的话，依然会生效。真正有模板输出的可能仅仅是当前的操作，前置和后置操作一般情况是没有任何输出的。<br />
+  2. 需要注意的是，在有些方法里面使用了exit或者错误输出之类的话 有可能不会再执行后置方法了。例如，如果在当前操作里面调用了系统Action的error方法，那么将不会再执行后置操作，但是不影响success方法的后置方法执行。</p>
+</blockquote>
+</div>
+		<div class="book-footer">
+			<div class="page"><a title="上一页" class="prev" href="35.html"><span>上一页</span></a><a title="下一页" class="next" href="37.html"><span>下一页</span></a></div>
+		</div>
+	</body>
+</html>

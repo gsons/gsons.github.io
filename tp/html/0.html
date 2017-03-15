@@ -1,0 +1,79 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+	<head>
+		<meta charset="GB2312">
+		<title>序言</title>
+		<link rel="stylesheet" href="../images/css/book.css">
+		<link rel="stylesheet" href="../images/prettify/prettify.css">
+		<script type="text/javascript" src="../images/js/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="../images/prettify/prettify.js"></script>
+		<script type="text/javascript">
+			$(function(){	
+				$(window).resize(function(){
+					$('.book-content').css('min-height', $(window).height() - 130);
+				}).resize();
+				
+				var $code = $(".book-content pre");
+				$code.each(function(){
+					var $this = $(this), $code = $this.children("code"), lang = $code.attr("class");
+					$this.addClass("prettyprint linenums");
+					lang && $this.addClass("lang-" + lang);					
+				});
+				
+				//调用高亮插件，高亮代码
+				prettyPrint();
+				
+				//解决表格存在边距的问题
+				$("table").attr({"cellspacing":"0", "cellpadding":"0"});
+				
+				//快捷键翻页
+				$(document).keydown(function(event){
+					if(event.keyCode == 37){ //上一页
+						$(".book-title .prev span").click();
+					} else if(event.keyCode == 39) {//下一页
+						$(".book-title .next span").click();
+					}
+				});
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div class="book-title">
+			<h1>序言</h1>
+            <div class="page"><a title="下一页" class="next" href="1.html"><span>下一页</span></a></div>
+            <div class="description"></div>
+		</div>
+		<div class="book-content"><blockquote>
+  <h4>手册阅读须知：本手册仅针对ThinkPHP3.2.*版本，3.1版本的请 <a href="http://doc.thinkphp.cn/manual">参考这里</a></h4>
+  
+  <h4>请使用左右键（<code>&lt;-- 和 --&gt;</code>）翻页阅读，<code>CTRL+ALT+F</code> 全屏阅读。</h4>
+</blockquote>
+
+<h2>版权申明</h2>
+
+<p>发布本资料须遵守开放出版许可协议 1.0 或者更新版本。<br />
+未经版权所有者明确授权，禁止发行本文档及其被实质上修改的版本。<br />
+未经版权所有者事先授权，禁止将此作品及其衍生作品以标准（纸质）书籍形式发行。<br />
+如果有兴趣再发行或再版本手册的全部或部分内容，不论修改过与否，或者有任何问题，请联系版权所有者 <a href="&#x6d;&#x61;&#x69;&#x6c;&#x74;&#x6f;&#x3a;&#x6c;&#x69;&#x75;&#x32;&#x31;&#x73;&#x74;&#x40;&#x67;&#x6d;&#x61;&#x69;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;">&#x6c;&#x69;&#x75;&#x32;&#x31;&#x73;&#x74;&#x40;&#x67;&#x6d;&#x61;&#x69;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;</a>。<br />
+对ThinkPHP有任何疑问或者建议，请进入官方讨论区 [ <a href="http://www.thinkphp.cn/topic">http://www.thinkphp.cn/topic</a> ] 发布相关讨论。<br />
+有关ThinkPHP项目及本文档的最新资料，请及时访问ThinkPHP项目主站 <a href="http://www.thinkphp.cn">http://www.thinkphp.cn</a>。<br />
+本文档的版权归ThinkPHP文档小组所有，本文档及其描述的内容受有关法律的版权保护，对本文档内容的任何形式的非法复制，泄露或散布，将导致相应的法律责任。</p>
+
+<h2>捐赠我们</h2>
+
+<p><strong>ThinkPHP一直在致力于简化企业和个人的WEB应用开发，您的帮助是对我们最大的支持和动力！</strong></p>
+
+<p>我们的团队8年来一直在坚持不懈地努力，并坚持开源和免费提供使用，帮助开发人员更加方便的进行WEB应用的快速开发，如果您对我们的成果表示认同并且觉得对你有所帮助我们愿意接受来自各方面的捐赠^_^。</p>
+
+<p><a href="http://me.alipay.com/thinkphp"><img src="../images/img/0.png" alt="捐赠我们" /></a></p>
+
+<h2>官方微博</h2>
+
+<p><a href="http://t.qq.com/topthink"><img src="../images/img/1.png" alt="" /></a></p>
+</div>
+		<div class="book-footer">
+			<div class="page"><a title="下一页" class="next" href="1.html"><span>下一页</span></a></div>
+		</div>
+	</body>
+</html>

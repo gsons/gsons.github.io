@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+	<head>
+		<meta charset="GB2312">
+		<title>关于</title>
+		<link rel="stylesheet" href="../images/css/book.css">
+		<link rel="stylesheet" href="../images/prettify/prettify.css">
+		<script type="text/javascript" src="../images/js/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="../images/prettify/prettify.js"></script>
+		<script type="text/javascript">
+			$(function(){	
+				$(window).resize(function(){
+					$('.book-content').css('min-height', $(window).height() - 130);
+				}).resize();
+				
+				var $code = $(".book-content pre");
+				$code.each(function(){
+					var $this = $(this), $code = $this.children("code"), lang = $code.attr("class");
+					$this.addClass("prettyprint linenums");
+					lang && $this.addClass("lang-" + lang);					
+				});
+				
+				//调用高亮插件，高亮代码
+				prettyPrint();
+				
+				//解决表格存在边距的问题
+				$("table").attr({"cellspacing":"0", "cellpadding":"0"});
+				
+				//快捷键翻页
+				$(document).keydown(function(event){
+					if(event.keyCode == 37){ //上一页
+						$(".book-title .prev span").click();
+					} else if(event.keyCode == 39) {//下一页
+						$(".book-title .next span").click();
+					}
+				});
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div class="book-title">
+			<h1>关于</h1>
+            <div class="page"><a title="上一页" class="prev" href="204.html"><span>上一页</span></a></div>
+            <div class="description"></div>
+		</div>
+		<div class="book-content"><p>本手册通过在线手册[ <a target="_blank" href="http://document.thinkphp.cn/manual_3_2.html">http://document.thinkphp.cn/manual_3_2.html</a> ]开放api获取内容编译生成，因此内容和在线手册一致。欢迎大家下载学习！</p>
+<p>官方会定期将在线手册编译成CHM版本供大家下载，敬请关注官网资讯。</p>
+
+
+<h3>版本信息</h3>
+<p>编译时间：2014-04-14 20:11:32</p>
+<p>下载地址：<a target="_blank" href="http://www.thinkphp.cn/down/521.html">http://www.thinkphp.cn/down/521.html</a></p>
+<p> BUG反馈：<a target="_blank" href="http://www.thinkphp.cn/bug/index.html">http://www.thinkphp.cn/bug/index.html</a></p>
+
+
+<h3>更新日志</h3>
+<p>[2014-01-15]</p>
+<p>· 完成3.2[CHM]版本第一次编译，发布下载</p>
+<p>[2014-02-14]</p>
+<p>· 内容更新到3.2.1版本</p>
+<p>[2014-04-14]</p>
+<p>· 内容更新到3.2.2版本</p></div>
+		<div class="book-footer">
+			<div class="page"><a title="上一页" class="prev" href="204.html"><span>上一页</span></a></div>
+		</div>
+	</body>
+</html>

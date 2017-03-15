@@ -1,0 +1,91 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+	<head>
+		<meta charset="GB2312">
+		<title>查询缓存</title>
+		<link rel="stylesheet" href="../images/css/book.css">
+		<link rel="stylesheet" href="../images/prettify/prettify.css">
+		<script type="text/javascript" src="../images/js/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="../images/prettify/prettify.js"></script>
+		<script type="text/javascript">
+			$(function(){	
+				$(window).resize(function(){
+					$('.book-content').css('min-height', $(window).height() - 130);
+				}).resize();
+				
+				var $code = $(".book-content pre");
+				$code.each(function(){
+					var $this = $(this), $code = $this.children("code"), lang = $code.attr("class");
+					$this.addClass("prettyprint linenums");
+					lang && $this.addClass("lang-" + lang);					
+				});
+				
+				//调用高亮插件，高亮代码
+				prettyPrint();
+				
+				//解决表格存在边距的问题
+				$("table").attr({"cellspacing":"0", "cellpadding":"0"});
+				
+				//快捷键翻页
+				$(document).keydown(function(event){
+					if(event.keyCode == 37){ //上一页
+						$(".book-title .prev span").click();
+					} else if(event.keyCode == 39) {//下一页
+						$(".book-title .next span").click();
+					}
+				});
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div class="book-title">
+			<h1>查询缓存</h1>
+            <div class="page"><a title="上一页" class="prev" href="152.html"><span>上一页</span></a><a title="下一页" class="next" href="154.html"><span>下一页</span></a></div>
+            <div class="description"></div>
+		</div>
+		<div class="book-content"><p>对于及时性要求不高的数据查询，我们可以使用查询缓存功能来提高性能，而且无需自己使用缓存方法进行缓存和获取。</p>
+
+<p>查询缓存功能支持所有的数据库，并且支持所有的缓存方式和有效期。</p>
+
+<p>在使用查询缓存的时候，只需要调用Model类的cache方法，例如：</p>
+
+<pre><code>$Model-&gt;cache(true)-&gt;where('status=1')-&gt;select();
+</code></pre>
+
+<p>如果使用了<code>cache(true)</code> ，则在查询的同时会根据当前的查询条件等信息生成一个带有唯一标识的查询缓存，如果指定了key的话，则直接生成名称为key的查询缓存 ，例如：</p>
+
+<pre><code>$Model-&gt;cache('cache_name')-&gt;select();
+</code></pre>
+
+<blockquote>
+  <p>指定key的方式会让查询缓存更加高效。</p>
+</blockquote>
+
+<p>默认情况下缓存方式采用<strong>DATA_CACHE_TYPE</strong>参数设置的缓存方式（系统默认值为File表示采用文件方式缓存），缓存有效期是<strong>DATA_CACHE_TIME</strong>参数设置的时间，也可以单独制定查询缓存的缓存方式和有效期：</p>
+
+<pre><code>$Model-&gt;cache(true,60,'xcache')-&gt;select();
+</code></pre>
+
+<p>表示当前查询缓存的缓存方式为xcache，并且缓存有效期为60秒。</p>
+
+<p>同样的查询，如果没有使用cache方法，则不会获取或者生成任何缓存，即便是之前调用过Cache方法。</p>
+
+<p>如果指定了查询缓存的key的话，则可以在外部通过S方法直接获取查询缓存的内容，例如：</p>
+
+<pre><code>$value = S('cache_name');
+</code></pre>
+
+<p>除了select方法之外，查询缓存还支持find和getField方法，以及他们的衍生方法（包括统计查询和动态查询方法）。</p>
+
+<pre><code>// 对查询数据缓存60秒
+$Model-&gt;where($map)-&gt;cache('key',60)-&gt;find();
+</code></pre>
+
+<p>具体应用的时候可以根据需要选择缓存方式和缓存有效期。</p>
+</div>
+		<div class="book-footer">
+			<div class="page"><a title="上一页" class="prev" href="152.html"><span>上一页</span></a><a title="下一页" class="next" href="154.html"><span>下一页</span></a></div>
+		</div>
+	</body>
+</html>

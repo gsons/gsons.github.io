@@ -1,0 +1,85 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+	<head>
+		<meta charset="GB2312">
+		<title>LIMIT</title>
+		<link rel="stylesheet" href="../images/css/book.css">
+		<link rel="stylesheet" href="../images/prettify/prettify.css">
+		<script type="text/javascript" src="../images/js/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="../images/prettify/prettify.js"></script>
+		<script type="text/javascript">
+			$(function(){	
+				$(window).resize(function(){
+					$('.book-content').css('min-height', $(window).height() - 130);
+				}).resize();
+				
+				var $code = $(".book-content pre");
+				$code.each(function(){
+					var $this = $(this), $code = $this.children("code"), lang = $code.attr("class");
+					$this.addClass("prettyprint linenums");
+					lang && $this.addClass("lang-" + lang);					
+				});
+				
+				//调用高亮插件，高亮代码
+				prettyPrint();
+				
+				//解决表格存在边距的问题
+				$("table").attr({"cellspacing":"0", "cellpadding":"0"});
+				
+				//快捷键翻页
+				$(document).keydown(function(event){
+					if(event.keyCode == 37){ //上一页
+						$(".book-title .prev span").click();
+					} else if(event.keyCode == 39) {//下一页
+						$(".book-title .next span").click();
+					}
+				});
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div class="book-title">
+			<h1>LIMIT</h1>
+            <div class="page"><a title="上一页" class="prev" href="61.html"><span>上一页</span></a><a title="下一页" class="next" href="63.html"><span>下一页</span></a></div>
+            <div class="description"></div>
+		</div>
+		<div class="book-content"><p>limit方法也是模型类的连贯操作方法之一，主要用于指定查询和操作的数量，特别在分页查询的时候使用较多。ThinkPHP的limit方法可以兼容所有的数据库驱动类的。</p>
+
+<h2>限制结果数量</h2>
+
+<p>例如获取满足要求的10个用户，如下调用即可：</p>
+
+<pre><code>$User = M('User');
+$User-&gt;where('status=1')-&gt;field('id,name')-&gt;limit(10)-&gt;select();
+</code></pre>
+
+<p>limit方法也可以用于写操作，例如更新满足要求的3条数据：</p>
+
+<pre><code>$User = M('User');
+$User-&gt;where('score=100')-&gt;limit(3)-&gt;save(array('level'=&gt;'A'));
+</code></pre>
+
+<h2>分页查询</h2>
+
+<p>用于文章分页查询是limit方法比较常用的场合，例如：</p>
+
+<pre><code>$Article = M('Article');
+$Article-&gt;limit('10,25')-&gt;select();
+</code></pre>
+
+<p>表示查询文章数据，从第10行开始的25条数据（可能还取决于where条件和order排序的影响 这个暂且不提）。</p>
+
+<p>在3.1版本后，你也可以这样使用：</p>
+
+<pre><code>$Article = M('Article');
+$Article-&gt;limit(10,25)-&gt;select();
+</code></pre>
+
+<p>对于大数据表，尽量使用limit限制查询结果，否则会导致很大的内存开销和性能问题。</p>
+</div>
+		<div class="book-footer">
+			<div class="page"><a title="上一页" class="prev" href="61.html"><span>上一页</span></a><a title="下一页" class="next" href="63.html"><span>下一页</span></a></div>
+		</div>
+	</body>
+</html>

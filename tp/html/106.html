@@ -1,0 +1,87 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+	<head>
+		<meta charset="GB2312">
+		<title>获取模板地址</title>
+		<link rel="stylesheet" href="../images/css/book.css">
+		<link rel="stylesheet" href="../images/prettify/prettify.css">
+		<script type="text/javascript" src="../images/js/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="../images/prettify/prettify.js"></script>
+		<script type="text/javascript">
+			$(function(){	
+				$(window).resize(function(){
+					$('.book-content').css('min-height', $(window).height() - 130);
+				}).resize();
+				
+				var $code = $(".book-content pre");
+				$code.each(function(){
+					var $this = $(this), $code = $this.children("code"), lang = $code.attr("class");
+					$this.addClass("prettyprint linenums");
+					lang && $this.addClass("lang-" + lang);					
+				});
+				
+				//调用高亮插件，高亮代码
+				prettyPrint();
+				
+				//解决表格存在边距的问题
+				$("table").attr({"cellspacing":"0", "cellpadding":"0"});
+				
+				//快捷键翻页
+				$(document).keydown(function(event){
+					if(event.keyCode == 37){ //上一页
+						$(".book-title .prev span").click();
+					} else if(event.keyCode == 39) {//下一页
+						$(".book-title .next span").click();
+					}
+				});
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div class="book-title">
+			<h1>获取模板地址</h1>
+            <div class="page"><a title="上一页" class="prev" href="105.html"><span>上一页</span></a><a title="下一页" class="next" href="107.html"><span>下一页</span></a></div>
+            <div class="description"></div>
+		</div>
+		<div class="book-content"><p>为了更方便的输出模板文件，新版封装了一个T函数用于生成模板文件名。</p>
+
+<p>用法：</p>
+
+<h6>T([资源://][模块@][主题/][控制器/]操作,[视图分层])</h6>
+
+<p>T函数的返回值是一个完整的模板文件名，可以直接用于display和fetch方法进行渲染输出。</p>
+
+<p>例如：</p>
+
+<pre><code>T('Public/menu');
+// 返回 当前模块/View/Public/menu.html
+T('blue/Public/menu');
+// 返回 当前模块/View/blue/Public/menu.html
+T('Public/menu','Tpl');
+// 返回 当前模块/Tpl/Public/menu.html
+T('Public/menu');
+// 如果TMPL_FILE_DEPR 为 _ 返回 当前模块/Tpl/Public_menu.html
+T('Public/menu');
+// 如果TMPL_TEMPLATE_SUFFIX 为.tpl 返回 当前模块/Tpl/Public/menu.tpl
+T('Admin@Public/menu');
+// 返回 Admin/View/Public/menu.html
+T('Extend://Admin@Public/menu');
+// 返回 Extend/Admin/View/Public/menu.html (Extend目录取决于AUTOLOAD_NAMESPACE中的配置）
+</code></pre>
+
+<p>在display方法中直接使用T函数：</p>
+
+<pre><code>// 使用T函数输出模板
+$this-&gt;display(T('Admin@Public/menu'));
+</code></pre>
+
+<blockquote>
+  <p>T函数可以输出不同的视图分层模板。</p>
+</blockquote>
+</div>
+		<div class="book-footer">
+			<div class="page"><a title="上一页" class="prev" href="105.html"><span>上一页</span></a><a title="下一页" class="next" href="107.html"><span>下一页</span></a></div>
+		</div>
+	</body>
+</html>

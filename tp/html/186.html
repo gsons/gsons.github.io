@@ -1,0 +1,132 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+	<head>
+		<meta charset="GB2312">
+		<title>替换入口</title>
+		<link rel="stylesheet" href="../images/css/book.css">
+		<link rel="stylesheet" href="../images/prettify/prettify.css">
+		<script type="text/javascript" src="../images/js/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="../images/prettify/prettify.js"></script>
+		<script type="text/javascript">
+			$(function(){	
+				$(window).resize(function(){
+					$('.book-content').css('min-height', $(window).height() - 130);
+				}).resize();
+				
+				var $code = $(".book-content pre");
+				$code.each(function(){
+					var $this = $(this), $code = $this.children("code"), lang = $code.attr("class");
+					$this.addClass("prettyprint linenums");
+					lang && $this.addClass("lang-" + lang);					
+				});
+				
+				//调用高亮插件，高亮代码
+				prettyPrint();
+				
+				//解决表格存在边距的问题
+				$("table").attr({"cellspacing":"0", "cellpadding":"0"});
+				
+				//快捷键翻页
+				$(document).keydown(function(event){
+					if(event.keyCode == 37){ //上一页
+						$(".book-title .prev span").click();
+					} else if(event.keyCode == 39) {//下一页
+						$(".book-title .next span").click();
+					}
+				});
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div class="book-title">
+			<h1>替换入口</h1>
+            <div class="page"><a title="上一页" class="prev" href="185.html"><span>上一页</span></a><a title="下一页" class="next" href="187.html"><span>下一页</span></a></div>
+            <div class="description"></div>
+		</div>
+		<div class="book-content"><p>3.2版本支持根据当前的运行环境生成Lite文件，可以替换框架的入口文件或者应用入口文件，提高运行效率。</p>
+
+<blockquote>
+  <p>我们的建议是在生产环境中关闭调试模式后生成Lite文件。<br />
+  注意，目前SAE平台不支持直接生成Lite文件。</p>
+</blockquote>
+
+<h2>生成Lite文件</h2>
+
+<p>要生成Lite文件，需要在入口文件中增加常量定义：</p>
+
+<pre><code>define('BUILD_LITE_FILE',true);
+</code></pre>
+
+<p>默认情况下，再次运行后会在Runtime目录下面生成一个<code>lite.php</code>文件。</p>
+
+<p>如果你需要修改Lite文件的位置或者名称，可以在应用配置文件中增加配置如下：</p>
+
+<pre><code>'RUNTIME_LITE_FILE'=&gt; APP_PATH.'lite.php'
+</code></pre>
+
+<p>配置后，生成的Lite文件的位置为 <code>APP_PATH.'lite.php'</code>。</p>
+
+<p>Lite文件的编译文件内容是系统默认的，如果希望改变或者增加其他的编译文件的话，可以在外部定义编译列表文件，例如：
+我们在应用配置目录下面增加lite.php定义如下：</p>
+
+<pre><code>return array(
+    THINK_PATH.'Common/functions.php',
+    COMMON_PATH.'Common/function.php',
+    CORE_PATH . 'Think'.EXT,
+    CORE_PATH . 'Hook'.EXT,
+    CORE_PATH . 'App'.EXT,
+    CORE_PATH . 'Dispatcher'.EXT,
+    CORE_PATH . 'Model'.EXT,
+    CORE_PATH . 'Log'.EXT,
+    CORE_PATH . 'Log/Driver/File'.EXT,
+    CORE_PATH . 'Route'.EXT,
+    CORE_PATH . 'Controller'.EXT,
+    CORE_PATH . 'View'.EXT,
+    CORE_PATH . 'Storage'.EXT,
+    CORE_PATH . 'Storage/Driver/File'.EXT,
+    CORE_PATH . 'Exception'.EXT,
+    BEHAVIOR_PATH . 'ParseTemplateBehavior'.EXT,
+    BEHAVIOR_PATH . 'ContentReplaceBehavior'.EXT,
+);
+</code></pre>
+
+<p>所有在lite.php文件中定义的文件都会纳入Lite文件的编译缓存中。你还可以对生成的lite文件进行修改。</p>
+
+<blockquote>
+  <p>如果你修改了框架文件和应用函数和配置文件的话，需要删除Lite文件重新生成。</p>
+</blockquote>
+
+<p>由于SAE等云平台不支持文件写入，因此不支持直接生成Lite文件。</p>
+
+<h2>替换入口</h2>
+
+<p>Lite文件可以用于替换框架入口文件或者应用入口文件。</p>
+
+<h3>替换框架入口文件</h3>
+
+<p>Lite文件生成后，就可以把原来的应用入口文件中的框架入口文件修改如下：</p>
+
+<pre><code>require './ThinkPHP/ThinkPHP.php';
+// 改成
+require './Runtime/lite.php';
+</code></pre>
+
+<blockquote>
+  <p>替换Lite文件后，应用编译缓存不再需要。</p>
+</blockquote>
+
+<h3>替换应用入口文件</h3>
+
+<p>如果你的入口文件没有其他代码和逻辑的话，还可以直接把lite.php文件作为应用的入口文件访问。
+把lite.php 文件复制到应用入口文件的相同目录，并直接改名为index.php即可和原来一样正常访问（原来的应用入口文件可以备份以备用于重新生成Lite文件的时候使用）。</p>
+
+<blockquote>
+  <p>注意：如果你的环境或者目录位置发生变化，以及更改了核心框架和应用函数、配置等文件后，则需要重新生成Lite文件。</p>
+</blockquote>
+</div>
+		<div class="book-footer">
+			<div class="page"><a title="上一页" class="prev" href="185.html"><span>上一页</span></a><a title="下一页" class="next" href="187.html"><span>下一页</span></a></div>
+		</div>
+	</body>
+</html>

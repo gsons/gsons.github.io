@@ -1,0 +1,143 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+	<head>
+		<meta charset="GB2312">
+		<title>Volist标签</title>
+		<link rel="stylesheet" href="../images/css/book.css">
+		<link rel="stylesheet" href="../images/prettify/prettify.css">
+		<script type="text/javascript" src="../images/js/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="../images/prettify/prettify.js"></script>
+		<script type="text/javascript">
+			$(function(){	
+				$(window).resize(function(){
+					$('.book-content').css('min-height', $(window).height() - 130);
+				}).resize();
+				
+				var $code = $(".book-content pre");
+				$code.each(function(){
+					var $this = $(this), $code = $this.children("code"), lang = $code.attr("class");
+					$this.addClass("prettyprint linenums");
+					lang && $this.addClass("lang-" + lang);					
+				});
+				
+				//调用高亮插件，高亮代码
+				prettyPrint();
+				
+				//解决表格存在边距的问题
+				$("table").attr({"cellspacing":"0", "cellpadding":"0"});
+				
+				//快捷键翻页
+				$(document).keydown(function(event){
+					if(event.keyCode == 37){ //上一页
+						$(".book-title .prev span").click();
+					} else if(event.keyCode == 39) {//下一页
+						$(".book-title .next span").click();
+					}
+				});
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div class="book-title">
+			<h1>Volist标签</h1>
+            <div class="page"><a title="上一页" class="prev" href="120.html"><span>上一页</span></a><a title="下一页" class="next" href="122.html"><span>下一页</span></a></div>
+            <div class="description"></div>
+		</div>
+		<div class="book-content"><p>volist标签通常用于查询数据集（select方法）的结果输出，通常模型的select方法返回的结果是一个二维数组，可以直接使用volist标签进行输出。
+在控制器中首先对模版赋值：</p>
+
+<pre><code>$User = M('User');
+$list = $User-&gt;limit(10)-&gt;select();
+$this-&gt;assign('list',$list);
+</code></pre>
+
+<p>在模版定义如下，循环输出用户的编号和姓名：</p>
+
+<pre><code>&lt;volist name="list" id="vo"&gt;
+{$vo.id}:{$vo.name}&lt;br/&gt;
+&lt;/volist&gt;
+</code></pre>
+
+<p>Volist标签的name属性表示模板赋值的变量名称，因此不可随意在模板文件中改变。id表示当前的循环变量，可以随意指定，但确保不要和name属性冲突，例如：</p>
+
+<pre><code>&lt;volist name="list" id="data"&gt;
+{$data.id}:{$data.name}&lt;br/&gt;
+&lt;/volist&gt;
+</code></pre>
+
+<p>支持输出查询结果中的部分数据，例如输出其中的第5～15条记录</p>
+
+<pre><code>&lt;volist name="list" id="vo" offset="5" length='10'&gt;
+{$vo.name}
+&lt;/volist&gt;
+</code></pre>
+
+<p>输出偶数记录</p>
+
+<pre><code>&lt;volist name="list" id="vo" mod="2" &gt;
+&lt;eq name="mod" value="1"&gt;{$vo.name}&lt;/eq&gt;
+&lt;/volist&gt;
+</code></pre>
+
+<p>Mod属性还用于控制一定记录的换行，例如：</p>
+
+<pre><code>&lt;volist name="list" id="vo" mod="5" &gt;
+{$vo.name}
+&lt;eq name="mod" value="4"&gt;&lt;br/&gt;&lt;/eq&gt;
+&lt;/volist&gt;
+</code></pre>
+
+<p>为空的时候输出提示：</p>
+
+<pre><code>&lt;volist name="list" id="vo" empty="暂时没有数据" &gt;
+{$vo.id}|{$vo.name}
+&lt;/volist&gt;
+</code></pre>
+
+<p>empty属性不支持直接传入html语法，但可以支持变量输出，例如：</p>
+
+<pre><code>$this-&gt;assign('empty','&lt;span class="empty"&gt;没有数据&lt;/span&gt;');
+$this-&gt;assign('list',$list);
+</code></pre>
+
+<p>然后在模板中使用：</p>
+
+<pre><code>&lt;volist name="list" id="vo" empty="$empty" &gt;
+{$vo.id}|{$vo.name}
+&lt;/volist&gt;
+</code></pre>
+
+<p>输出循环变量</p>
+
+<pre><code>&lt;volist name="list" id="vo" key="k" &gt;
+{$k}.{$vo.name}
+&lt;/volist&gt;
+</code></pre>
+
+<p>如果没有指定key属性的话，默认使用循环变量i，例如：</p>
+
+<pre><code>&lt;volist name="list" id="vo"  &gt;
+{$i}.{$vo.name}
+&lt;/volist&gt;
+</code></pre>
+
+<p>如果要输出数组的索引，可以直接使用key变量，和循环变量不同的是，这个key是由数据本身决定，而不是循环控制的，例如：</p>
+
+<pre><code>&lt;volist name="list" id="vo"  &gt;
+{$key}.{$vo.name}
+&lt;/volist&gt;
+</code></pre>
+
+<p>模板中可以直接使用函数设定数据集，而不需要在控制器中给模板变量赋值传入数据集变量，如：</p>
+
+<pre><code>&lt;volist name=":fun('arg')" id="vo"&gt;
+{$vo.name}
+&lt;/volist&gt;
+</code></pre>
+</div>
+		<div class="book-footer">
+			<div class="page"><a title="上一页" class="prev" href="120.html"><span>上一页</span></a><a title="下一页" class="next" href="122.html"><span>下一页</span></a></div>
+		</div>
+	</body>
+</html>

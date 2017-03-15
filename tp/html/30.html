@@ -1,0 +1,78 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+	<head>
+		<meta charset="GB2312">
+		<title>正则路由</title>
+		<link rel="stylesheet" href="../images/css/book.css">
+		<link rel="stylesheet" href="../images/prettify/prettify.css">
+		<script type="text/javascript" src="../images/js/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="../images/prettify/prettify.js"></script>
+		<script type="text/javascript">
+			$(function(){	
+				$(window).resize(function(){
+					$('.book-content').css('min-height', $(window).height() - 130);
+				}).resize();
+				
+				var $code = $(".book-content pre");
+				$code.each(function(){
+					var $this = $(this), $code = $this.children("code"), lang = $code.attr("class");
+					$this.addClass("prettyprint linenums");
+					lang && $this.addClass("lang-" + lang);					
+				});
+				
+				//调用高亮插件，高亮代码
+				prettyPrint();
+				
+				//解决表格存在边距的问题
+				$("table").attr({"cellspacing":"0", "cellpadding":"0"});
+				
+				//快捷键翻页
+				$(document).keydown(function(event){
+					if(event.keyCode == 37){ //上一页
+						$(".book-title .prev span").click();
+					} else if(event.keyCode == 39) {//下一页
+						$(".book-title .next span").click();
+					}
+				});
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div class="book-title">
+			<h1>正则路由</h1>
+            <div class="page"><a title="上一页" class="prev" href="29.html"><span>上一页</span></a><a title="下一页" class="next" href="31.html"><span>下一页</span></a></div>
+            <div class="description"></div>
+		</div>
+		<div class="book-content"><p>正则路由也就是采用正则表达式定义路由的一种方式，依靠强大的正则表达式，能够定义更灵活的路由规则。</p>
+
+<p>路由表达式支持的正则定义必须以“/”开头，否则就视为规则表达式。也就是说如果采用：</p>
+
+<pre><code>'#^blog\/(\d+)$#' =&gt; 'Blog/read/id/:1'
+</code></pre>
+
+<p>方式定义的正则表达式不会被支持，而会被认为是规则表达式进行解析，从而无法正确匹配。</p>
+
+<p>下面是一种正确的正则路由定义：</p>
+
+<pre><code>'/^new\/(\d{4})\/(\d{2})$/' =&gt; 'News/achive?year=:1&amp;month=:2',
+</code></pre>
+
+<blockquote>
+  <p>对于正则表达式中的每个变量（即正则规则中的子模式）部分，如果需要在后面的路由地址中引用，可以采用:1、:2这样的方式，序号就是子模式的序号。</p>
+</blockquote>
+
+<p>正则定义也支持函数过滤处理，例如：</p>
+
+<pre><code>'/^new\/(\d{4})\/(\d{2})$/' =&gt; 'News/achive?year=:1|format_year&amp;month=:2',
+</code></pre>
+
+<p>其中 year=:1|format_year 就表示对匹配到的变量进行format_year函数处理（假设format_year是一个用户自定义函数）。</p>
+
+<p>更多的关于如何定义正则表达式就不在本文的描述范畴了。</p>
+</div>
+		<div class="book-footer">
+			<div class="page"><a title="上一页" class="prev" href="29.html"><span>上一页</span></a><a title="下一页" class="next" href="31.html"><span>下一页</span></a></div>
+		</div>
+	</body>
+</html>

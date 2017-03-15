@@ -1,0 +1,148 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+	<head>
+		<meta charset="GB2312">
+		<title>DATA</title>
+		<link rel="stylesheet" href="../images/css/book.css">
+		<link rel="stylesheet" href="../images/prettify/prettify.css">
+		<script type="text/javascript" src="../images/js/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="../images/prettify/prettify.js"></script>
+		<script type="text/javascript">
+			$(function(){	
+				$(window).resize(function(){
+					$('.book-content').css('min-height', $(window).height() - 130);
+				}).resize();
+				
+				var $code = $(".book-content pre");
+				$code.each(function(){
+					var $this = $(this), $code = $this.children("code"), lang = $code.attr("class");
+					$this.addClass("prettyprint linenums");
+					lang && $this.addClass("lang-" + lang);					
+				});
+				
+				//调用高亮插件，高亮代码
+				prettyPrint();
+				
+				//解决表格存在边距的问题
+				$("table").attr({"cellspacing":"0", "cellpadding":"0"});
+				
+				//快捷键翻页
+				$(document).keydown(function(event){
+					if(event.keyCode == 37){ //上一页
+						$(".book-title .prev span").click();
+					} else if(event.keyCode == 39) {//下一页
+						$(".book-title .next span").click();
+					}
+				});
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div class="book-title">
+			<h1>DATA</h1>
+            <div class="page"><a title="上一页" class="prev" href="58.html"><span>上一页</span></a><a title="下一页" class="next" href="60.html"><span>下一页</span></a></div>
+            <div class="description"></div>
+		</div>
+		<div class="book-content"><p>data方法也是模型类的连贯操作方法之一，用于设置当前要操作的数据对象的值。</p>
+
+<h2>写操作</h2>
+
+<p>通常情况下我们都是通过create方法或者赋值的方式生成数据对象，然后写入数据库，例如：</p>
+
+<pre><code>$Model = D('User');
+$Model-&gt;create();
+// 这里略过具体的自动生成和验证判断
+$Model-&gt;add();
+</code></pre>
+
+<p>又或者直接对数据对象赋值，例如：</p>
+
+<pre><code>$Model = M('User');
+$Model-&gt;name = '流年';
+$Model-&gt;email = 'thinkphp@qq.com';
+$Model-&gt;add();
+</code></pre>
+
+<p>那么data方法则是直接生成要操作的数据对象，例如：</p>
+
+<pre><code>$Model = M('User');
+$data['name'] = '流年';
+$data['email'] = 'thinkphp@qq.com';
+$Model-&gt;data($data)-&gt;add();
+</code></pre>
+
+<blockquote>
+  <p>注意：如果我们同时使用create方法和data创建数据对象的话，则最后调用的方法有效。</p>
+</blockquote>
+
+<p>data方法支持数组、对象和字符串，对象方式如下：</p>
+
+<pre><code>$Model = M('User');
+$obj = new \stdClass;
+$obj-&gt;name = '流年';
+$obj-&gt;email = 'thinkphp@qq.com';
+$Model-&gt;data($obj)-&gt;add();
+</code></pre>
+
+<p>字符串方式用法如下：</p>
+
+<pre><code>$Model = M('User');
+$data = 'name=流年&amp;email=thinkphp@qq.com';
+$Model-&gt;data($data)-&gt;add();
+</code></pre>
+
+<p>也可以直接在add方法中传入数据对象来新增数据，例如：</p>
+
+<pre><code>$Model = M('User');
+$data['name'] = '流年';
+$data['email'] = 'thinkphp@qq.com';
+$Model-&gt;add($data);
+</code></pre>
+
+<p>但是这种方式data参数只能使用数组。</p>
+
+<p>当然data方法也可以用于更新数据，例如：</p>
+
+<pre><code>$Model = M('User');
+$data['id'] = 8;
+$data['name'] = '流年';
+$data['email'] = 'thinkphp@qq.com';
+$Model-&gt;data($data)-&gt;save();
+</code></pre>
+
+<p>当然我们也可以直接这样用：</p>
+
+<pre><code>$Model = M('User');
+$data['id'] = 8;
+$data['name'] = '流年';
+$data['email'] = 'thinkphp@qq.com';
+$Model-&gt;save($data);
+</code></pre>
+
+<p>同样，此时data参数只能传入数组。</p>
+
+<p>在调用save方法更新数据的时候 会自动判断当前的数据对象里面是否有主键值存在，如果有的话会自动作为更新条件。也就是说，下面的用法和上面等效：</p>
+
+<pre><code>$Model = M('User');
+$data['name'] = '流年';
+$data['email'] = 'thinkphp@qq.com';
+$Model-&gt;data($data)-&gt;where('id=8')-&gt;save();
+</code></pre>
+
+<h2>读操作</h2>
+
+<p>除了写操作外，data方法还可以用于读取当前的数据对象，例如：</p>
+
+<pre><code>$User = M('User');
+$map['name'] = '流年';
+$User-&gt;where($map)-&gt;find();
+// 读取当前数据对象
+$data = $User-&gt;data(); 
+</code></pre>
+</div>
+		<div class="book-footer">
+			<div class="page"><a title="上一页" class="prev" href="58.html"><span>上一页</span></a><a title="下一页" class="next" href="60.html"><span>下一页</span></a></div>
+		</div>
+	</body>
+</html>

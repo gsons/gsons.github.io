@@ -1,0 +1,86 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+	<head>
+		<meta charset="GB2312">
+		<title>模板赋值</title>
+		<link rel="stylesheet" href="../images/css/book.css">
+		<link rel="stylesheet" href="../images/prettify/prettify.css">
+		<script type="text/javascript" src="../images/js/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="../images/prettify/prettify.js"></script>
+		<script type="text/javascript">
+			$(function(){	
+				$(window).resize(function(){
+					$('.book-content').css('min-height', $(window).height() - 130);
+				}).resize();
+				
+				var $code = $(".book-content pre");
+				$code.each(function(){
+					var $this = $(this), $code = $this.children("code"), lang = $code.attr("class");
+					$this.addClass("prettyprint linenums");
+					lang && $this.addClass("lang-" + lang);					
+				});
+				
+				//调用高亮插件，高亮代码
+				prettyPrint();
+				
+				//解决表格存在边距的问题
+				$("table").attr({"cellspacing":"0", "cellpadding":"0"});
+				
+				//快捷键翻页
+				$(document).keydown(function(event){
+					if(event.keyCode == 37){ //上一页
+						$(".book-title .prev span").click();
+					} else if(event.keyCode == 39) {//下一页
+						$(".book-title .next span").click();
+					}
+				});
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div class="book-title">
+			<h1>模板赋值</h1>
+            <div class="page"><a title="上一页" class="prev" href="103.html"><span>上一页</span></a><a title="下一页" class="next" href="105.html"><span>下一页</span></a></div>
+            <div class="description"></div>
+		</div>
+		<div class="book-content"><p>如果要在模板中输出变量，必须在在控制器中把变量传递给模板，系统提供了assign方法对模板变量赋值，无论何种变量类型都统一使用assign赋值。</p>
+
+<pre><code>$this-&gt;assign('name',$value);
+// 下面的写法是等效的
+$this-&gt;name = $value;
+</code></pre>
+
+<p>assign方法必须在<code>display和show方法</code>之前调用，并且系统只会输出设定的变量，其它变量不会输出（系统变量例外），一定程度上保证了变量的安全性。</p>
+
+<blockquote>
+  <p>系统变量可以通过特殊的标签输出，无需赋值模板变量</p>
+</blockquote>
+
+<p>赋值后，就可以在模板文件中输出变量了，如果使用的是内置模板的话，就可以这样输出：
+<code>{$name}</code></p>
+
+<p>如果要同时输出多个模板变量，可以使用下面的方式：</p>
+
+<pre><code>$array['name']    =    'thinkphp';
+$array['email']   =    'liu21st@gmail.com';
+$array['phone']   =    '12335678';
+$this-&gt;assign($array);
+</code></pre>
+
+<p>这样，就可以在模板文件中同时输出name、email和phone三个变量。</p>
+
+<p>模板变量的输出根据不同的模板引擎有不同的方法，我们在后面会专门讲解内置模板引擎的用法。如果你使用的是PHP本身作为模板引擎的话 ，就可以直接在模板文件里面输出了：
+<code>&lt;?php echo $name.'['.$email.''.$phone.']';?&gt;</code></p>
+
+<p>如果采用内置的模板引擎，可以使用： <code>{$name} [ {$email} {$phone} ]</code> 输出同样的内容。</p>
+
+<blockquote>
+  <p>关于更多的模板标签使用，我们会在后面模板标签中详细讲解。</p>
+</blockquote>
+</div>
+		<div class="book-footer">
+			<div class="page"><a title="上一页" class="prev" href="103.html"><span>上一页</span></a><a title="下一页" class="next" href="105.html"><span>下一页</span></a></div>
+		</div>
+	</body>
+</html>

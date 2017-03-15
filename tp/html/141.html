@@ -1,0 +1,105 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+	<head>
+		<meta charset="GB2312">
+		<title>调试模式</title>
+		<link rel="stylesheet" href="../images/css/book.css">
+		<link rel="stylesheet" href="../images/prettify/prettify.css">
+		<script type="text/javascript" src="../images/js/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="../images/prettify/prettify.js"></script>
+		<script type="text/javascript">
+			$(function(){	
+				$(window).resize(function(){
+					$('.book-content').css('min-height', $(window).height() - 130);
+				}).resize();
+				
+				var $code = $(".book-content pre");
+				$code.each(function(){
+					var $this = $(this), $code = $this.children("code"), lang = $code.attr("class");
+					$this.addClass("prettyprint linenums");
+					lang && $this.addClass("lang-" + lang);					
+				});
+				
+				//调用高亮插件，高亮代码
+				prettyPrint();
+				
+				//解决表格存在边距的问题
+				$("table").attr({"cellspacing":"0", "cellpadding":"0"});
+				
+				//快捷键翻页
+				$(document).keydown(function(event){
+					if(event.keyCode == 37){ //上一页
+						$(".book-title .prev span").click();
+					} else if(event.keyCode == 39) {//下一页
+						$(".book-title .next span").click();
+					}
+				});
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div class="book-title">
+			<h1>调试模式</h1>
+            <div class="page"><a title="上一页" class="prev" href="140.html"><span>上一页</span></a><a title="下一页" class="next" href="142.html"><span>下一页</span></a></div>
+            <div class="description"></div>
+		</div>
+		<div class="book-content"><p>ThinkPHP有专门为开发过程而设置的调试模式，开启调试模式后，会牺牲一定的执行效率，但带来的方便和除错功能非常值得。</p>
+
+<blockquote>
+  <p>我们强烈建议ThinkPHP开发人员在开发阶段始终开启调试模式（直到正式部署后关闭调试模式），方便及时发现隐患问题和分析、解决问题。</p>
+</blockquote>
+
+<p>开启调试模式很简单，只需要在入口文件中增加一行常量定义代码：</p>
+
+<pre><code>&lt;?php
+ // 开启调试模式
+ define('APP_DEBUG', true);
+ // 定义应用目录
+ define('APP_PATH', './Application/');
+ // 加载框架入口文件
+ require './ThinkPHP/ThinkPHP.php';
+</code></pre>
+
+<p>在完成开发阶段部署到生产环境后，只需要关闭调试模式或者删除调试模式定义代码即可切换到部署模式。</p>
+
+<pre><code>&lt;?php
+// 关闭调试模式
+define('APP_DEBUG', false);
+// 定义应用目录
+define('APP_PATH', './Application/');
+// 加载框架入口文件
+require './ThinkPHP/ThinkPHP.php';
+</code></pre>
+
+<h5>调试模式的优势在于：</h5>
+
+<ul>
+<li>开启日志记录，任何错误信息和调试信息都会详细记录，便于调试；</li>
+<li>关闭模板缓存，模板修改可以即时生效；</li>
+<li>记录SQL日志，方便分析SQL；</li>
+<li>关闭字段缓存，数据表字段修改不受缓存影响；</li>
+<li>严格检查文件大小写（即使是Windows平台），帮助你提前发现Linux部署可能导致的隐患问题；</li>
+<li>通过页面Trace功能更好的调试和发现错误；</li>
+</ul>
+
+<p>在开启调试模式的状态下，系统会首先导入框架默认的调试模式配置文件，该文件位于系统目录的<code>Conf\debug.php</code>。</p>
+
+<p>通常情况下，调试配置文件里面可以进行一些开发模式所需要的配置。例如，配置额外的数据库连接用于调试，开启日志写入便于查找错误信息、开启页面Trace输出更多的调试信息等等。</p>
+
+<p>如果检测到应用的配置目录中有存在debug.php文件，则会自动加载该配置文件，并且和系统项目配置文件以及系统调试配置文件合并，也就是说，debug.php配置文件只需要配置和项目配置文件以及系统调试配置文件不同的参数或者新增的参数。</p>
+
+<blockquote>
+  <p>由于调试模式没有任何缓存，因此涉及到较多的文件IO操作和模板实时编译，所以在开启调试模式的情况下，性能会有一定的下降，但不会影响部署模式的性能。另外需要注意的是，一旦关闭调试模式，项目的调试配置文件即刻失效。</p>
+</blockquote>
+
+<p>一旦关闭调试模式，发生错误后不会提示具体的错误信息，如果你仍然希望看到具体的错误信息，那么可以如下设置：</p>
+
+<pre><code>'SHOW_ERROR_MSG'        =&gt;  true,    // 显示错误信息
+</code></pre>
+</div>
+		<div class="book-footer">
+			<div class="page"><a title="上一页" class="prev" href="140.html"><span>上一页</span></a><a title="下一页" class="next" href="142.html"><span>下一页</span></a></div>
+		</div>
+	</body>
+</html>

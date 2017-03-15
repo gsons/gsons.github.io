@@ -1,0 +1,53 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+	<head>
+		<meta charset="GB2312">
+		<title>缓存</title>
+		<link rel="stylesheet" href="../images/css/book.css">
+		<link rel="stylesheet" href="../images/prettify/prettify.css">
+		<script type="text/javascript" src="../images/js/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="../images/prettify/prettify.js"></script>
+		<script type="text/javascript">
+			$(function(){	
+				$(window).resize(function(){
+					$('.book-content').css('min-height', $(window).height() - 130);
+				}).resize();
+				
+				var $code = $(".book-content pre");
+				$code.each(function(){
+					var $this = $(this), $code = $this.children("code"), lang = $code.attr("class");
+					$this.addClass("prettyprint linenums");
+					lang && $this.addClass("lang-" + lang);					
+				});
+				
+				//调用高亮插件，高亮代码
+				prettyPrint();
+				
+				//解决表格存在边距的问题
+				$("table").attr({"cellspacing":"0", "cellpadding":"0"});
+				
+				//快捷键翻页
+				$(document).keydown(function(event){
+					if(event.keyCode == 37){ //上一页
+						$(".book-title .prev span").click();
+					} else if(event.keyCode == 39) {//下一页
+						$(".book-title .next span").click();
+					}
+				});
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div class="book-title">
+			<h1>缓存</h1>
+            <div class="page"><a title="上一页" class="prev" href="149.html"><span>上一页</span></a><a title="下一页" class="next" href="151.html"><span>下一页</span></a></div>
+            <div class="description"></div>
+		</div>
+		<div class="book-content"><p>在项目中，合理的使用缓存对性能有较大的帮助。ThinkPHP提供了方便的缓存方式，包括数据缓存、静态缓存和查询缓存等，支持包括文件方式、APC、Db、Memcache、Shmop、Sqlite、Redis、Eaccelerator和Xcache在内的动态数据缓存类型，以及可定制的静态缓存规则，并提供了快捷方法进行存取操作。</p>
+</div>
+		<div class="book-footer">
+			<div class="page"><a title="上一页" class="prev" href="149.html"><span>上一页</span></a><a title="下一页" class="next" href="151.html"><span>下一页</span></a></div>
+		</div>
+	</body>
+</html>

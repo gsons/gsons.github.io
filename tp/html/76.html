@@ -1,0 +1,216 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+	<head>
+		<meta charset="GB2312">
+		<title>数据写入</title>
+		<link rel="stylesheet" href="../images/css/book.css">
+		<link rel="stylesheet" href="../images/prettify/prettify.css">
+		<script type="text/javascript" src="../images/js/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="../images/prettify/prettify.js"></script>
+		<script type="text/javascript">
+			$(function(){	
+				$(window).resize(function(){
+					$('.book-content').css('min-height', $(window).height() - 130);
+				}).resize();
+				
+				var $code = $(".book-content pre");
+				$code.each(function(){
+					var $this = $(this), $code = $this.children("code"), lang = $code.attr("class");
+					$this.addClass("prettyprint linenums");
+					lang && $this.addClass("lang-" + lang);					
+				});
+				
+				//调用高亮插件，高亮代码
+				prettyPrint();
+				
+				//解决表格存在边距的问题
+				$("table").attr({"cellspacing":"0", "cellpadding":"0"});
+				
+				//快捷键翻页
+				$(document).keydown(function(event){
+					if(event.keyCode == 37){ //上一页
+						$(".book-title .prev span").click();
+					} else if(event.keyCode == 39) {//下一页
+						$(".book-title .next span").click();
+					}
+				});
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div class="book-title">
+			<h1>数据写入</h1>
+            <div class="page"><a title="上一页" class="prev" href="75.html"><span>上一页</span></a><a title="下一页" class="next" href="77.html"><span>下一页</span></a></div>
+            <div class="description"></div>
+		</div>
+		<div class="book-content"><p>ThinkPHP的数据写入操作使用<strong>add方法</strong>，使用示例如下：</p>
+
+<pre><code>$User = M("User"); // 实例化User对象
+$data['name'] = 'ThinkPHP';
+$data['email'] = 'ThinkPHP@gmail.com';
+$User-&gt;add($data);
+</code></pre>
+
+<p>或者使用data方法连贯操作</p>
+
+<pre><code>$User = M("User"); // 实例化User对象
+$User-&gt;data($data)-&gt;add();
+</code></pre>
+
+<p>如果在add之前已经创建数据对象的话（例如使用了create或者data方法），add方法就不需要再传入数据了。
+使用create方法的例子：</p>
+
+<pre><code>$User = M("User"); // 实例化User对象
+// 根据表单提交的POST数据创建数据对象
+if($User-&gt;create()){
+    $result = $User-&gt;add(); // 写入数据到数据库 
+    if($result){
+        // 如果主键是自动增长型 成功后返回值就是最新插入的值
+        $insertId = $result;
+    }
+}
+</code></pre>
+
+<blockquote>
+  <p>create方法并不算是连贯操作，因为其返回值可能是布尔值，所以必须要进行严格判断。</p>
+</blockquote>
+
+<h2>支持的连贯操作</h2>
+
+<p>在执行add方法之前，我们可以调用相关的连贯操作方法，配合完成数据写入操作。</p>
+
+<p>写入操作支持的连贯操作方法包括：
+<table>
+<thead>
+<tr>
+  <th>连贯操作</th>
+  <th>作用</th>
+  <th>支持的参数类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>table</td>
+  <td>用于定义要操作的数据表名称</td>
+  <td>字符串和数组</td>
+</tr>
+<tr>
+  <td>data</td>
+  <td>用于指定要写入的数据对象</td>
+  <td>数组和对象</td>
+</tr>
+<tr>
+  <td>field</td>
+  <td>用于定义要写入的字段</td>
+  <td>字符串和数组</td>
+</tr>
+<tr>
+  <td>relation</td>
+  <td>用于关联查询（需要关联模型支持）</td>
+  <td>字符串</td>
+</tr>
+<tr>
+  <td>validate</td>
+  <td>用于数据自动验证</td>
+  <td>数组</td>
+</tr>
+<tr>
+  <td>auto</td>
+  <td>用于数据自动完成</td>
+  <td>数组</td>
+</tr>
+<tr>
+  <td>filter</td>
+  <td>用于数据过滤</td>
+  <td>字符串</td>
+</tr>
+<tr>
+  <td>scope</td>
+  <td>用于命名范围</td>
+  <td>字符串、数组</td>
+</tr>
+<tr>
+  <td>bind</td>
+  <td>用于数据绑定操作</td>
+  <td>数组</td>
+</tr>
+<tr>
+  <td>token</td>
+  <td>用于令牌验证</td>
+  <td>布尔值</td>
+</tr>
+<tr>
+  <td>comment</td>
+  <td>用于SQL注释</td>
+  <td>字符串</td>
+</tr>
+</tbody>
+</table></p>
+
+<h5>字段过滤</h5>
+
+<p>如果写入了数据表中不存在的字段数据，则会被直接过滤，例如：</p>
+
+<pre><code>$data['name'] = 'thinkphp';
+$data['email'] = 'thinkphp@gmail.com';
+$data['test'] = 'test';
+$User = M('User');
+$User-&gt;data($data)-&gt;add();
+</code></pre>
+
+<p>其中test字段是不存在的，所以写入数据的时候会自动过滤掉。</p>
+
+<blockquote>
+  <p>在3.2.2版本以上，如果开启调试模式的话，则会抛出异常，提示：<code>非法数据对象：[test=&gt;test]</code></p>
+</blockquote>
+
+<p>如果在add方法之前调用field方法，则表示只允许写入指定的字段数据，其他非法字段将会被过滤，例如：</p>
+
+<pre><code>$data['name'] = 'thinkphp';
+$data['email'] = 'thinkphp@gmail.com';
+$data['test'] = 'test';
+$User = M('User');
+$User-&gt;field('name')-&gt;data($data)-&gt;add();
+</code></pre>
+
+<p>最终只有name字段的数据被允许写入，email和test字段直接被过滤了，哪怕email也是数据表中的合法字段。</p>
+
+<h5>字段内容过滤</h5>
+
+<p>通过filter方法可以对数据的值进行过滤处理，例如：</p>
+
+<pre><code>$data['name'] = '&lt;b&gt;thinkphp&lt;/b&gt;';
+$data['email'] = 'thinkphp@gmail.com';
+$User = M('User');
+$User-&gt;data($data)-&gt;filter('strip_tags')-&gt;add();
+</code></pre>
+
+<p>写入数据库的时候会把name字段的值转化为<code>thinkphp</code>。</p>
+
+<blockquote>
+  <p>filter方法的参数是一个回调类型，支持函数或者闭包定义。</p>
+</blockquote>
+
+<h2>Mysql的特殊操作</h2>
+
+<p>如果是mysql数据库的话，系统还提供了针对Mysql的操作方法，包括批量插入数据和替换操作，如：</p>
+
+<pre><code>// 批量添加数据
+$dataList[] = array('name'=&gt;'thinkphp','email'=&gt;'thinkphp@gamil.com');
+$dataList[] = array('name'=&gt;'onethink','email'=&gt;'onethink@gamil.com');
+$User-&gt;addAll($dataList);
+</code></pre>
+
+<p>同时在数据插入时允许更新操作:</p>
+
+<pre><code>add($data='',$options=array(),$replace=false)
+</code></pre>
+
+<p>其中add方法增加$replace参数(是否添加数据时允许覆盖)，true表示覆盖，默认为false</p>
+</div>
+		<div class="book-footer">
+			<div class="page"><a title="上一页" class="prev" href="75.html"><span>上一页</span></a><a title="下一页" class="next" href="77.html"><span>下一页</span></a></div>
+		</div>
+	</body>
+</html>

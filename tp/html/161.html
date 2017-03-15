@@ -1,0 +1,76 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+	<head>
+		<meta charset="GB2312">
+		<title>目录安全文件</title>
+		<link rel="stylesheet" href="../images/css/book.css">
+		<link rel="stylesheet" href="../images/prettify/prettify.css">
+		<script type="text/javascript" src="../images/js/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="../images/prettify/prettify.js"></script>
+		<script type="text/javascript">
+			$(function(){	
+				$(window).resize(function(){
+					$('.book-content').css('min-height', $(window).height() - 130);
+				}).resize();
+				
+				var $code = $(".book-content pre");
+				$code.each(function(){
+					var $this = $(this), $code = $this.children("code"), lang = $code.attr("class");
+					$this.addClass("prettyprint linenums");
+					lang && $this.addClass("lang-" + lang);					
+				});
+				
+				//调用高亮插件，高亮代码
+				prettyPrint();
+				
+				//解决表格存在边距的问题
+				$("table").attr({"cellspacing":"0", "cellpadding":"0"});
+				
+				//快捷键翻页
+				$(document).keydown(function(event){
+					if(event.keyCode == 37){ //上一页
+						$(".book-title .prev span").click();
+					} else if(event.keyCode == 39) {//下一页
+						$(".book-title .next span").click();
+					}
+				});
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div class="book-title">
+			<h1>目录安全文件</h1>
+            <div class="page"><a title="上一页" class="prev" href="160.html"><span>上一页</span></a><a title="下一页" class="next" href="162.html"><span>下一页</span></a></div>
+            <div class="description"></div>
+		</div>
+		<div class="book-content"><p>为了避免某些服务器开启了目录浏览权限后可以直接在浏览器输入URL地址查看目录，系统默认开启了目录安全文件机制，会在自动生成目录的时候生成空白的<code>index.html</code>文件，当然安全文件的名称可以设置，例如你想给安全文件定义为<code>default.html</code>可以在入口文件中添加：</p>
+
+<pre><code>define('DIR_SECURE_FILENAME', 'default.html');
+define('APP_PATH','./Application/');
+require './ThinkPHP/ThinkPHP.php';
+</code></pre>
+
+<p>还可以支持多个安全文件写入，例如你想同时写入index.html和index.htm 两个文件，以满足不同的服务器部署环境，可以这样定义：</p>
+
+<pre><code>define('DIR_SECURE_FILENAME', 'index.html,index.htm');
+</code></pre>
+
+<p>默认的安全文件只是写入一个空白字符串，如果需要写入其他内容，可以通过DIR_SECURE_CONTENT参数来指定，例如：</p>
+
+<pre><code>define('DIR_SECURE_CONTENT', 'deney Access!');
+</code></pre>
+
+<blockquote>
+  <p>注意：目录安全文件仅在第一次生成模块目录的时候生成。如果是3.2.1版本以上，则可以调用代码生成，例如：</p>
+</blockquote>
+
+<pre><code>// dirs变量是要生成安全文件的目录数组
+\Think\Build::buildDirSecure($dirs);
+</code></pre>
+</div>
+		<div class="book-footer">
+			<div class="page"><a title="上一页" class="prev" href="160.html"><span>上一页</span></a><a title="下一页" class="next" href="162.html"><span>下一页</span></a></div>
+		</div>
+	</body>
+</html>

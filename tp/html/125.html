@@ -1,0 +1,185 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+	<head>
+		<meta charset="GB2312">
+		<title>比较标签</title>
+		<link rel="stylesheet" href="../images/css/book.css">
+		<link rel="stylesheet" href="../images/prettify/prettify.css">
+		<script type="text/javascript" src="../images/js/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="../images/prettify/prettify.js"></script>
+		<script type="text/javascript">
+			$(function(){	
+				$(window).resize(function(){
+					$('.book-content').css('min-height', $(window).height() - 130);
+				}).resize();
+				
+				var $code = $(".book-content pre");
+				$code.each(function(){
+					var $this = $(this), $code = $this.children("code"), lang = $code.attr("class");
+					$this.addClass("prettyprint linenums");
+					lang && $this.addClass("lang-" + lang);					
+				});
+				
+				//调用高亮插件，高亮代码
+				prettyPrint();
+				
+				//解决表格存在边距的问题
+				$("table").attr({"cellspacing":"0", "cellpadding":"0"});
+				
+				//快捷键翻页
+				$(document).keydown(function(event){
+					if(event.keyCode == 37){ //上一页
+						$(".book-title .prev span").click();
+					} else if(event.keyCode == 39) {//下一页
+						$(".book-title .next span").click();
+					}
+				});
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div class="book-title">
+			<h1>比较标签</h1>
+            <div class="page"><a title="上一页" class="prev" href="124.html"><span>上一页</span></a><a title="下一页" class="next" href="126.html"><span>下一页</span></a></div>
+            <div class="description"></div>
+		</div>
+		<div class="book-content"><p>比较标签用于简单的变量比较，复杂的判断条件可以用if标签替换，比较标签是一组标签的集合，基本上用法都一致，如下：</p>
+
+<pre><code>&lt;比较标签 name="变量" value="值"&gt;
+内容
+&lt;/比较标签&gt;
+</code></pre>
+
+<p>系统支持的比较标签以及所表示的含义分别是：
+<table>
+<thead>
+<tr>
+  <th>标签</th>
+  <th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>eq或者 equal</td>
+  <td>等于</td>
+</tr>
+<tr>
+  <td>neq 或者notequal</td>
+  <td>不等于</td>
+</tr>
+<tr>
+  <td>gt</td>
+  <td>大于</td>
+</tr>
+<tr>
+  <td>egt</td>
+  <td>大于等于</td>
+</tr>
+<tr>
+  <td>lt</td>
+  <td>小于</td>
+</tr>
+<tr>
+  <td>elt</td>
+  <td>小于等于</td>
+</tr>
+<tr>
+  <td>heq</td>
+  <td>恒等于</td>
+</tr>
+<tr>
+  <td>nheq</td>
+  <td>不恒等于</td>
+</tr>
+</tbody>
+</table></p>
+
+<p>他们的用法基本是一致的，区别在于判断的条件不同，并且所有的比较标签都可以和else标签一起使用。</p>
+
+<p>例如，要求name变量的值等于value就输出，可以使用：</p>
+
+<pre><code>&lt;eq name="name" value="value"&gt;value&lt;/eq&gt;
+</code></pre>
+
+<p>或者</p>
+
+<pre><code>&lt;equal name="name" value="value"&gt;value&lt;/equal&gt;
+</code></pre>
+
+<p>也可以支持和else标签混合使用：</p>
+
+<pre><code>&lt;eq name="name" value="value"&gt;
+相等
+&lt;else/&gt;
+不相等
+&lt;/eq&gt;
+</code></pre>
+
+<p>当 name变量的值大于5就输出</p>
+
+<pre><code>&lt;gt name="name" value="5"&gt;value&lt;/gt&gt;
+</code></pre>
+
+<p>当name变量的值不小于5就输出</p>
+
+<pre><code>&lt;egt name="name" value="5"&gt;value&lt;/egt&gt;
+</code></pre>
+
+<p>比较标签中的变量可以支持对象的属性或者数组，甚至可以是系统变量，例如：
+当vo对象的属性（或者数组，或者自动判断）等于5就输出</p>
+
+<pre><code>&lt;eq name="vo.name" value="5"&gt;
+{$vo.name}
+&lt;/eq&gt;
+</code></pre>
+
+<p>当vo对象的属性等于5就输出</p>
+
+<pre><code>&lt;eq name="vo:name" value="5"&gt;
+{$vo.name}
+&lt;/eq&gt;
+</code></pre>
+
+<p>当$vo['name']等于5就输出</p>
+
+<pre><code>&lt;eq name="vo['name']" value="5"&gt;
+{$vo.name}
+&lt;/eq&gt;
+</code></pre>
+
+<p>而且还可以支持对变量使用函数 
+当vo对象的属性值的字符串长度等于5就输出</p>
+
+<pre><code>&lt;eq name="vo:name|strlen" value="5"&gt;{$vo.name}&lt;/eq&gt;
+</code></pre>
+
+<p>变量名可以支持系统变量的方式，例如：</p>
+
+<pre><code>&lt;eq name="Think.get.name" value="value"&gt;相等&lt;else/&gt;不相等&lt;/eq&gt;
+</code></pre>
+
+<p>通常比较标签的值是一个字符串或者数字，如果需要使用变量，只需要在前面添加“$”标志：
+当vo对象的属性等于$a就输出</p>
+
+<pre><code>&lt;eq name="vo:name" value="$a"&gt;{$vo.name}&lt;/eq&gt;
+</code></pre>
+
+<p>所有的比较标签可以统一使用compare标签（其实所有的比较标签都是compare标签的别名），例如：
+当name变量的值等于5就输出</p>
+
+<pre><code>&lt;compare name="name" value="5" type="eq"&gt;value&lt;/compare&gt;
+</code></pre>
+
+<p>等效于</p>
+
+<pre><code>&lt;eq name="name" value="5" &gt;value&lt;/eq&gt;
+</code></pre>
+
+<p>其中type属性的值就是上面列出的比较标签名称</p>
+</div>
+		<div class="book-footer">
+			<div class="page"><a title="上一页" class="prev" href="124.html"><span>上一页</span></a><a title="下一页" class="next" href="126.html"><span>下一页</span></a></div>
+		</div>
+	</body>
+</html>

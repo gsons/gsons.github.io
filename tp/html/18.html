@@ -1,0 +1,336 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+	<head>
+		<meta charset="GB2312">
+		<title>模块化设计</title>
+		<link rel="stylesheet" href="../images/css/book.css">
+		<link rel="stylesheet" href="../images/prettify/prettify.css">
+		<script type="text/javascript" src="../images/js/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="../images/prettify/prettify.js"></script>
+		<script type="text/javascript">
+			$(function(){	
+				$(window).resize(function(){
+					$('.book-content').css('min-height', $(window).height() - 130);
+				}).resize();
+				
+				var $code = $(".book-content pre");
+				$code.each(function(){
+					var $this = $(this), $code = $this.children("code"), lang = $code.attr("class");
+					$this.addClass("prettyprint linenums");
+					lang && $this.addClass("lang-" + lang);					
+				});
+				
+				//调用高亮插件，高亮代码
+				prettyPrint();
+				
+				//解决表格存在边距的问题
+				$("table").attr({"cellspacing":"0", "cellpadding":"0"});
+				
+				//快捷键翻页
+				$(document).keydown(function(event){
+					if(event.keyCode == 37){ //上一页
+						$(".book-title .prev span").click();
+					} else if(event.keyCode == 39) {//下一页
+						$(".book-title .next span").click();
+					}
+				});
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div class="book-title">
+			<h1>模块化设计</h1>
+            <div class="page"><a title="上一页" class="prev" href="17.html"><span>上一页</span></a><a title="下一页" class="next" href="19.html"><span>下一页</span></a></div>
+            <div class="description"></div>
+		</div>
+		<div class="book-content"><p>一个完整的ThinkPHP应用基于<strong>模块/控制器/操作</strong>设计，并且，如果有需要的话，可以支持多入口文件和多级控制器。</p>
+
+<p>ThinkPHP3.2采用模块化的架构设计思想，对目录结构规范做了调整，可以支持多模块应用的创建，让应用的扩展更加方便。</p>
+
+<p>一个典型的URL访问规则是（我们以默认的PATHINFO模式为例说明，当然也可以支持普通的URL模式）：</p>
+
+<pre><code>http://serverName/index.php（或者其他应用入口文件）/模块/控制器/操作/[参数名/参数值...]
+</code></pre>
+
+<p>ThinkPHP3.2的应用可以支持切换到命令行访问，如果切换到命令行模式下面的访问规则是：</p>
+
+<pre><code>&gt;php.exe index.php(或其它应用入口文件） 模块/控制器/操作/[参数名/参数值...]
+</code></pre>
+
+<p>解释下其中的几个概念：
+<table>
+<thead>
+<tr>
+  <th>名称</th>
+  <th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>应用</td>
+  <td>基于同一个入口文件访问的项目我们称之为一个应用。</td>
+</tr>
+<tr>
+  <td>模块</td>
+  <td>一个应用下面可以包含多个模块，每个模块在应用目录下面都是一个独立的子目录。</td>
+</tr>
+<tr>
+  <td>控制器</td>
+  <td>每个模块可以包含多个控制器，一个控制器通常体现为一个控制器类。</td>
+</tr>
+<tr>
+  <td>操作</td>
+  <td>每个控制器类可以包含多个操作方法，也可能是绑定的某个操作类，每个操作是URL访问的最小单元。</td>
+</tr>
+</tbody>
+</table></p>
+
+<blockquote>
+  <p>模块化设计的思想下面模块是最重要的部分，模块其实是一个包含配置文件、函数文件和MVC文件（目录）的集合。</p>
+</blockquote>
+
+<h2>模块设计</h2>
+
+<p>新版采用模块化的设计架构，下面是一个应用目录下面的模块目录结构，每个模块可以方便的卸载和部署，并且支持公共模块。</p>
+
+<pre><code>Application      默认应用目录（可以设置）
+├─Common         公共模块（不能直接访问）
+├─Home           前台模块
+├─Admin          后台模块
+├─...            其他更多模块
+├─Runtime        默认运行时目录（可以设置）
+</code></pre>
+
+<blockquote>
+  <p>注意：3.2版本在原来3.1.3的独立分组的基础上进行了改进，改进后的独立分组就是新版的模块，之前的模块则改称为控制器。
+  默认情况下，只要应用目录下面存在模块目录，该模块就可以访问，只有当你希望禁止某些模块或者仅允许模块访问的时候才需要进行模块列表的相关设置。</p>
+</blockquote>
+
+<p>每个模块是相对独立的，其目录结构如下：</p>
+
+<pre><code>├─Module         模块目录
+│  ├─Conf        配置文件目录
+│  ├─Common      公共函数目录
+│  ├─Controller  控制器目录
+│  ├─Model       模型目录
+│  ├─Logic       逻辑目录（可选）
+│  ├─Service     Service目录（可选）
+│  ... 更多分层目录可选
+│  └─View        视图目录
+</code></pre>
+
+<blockquote>
+  <p>由于采用多层的MVC机制，除了Conf和Common目录外，每个模块下面的目录结构可以根据需要灵活设置和添加，所以并不拘泥于上面展现的目录</p>
+</blockquote>
+
+<h2>公共模块</h2>
+
+<p>Common模块是一个特殊的模块，是应用的公共模块，访问所有的模块之前都会首先加载公共模块下面的配置文件（<code>Conf/config.php</code>）和公共函数文件（<code>Common/function.php</code>）。但Common模块本身不能通过URL直接访问，公共模块的其他文件则可以被其他模块继承或者调用。</p>
+
+<p>公共模块的位置可以通过<strong>COMMON_PATH</strong>常量改变，我们可以在入口文件中重新定义<strong>COMMON_PATH</strong>如下：</p>
+
+<pre><code>define('COMMON_PATH','./Common/');
+define('APP_PATH','./Application/');
+require './ThinkPHP/ThinkPHP.php';
+</code></pre>
+
+<p>其应用目录结构变成：</p>
+
+<pre><code>www  WEB部署目录（或者子目录）
+├─index.php       入口文件
+├─README.md       README文件
+├─Common          应用公共模块目录
+├─Application     应用模块目录
+├─Public          应用资源文件目录
+└─ThinkPHP        框架目录
+</code></pre>
+
+<blockquote>
+  <p>定义之后，Application目录下面就不再需要Common目录了。</p>
+</blockquote>
+
+<h2>自动生成模块目录</h2>
+
+<p>从<strong>3.2.2版本</strong>开始，可以支持自动生成默认模块之外的模块目录以及批量生成控制器和模型类。</p>
+
+<p>例如，如果我们需要生成一个Admin模块用于后台应用，在应用入口文件中定义如下：</p>
+
+<pre><code>// 绑定Admin模块到当前入口文件
+define('BIND_MODULE','Admin');
+define('APP_PATH','./Application/');
+require './ThinkPHP/ThinkPHP.php';
+</code></pre>
+
+<p>然后访问URL地址</p>
+
+<pre><code>http://serverName/index.php
+</code></pre>
+
+<p>就会生成Admin模块的目录，并生成一个默认的控制器类<code>Admin\Controller\IndexController</code>。
+如果需要生成更多的控制器类，可以定义<code>BUILD_CONTROLLER_LIST</code>常量，例如：</p>
+
+<pre><code>// 绑定Admin模块到当前入口文件
+define('BIND_MODULE','Admin');
+define('BUILD_CONTROLLER_LIST','Index,User,Menu');
+define('APP_PATH','./Application/');
+require './ThinkPHP/ThinkPHP.php';
+</code></pre>
+
+<p>访问后会自动生成三个指定的控制器类：</p>
+
+<pre><code>Admin\Controller\IndexController
+Admin\Controller\UserController
+Admin\Controller\MenuController
+</code></pre>
+
+<blockquote>
+  <p>注意：默认生成的控制器类都是继承<code>Think\Controller</code>，如果需要继承其他的公共类需要另外调整。
+  如果在应用的公共配置文件中设置关闭了 <code>APP_USE_NAMESPACE</code>的话，生成的控制器类则不会采用命名空间定义。</p>
+</blockquote>
+
+<p>还可以自己手动调用<code>Think\Build</code>类的方法来生成控制器类，例如：</p>
+
+<pre><code>// 生成Admin模块的Role控制器类
+// 默认类库为Admin\Controller\RoleController
+// 如果已经存在则不会重新生成
+\Think\Build::buildController('Admin','Role');
+</code></pre>
+
+<p>同样，也可以定义<code>BUILD_MODEL_LIST</code>支持生成多个模型类：</p>
+
+<pre><code>// 绑定Admin模块到当前入口文件
+define('BIND_MODULE','Admin');
+define('BUILD_CONTROLLER_LIST','Index,User,Menu');
+define('BUILD_MODEL_LIST','User,Menu');
+define('APP_PATH','./Application/');
+require './ThinkPHP/ThinkPHP.php';
+</code></pre>
+
+<p>访问会自动生成模型类：</p>
+
+<pre><code>Admin\Model\UserModel
+Admin\Model\MenuModel
+</code></pre>
+
+<blockquote>
+  <p>注意：默认生成的模型类都是继承<code>Think\Model</code>，如果需要继承公共的模型类需要另外调整。
+  如果在应用的公共配置文件中设置关闭了 <code>APP_USE_NAMESPACE</code>的话，生成的模型类则不会采用命名空间定义。</p>
+</blockquote>
+
+<p>也可以自己手动调用Think\Build类的方法来生成模型类，例如：</p>
+
+<pre><code>// 生成Admin模块的Role模型类
+// 默认类库为Admin\Model\RoleModel
+// 如果已经存在则不会重新生成
+\Think\Build::buildModel('Admin','Role');
+</code></pre>
+
+<h2>禁止访问模块</h2>
+
+<p>3.2对模块的访问是自动判断的，所以通常情况下无需配置模块列表即可访问，但可以配置禁止访问的模块列表（用于被其他模块调用或者不开放访问），默认配置中是禁止访问<code>Common</code>模块和<code>Runtime</code>模块（Runtime目录是默认的运行时目录），我们可以增加其他的禁止访问模块列表：</p>
+
+<pre><code>// 设置禁止访问的模块列表
+'MODULE_DENY_LIST'      =&gt;  array('Common','Runtime','Api'),
+</code></pre>
+
+<p>设置后，Api模块不能通过URL直接访问，事实上，可能我们只是在该模块下面放置一些公共的接口文件，因此都是内部调用即可。</p>
+
+<h2>设置访问列表</h2>
+
+<p>如果你的应用下面模块比较少，还可以设置允许访问列表和默认模块，这样可以简化默认模块的URL访问。</p>
+
+<pre><code>'MODULE_ALLOW_LIST'    =&gt;    array('Home','Admin','User'),
+'DEFAULT_MODULE'       =&gt;    'Home',
+</code></pre>
+
+<p>设置之后，除了Home、Admin和User模块之外的模块都不能被直接访问，并且Home模块是默认访问模块（可以不出现在URL地址）。</p>
+
+<h2>单模块设计</h2>
+
+<p>如果你的应用够简单，那么也许仅仅用一个模块就可以完成，那么可以直接设置：</p>
+
+<pre><code>// 关闭多模块访问
+'MULTI_MODULE'          =&gt;  false,
+'DEFAULT_MODULE'        =&gt;  'Home',
+</code></pre>
+
+<p>一旦关闭多模块访问后，就只能访问默认模块（这里设置的是Home）。</p>
+
+<blockquote>
+  <p>单模块设计后公共模块依然有效</p>
+</blockquote>
+
+<h2>多入口设计</h2>
+
+<p>可以给相同的应用及模块设置多个入口，不同的入口文件可以设置不同的应用模式或者绑定模块。</p>
+
+<p>例如，我们在<code>index.php</code>文件的同级目录新增一个<code>home.php</code>入口文件，并绑定Home模块：</p>
+
+<p><strong>3.2.0版本写法：</strong></p>
+
+<pre><code>// 绑定Home模块到当前入口文件
+$_GET['m'] = 'Home'; 
+define('APP_PATH','./Application/');
+require './ThinkPHP/ThinkPHP.php';
+</code></pre>
+
+<p><strong>3.2.1以上版本写法：</strong></p>
+
+<pre><code>// 绑定Home模块到当前入口文件
+define('BIND_MODULE','Home');
+define('APP_PATH','./Application/');
+require './ThinkPHP/ThinkPHP.php';
+</code></pre>
+
+<blockquote>
+  <p>如果你更改了系统默认的变量设置，则需要做对应的模块绑定的变量调整。</p>
+</blockquote>
+
+<p>绑定模块后，原来的访问地址</p>
+
+<pre><code>http://serverName/index.php/Home/Index/index
+</code></pre>
+
+<p>就变成</p>
+
+<pre><code>http://serverName/home.php/Index/index
+</code></pre>
+
+<p>同样的方式，我们也可以在入口文件中绑定控制器，例如：</p>
+
+<p><strong>3.2.0版本写法：</strong></p>
+
+<pre><code>$_GET['m'] = 'Home'; // 绑定Home模块到当前入口文件
+$_GET['c'] = 'Index'; // 绑定Index控制器到当前入口文件
+define('APP_PATH','./Application/');
+require './ThinkPHP/ThinkPHP.php';
+</code></pre>
+
+<p><strong>3.2.1以上版本写法：</strong></p>
+
+<pre><code>define('BIND_MODULE', 'Home'); // 绑定Home模块到当前入口文件
+define('BIND_CONTROLLER','Index'); // 绑定Index控制器到当前入口文件
+define('APP_PATH','./Application/');
+require './ThinkPHP/ThinkPHP.php';
+</code></pre>
+
+<p>绑定模块和控制器后，原来的访问地址：</p>
+
+<pre><code>http://serverName/index.php/Home/Index/index
+</code></pre>
+
+<p>就变成：</p>
+
+<pre><code>http://serverName/home.php/index
+</code></pre>
+
+<blockquote>
+  <p>不同的入口文件还可以用于绑定不同的应用模式，参考<a href="#app_mode">应用模式</a>部分。</p>
+</blockquote>
+</div>
+		<div class="book-footer">
+			<div class="page"><a title="上一页" class="prev" href="17.html"><span>上一页</span></a><a title="下一页" class="next" href="19.html"><span>下一页</span></a></div>
+		</div>
+	</body>
+</html>

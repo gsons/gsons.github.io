@@ -1,0 +1,107 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+	<head>
+		<meta charset="GB2312">
+		<title>使用运算符</title>
+		<link rel="stylesheet" href="../images/css/book.css">
+		<link rel="stylesheet" href="../images/prettify/prettify.css">
+		<script type="text/javascript" src="../images/js/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="../images/prettify/prettify.js"></script>
+		<script type="text/javascript">
+			$(function(){	
+				$(window).resize(function(){
+					$('.book-content').css('min-height', $(window).height() - 130);
+				}).resize();
+				
+				var $code = $(".book-content pre");
+				$code.each(function(){
+					var $this = $(this), $code = $this.children("code"), lang = $code.attr("class");
+					$this.addClass("prettyprint linenums");
+					lang && $this.addClass("lang-" + lang);					
+				});
+				
+				//调用高亮插件，高亮代码
+				prettyPrint();
+				
+				//解决表格存在边距的问题
+				$("table").attr({"cellspacing":"0", "cellpadding":"0"});
+				
+				//快捷键翻页
+				$(document).keydown(function(event){
+					if(event.keyCode == 37){ //上一页
+						$(".book-title .prev span").click();
+					} else if(event.keyCode == 39) {//下一页
+						$(".book-title .next span").click();
+					}
+				});
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div class="book-title">
+			<h1>使用运算符</h1>
+            <div class="page"><a title="上一页" class="prev" href="113.html"><span>上一页</span></a><a title="下一页" class="next" href="115.html"><span>下一页</span></a></div>
+            <div class="description"></div>
+		</div>
+		<div class="book-content"><p>我们可以对模板输出使用运算符，包括对“+”“ ” “*” “/”和“%”的支持。</p>
+
+<p>例如：</p>
+
+<table>
+<thead>
+<tr>
+  <th>运算符</th>
+  <th>使用示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>+</td>
+  <td>{$a+$b}</td>
+</tr>
+<tr>
+  <td>-</td>
+  <td>{$a-$b}</td>
+</tr>
+<tr>
+  <td>*</td>
+  <td>{$a*$b}</td>
+</tr>
+<tr>
+  <td>/</td>
+  <td>{$a/$b}</td>
+</tr>
+<tr>
+  <td>%</td>
+  <td>{$a%$b}</td>
+</tr>
+<tr>
+  <td>++</td>
+  <td>{$a++} 或  {++$a}</td>
+</tr>
+<tr>
+  <td>--</td>
+  <td>{$a--}  或 {--$a}</td>
+</tr>
+<tr>
+  <td>综合运算</td>
+  <td>{$a+$b*10+$c}</td>
+</tr>
+</tbody>
+</table>
+
+<p>在使用运算符的时候，不再支持点语法和常规的函数用法，例如：</p>
+
+<pre><code>{$user.score+10} //错误的
+{$user['score']+10} //正确的
+{$user['score']*$user['level']} //正确的
+{$user['score']|myFun*10} //错误的
+{$user['score']+myFun($user['level'])} //正确的
+</code></pre>
+</div>
+		<div class="book-footer">
+			<div class="page"><a title="上一页" class="prev" href="113.html"><span>上一页</span></a><a title="下一页" class="next" href="115.html"><span>下一页</span></a></div>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+	<head>
+		<meta charset="GB2312">
+		<title>Action参数绑定</title>
+		<link rel="stylesheet" href="../images/css/book.css">
+		<link rel="stylesheet" href="../images/prettify/prettify.css">
+		<script type="text/javascript" src="../images/js/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="../images/prettify/prettify.js"></script>
+		<script type="text/javascript">
+			$(function(){	
+				$(window).resize(function(){
+					$('.book-content').css('min-height', $(window).height() - 130);
+				}).resize();
+				
+				var $code = $(".book-content pre");
+				$code.each(function(){
+					var $this = $(this), $code = $this.children("code"), lang = $code.attr("class");
+					$this.addClass("prettyprint linenums");
+					lang && $this.addClass("lang-" + lang);					
+				});
+				
+				//调用高亮插件，高亮代码
+				prettyPrint();
+				
+				//解决表格存在边距的问题
+				$("table").attr({"cellspacing":"0", "cellpadding":"0"});
+				
+				//快捷键翻页
+				$(document).keydown(function(event){
+					if(event.keyCode == 37){ //上一页
+						$(".book-title .prev span").click();
+					} else if(event.keyCode == 39) {//下一页
+						$(".book-title .next span").click();
+					}
+				});
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div class="book-title">
+			<h1>Action参数绑定</h1>
+            <div class="page"><a title="上一页" class="prev" href="36.html"><span>上一页</span></a><a title="下一页" class="next" href="38.html"><span>下一页</span></a></div>
+            <div class="description"></div>
+		</div>
+		<div class="book-content"><p>参数绑定是通过直接绑定URL地址中的变量作为操作方法的参数，可以简化方法的定义甚至路由的解析。</p>
+
+<p>参数绑定功能默认是开启的，其原理是把URL中的参数（不包括模块、控制器和操作名）和操作方法中的参数进行绑定。</p>
+
+<p>要启用参数绑定功能，首先确保你开启了<code>URL_PARAMS_BIND</code>设置：</p>
+
+<pre><code>'URL_PARAMS_BIND'       =&gt;  true, // URL变量绑定到操作方法作为参数
+</code></pre>
+
+<p>参数绑定有两种方式：<strong>按照变量名绑定和按照变量顺序绑定</strong>。</p>
+
+<h2>按变量名绑定</h2>
+
+<p>默认的参数绑定方式是按照变量名进行绑定，例如，我们给Blog控制器定义了两个操作方法read和archive方法，由于read操作需要指定一个id参数，archive方法需要指定年份（year）和月份（month）两个参数，那么我们可以如下定义：</p>
+
+<pre><code>namespace Home\Controller;
+use Think\Controller;
+class BlogController extends Controller{
+    public function read($id){
+        echo 'id='.$id;
+    }
+
+    public function archive($year='2013',$month='01'){
+        echo 'year='.$year.'&amp;month='.$month;
+    }
+}
+</code></pre>
+
+<blockquote>
+  <p>注意这里的操作方法并没有具体的业务逻辑，只是简单的示范。</p>
+</blockquote>
+
+<p>URL的访问地址分别是：</p>
+
+<pre><code>http://serverName/index.php/Home/Blog/read/id/5
+http://serverName/index.php/Home/Blog/archive/year/2013/month/11
+</code></pre>
+
+<p>两个URL地址中的id参数和year和month参数会自动和read操作方法以及archive操作方法的同名参数绑定。</p>
+
+<blockquote>
+  <p>变量名绑定不一定由访问URL决定，路由地址也能起到相同的作用</p>
+</blockquote>
+
+<p>输出的结果依次是：</p>
+
+<pre><code>id=5
+year=2013&amp;month=11
+</code></pre>
+
+<p>按照变量名进行参数绑定的参数必须和URL中传入的变量名称一致，但是参数顺序不需要一致。也就是说</p>
+
+<pre><code>http://serverName/index.php/Home/Blog/archive/month/11/year/2013
+</code></pre>
+
+<p>和上面的访问结果是一致的，URL中的参数顺序和操作方法中的参数顺序都可以随意调整，关键是确保参数名称一致即可。</p>
+
+<p>如果使用下面的URL地址进行访问，参数绑定仍然有效：</p>
+
+<pre><code>http://serverName/index.php?s=/Home/Blog/read/id/5
+http://serverName/index.php?s=/Home/Blog/archive/year/2013/month/11
+http://serverName/index.php?c=Blog&amp;a=read&amp;id=5
+http://serverName/index.php?c=Blog&amp;a=archive&amp;year=2013&amp;month=11
+</code></pre>
+
+<p>如果用户访问的URL地址是（至于为什么会这么访问暂且不提）：</p>
+
+<pre><code>http://serverName/index.php/Home/Blog/read/
+</code></pre>
+
+<p>那么会抛出下面的异常提示：
+<code>参数错误:id</code></p>
+
+<p>报错的原因很简单，因为在执行read操作方法的时候，id参数是必须传入参数的，但是方法无法从URL地址中获取正确的id参数信息。由于我们不能相信用户的任何输入，因此建议你给read方法的id参数添加默认值，例如：</p>
+
+<pre><code>    public function read($id=0){
+        echo 'id='.$id;
+    }
+</code></pre>
+
+<p>这样，当我们访问
+<code>http://serverName/index.php/Home/Blog/read/</code>
+的时候 就会输出</p>
+
+<pre><code>id=0
+</code></pre>
+
+<p>当我们访问
+<code>http://serverName/index.php/Home/Blog/archive/</code>
+的时候，输出：</p>
+
+<pre><code>year=2013&amp;month=01
+</code></pre>
+
+<blockquote>
+  <p>始终给操作方法的参数定义默认值是一个避免报错的好办法</p>
+</blockquote>
+
+<h2>按变量顺序绑定</h2>
+
+<p>第二种方式是按照变量的顺序绑定，这种情况下URL地址中的参数顺序非常重要，不能随意调整。要按照变量顺序进行绑定，必须先设置<code>URL_PARAMS_BIND_TYPE</code>为1：</p>
+
+<pre><code>'URL_PARAMS_BIND_TYPE'  =&gt;  1, // 设置参数绑定按照变量顺序绑定
+</code></pre>
+
+<p>操作方法的定义不需要改变，URL的访问地址分别改成：</p>
+
+<pre><code>http://serverName/index.php/Home/Blog/read/5
+http://serverName/index.php/Home/Blog/archive/2013/11
+</code></pre>
+
+<p>输出的结果依次是：</p>
+
+<pre><code>id=5
+year=2013&amp;month=11
+</code></pre>
+
+<p>这个时候如果改成</p>
+
+<pre><code>http://serverName/index.php/Home/Blog/archive/11/2013
+</code></pre>
+
+<p>输出的结果就变成了：</p>
+
+<pre><code>year=11&amp;month=2013
+</code></pre>
+
+<p>显然就有问题了，所以不能随意调整参数在URL中的传递顺序，要确保和你的操作方法定义顺序一致。</p>
+
+<blockquote>
+  <p>可以看到，这种参数绑定的效果有点类似于简单的规则路由。</p>
+</blockquote>
+
+<p>按变量顺序绑定的方式目前仅对PATHINFO地址有效，所以下面的URL访问参数绑定会失效：</p>
+
+<pre><code>http://serverName/index.php?c=Blog&amp;a=read&amp;id=5
+http://serverName/index.php?c=Blog&amp;a=archive&amp;year=2013&amp;month=11
+</code></pre>
+
+<p>但是，兼容模式URL地址访问依然有效：</p>
+
+<pre><code>http://serverName/index.php?s=/Home/Blog/read/5
+http://serverName/index.php?s=/Home/Blog/archive/2013/11
+</code></pre>
+
+<p>如果你的操作方法定义都不带任何参数或者不希望使用该功能的话，可以关闭参数绑定功能：</p>
+
+<pre><code>'URL_PARAMS_BIND'       =&gt;  false
+</code></pre>
+</div>
+		<div class="book-footer">
+			<div class="page"><a title="上一页" class="prev" href="36.html"><span>上一页</span></a><a title="下一页" class="next" href="38.html"><span>下一页</span></a></div>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,215 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+	<head>
+		<meta charset="GB2312">
+		<title>SAE</title>
+		<link rel="stylesheet" href="../images/css/book.css">
+		<link rel="stylesheet" href="../images/prettify/prettify.css">
+		<script type="text/javascript" src="../images/js/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="../images/prettify/prettify.js"></script>
+		<script type="text/javascript">
+			$(function(){	
+				$(window).resize(function(){
+					$('.book-content').css('min-height', $(window).height() - 130);
+				}).resize();
+				
+				var $code = $(".book-content pre");
+				$code.each(function(){
+					var $this = $(this), $code = $this.children("code"), lang = $code.attr("class");
+					$this.addClass("prettyprint linenums");
+					lang && $this.addClass("lang-" + lang);					
+				});
+				
+				//调用高亮插件，高亮代码
+				prettyPrint();
+				
+				//解决表格存在边距的问题
+				$("table").attr({"cellspacing":"0", "cellpadding":"0"});
+				
+				//快捷键翻页
+				$(document).keydown(function(event){
+					if(event.keyCode == 37){ //上一页
+						$(".book-title .prev span").click();
+					} else if(event.keyCode == 39) {//下一页
+						$(".book-title .next span").click();
+					}
+				});
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div class="book-title">
+			<h1>SAE</h1>
+            <div class="page"><a title="上一页" class="prev" href="196.html"><span>上一页</span></a><a title="下一页" class="next" href="198.html"><span>下一页</span></a></div>
+            <div class="description"></div>
+		</div>
+		<div class="book-content"><h2>SAE介绍</h2>
+
+<p>Sina App Engine（简称<strong>SAE</strong>）是新浪研发中心开发的国内首个公有云计算平台，是新浪云计算战略的核心组成部分，作为一个简单高效的分布式Web服务开发、运行平台越来越受开发者青睐。</p>
+
+<p>SAE环境和普通环境有所不同，它是一个分布式服务器集群，能让你的程序同时运行在多台服务器中。并提供了很多高效的分布式服务。SAE为了提升性能和安全，禁止了本地IO写操作，使用MemcacheX、Storage等存储型服务代替传统IO操作，效率比传统IO读写操作高，有效解决因IO瓶颈导致程序性能低下的问题。</p>
+
+<blockquote>
+  <p>正是因为SAE和普通环境的不同，使得普通程序不能直接放在SAE上，需要经过移植才能放在SAE上运行。也使得很多能在SAE上运行的程序不能在普通环境下运行。</p>
+</blockquote>
+
+<p>ThinkPHP3.2核心内置了对SAE平台的支持（采用了应用模式的方式），具有自己的独创特性，能够最大程度的使用ThinkPHP的标准特性，让开发人员感受不到SAE和普通环境的差别。甚至可以不学习任何SAE知识，只要会ThinkPHP开发，就能将你的程序运行在SAE上。</p>
+
+<p>SAE版ThinkPHP具有以下特性：</p>
+
+<ul>
+<li>横跨性：能让同样的代码既能在SAE环境下运行，也能在普通环境下运行。解决了使用SAE不能在本地调试代码的问题。</li>
+<li>平滑性：我们还是按照以前一样使用ThinkPHP，但是您已经不知不觉的使用了SAE服务，不用特意学习SAE服务，降低学习成本。比如你不用特意的去学习KVDB服务，你在SAE环境下使用ThinkPHP的F函数就已经使用了KVDB的服务。</li>
+<li>完整性：SAE开发下面功能没有任何删减，支持ThinkPHP标准模式的所有功能。</li>
+</ul>
+
+<blockquote>
+  <p>大多SAE移植程序都是使用Wrappers实现，SAE版ThinkPHP没有使用Wrappers，使用SAE的原始服务接口，运行效率比用Wrappers更高。</p>
+</blockquote>
+
+<p>3.2版本中你无需考虑SAE平台的部署，在本地采用标准模式开发完成后，直接部署到SAE平台后，系统会自动转换为SAE模式运行。</p>
+
+<blockquote>
+  <p>在本地开发完成后，上传到SAE平台需要做一些初始化工作，例如初始化Mysql，Memcache，KVDB服务。
+  SAE平台不支持IO写操作，所以你不能在SAE上首次运行入口文件生成项目目录。你可以在本地运行入口文件，本地生成好项目目录后再提交到SAE上。</p>
+  
+  <p>注意：如果要部署到SAE平台的话，你的应用代码不要直接进行文件读写操作，而采用ThinkPHP封装的方法或者函数进行操作即可。</p>
+</blockquote>
+
+<h2>SAE配置</h2>
+
+<p>SAE引擎运行时拥有SAE自己的惯例配置和专有配置，因此配置文件加载顺序为：</p>
+
+<h3>惯例配置->项目配置->SAE惯例配置->SAE专有配置</h3>
+
+<blockquote>
+  <p>SAE惯例配置和SAE专有配置中的配置项将会覆盖项目配置。</p>
+</blockquote>
+
+<p><strong>SAE惯例配置</strong>：位于系统目录的 /Mode/Sae/convention.php，其中定义了程序在SAE上运行时固定的数据库连接配置项。
+<strong>SAE专有配置</strong>：位于应用的公共Conf目录下，文件名为config_sae.php，大家可以将针对SAE的配置写到其中。</p>
+
+<blockquote>
+  <p>注：SAE惯例配置和SAE专有配置是针对SAE环境的独有配置，在本地运行时将不会加载。</p>
+</blockquote>
+
+<h2>数据库</h2>
+
+<p>开发者不需要在应用配置文件(config.php)中定义和SAE相关的数据库配置项，只需要定义本地调试时连接的数据库即可。代码提交到SAE时无需修改任何配置项也能运行，因为SAE惯例配置会自动覆盖你的项目配置文件中的数据库配置。</p>
+
+<blockquote>
+  <p>代码在SAE上运行时会进行分布式数据库连接，并读写分离。</p>
+</blockquote>
+
+<h2>缓存</h2>
+
+<p>在SAE开发过程中，你仍然可以使用ThinkPHP内置的缓存方法进行处理。下面是SAE引擎使用不同的缓存方法在本地和SAE平台下的区别（注意这个区别SAE引擎会自动判断处理）：
+<table>
+<thead>
+<tr>
+  <th>缓存方法</th>
+  <th>本地运行</th>
+  <th>SAE平台</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>S缓存</td>
+  <td>默认使用File方式实现</td>
+  <td>固定使用Memcache实现</td>
+</tr>
+<tr>
+  <td>F缓存</td>
+  <td>使用File实现</td>
+  <td>使用KVDB实现</td>
+</tr>
+<tr>
+  <td>静态缓存</td>
+  <td>生成静态Html文件</td>
+  <td>静态文件存入KVDB中</td>
+</tr>
+<tr>
+  <td>SQL队列</td>
+  <td>支持File、Xcache和APC方式</td>
+  <td>使用KVDB存储</td>
+</tr>
+</tbody>
+</table></p>
+
+<h2>日志</h2>
+
+<p>你无需单独为SAE平台写日志功能，一切都是框架的Log类自动处理的。ThinkPHP在SAE平台的日志写入是调用了<strong>sae_debug</strong>方法，具体工作由<code>Think\Log\Driver\Sae</code>类完成。</p>
+
+<p>在本地运行会将日志记录到项目的项目的<code>Runtime/Logs</code>文件夹下，而在SAE上运行会将日志记录到SAE平台的日志中心：
+<a href="http://sae.sina.com.cn/?m=applog">http://sae.sina.com.cn/?m=applog</a></p>
+
+<p>请在搜索框选择中的下拉菜单处选择“debug”进行查看。</p>
+
+<h2>文件上传</h2>
+
+<p>文件上传仍然使用<code>Think\Upload</code>扩展类库上传文件，使用方法不变。同样的代码在本地运行时将会上传到指定的目录，在SAE上运行时就会自动使用<strong>Storage</strong>服务，将文件上传到指定的Storage中。</p>
+
+<p>首先你需要在SAE平台上创建一个Storage的domain用于存放上传的文件：
+<a href="http://sae.sina.com.cn/?m=storage">http://sae.sina.com.cn/?m=storage</a></p>
+
+<p>这里可以建立多个domain。而我们的文件会上传到哪个domain，是由上传路径的第一个目录名称决定的。如：</p>
+
+<pre><code>$upload-&gt;savePath = './Public/Uploads/';
+</code></pre>
+
+<p>会上传到<strong>名为Public的domain</strong>。</p>
+
+<blockquote>
+  <p>你也不用在这个domain下创建Uploads文件夹，SAE的Storage服务会为你自动创建。</p>
+</blockquote>
+
+<p>图片地址的问题：
+我们使用UploadFile类上传图片，在本地和在SAE下图片的浏览地址是不一样的。比如有张图片地址为 "/Public/upload/1.jpg" ， /Public 是一个模板替换变量， 他会被替换为Public文件夹所在目录的地址， 我们可以通过浏览器的查看源代码功能查看被替换后是什么效果。 可以看见， 替换后为 "/Public/upload/1.jpg" 。 但是在SAE上图片并没有在Public/upload目录下，而是在storage中。我们需要将 /Public/替换为storage的域名，在SAE上才能正常显示。</p>
+
+<p>我们在SAE专有配置<code>Conf/config_sae.php</code>文件中定义如下代码：</p>
+
+<pre><code>&lt;?php
+return array(
+  'TMPL_PARSE_STRING'=&gt;array(
+    '/Public/upload' =&gt; $st-&gt;getUrl('public','upload'),
+  )
+);
+</code></pre>
+
+<p>这样，在SAE上会把 <code>/Public/upload</code> <strong>替换为storage的地址</strong>， 在SAE上图片也能正常显示。</p>
+
+<h2>隐藏index.php</h2>
+
+<p>SAE不支持<code>.htaccess</code>文件，但我们可以使用SAE提供的<strong>AppConfig</strong>服务实现伪静态。</p>
+
+<p>在你项目的根目录建立<code>config.yaml</code>文件，代码为：</p>
+
+<pre><code>handle:
+ - rewrite: if(!is_dir() &amp;&amp; !is_file() &amp;&amp; path~"^(.*)$") goto "index.php/$1"
+</code></pre>
+
+<p>这样就可以隐藏入口了。</p>
+
+<p>比如这样的地址 <code>http://serverName/index.php/Blog/read/id/1</code>也能通过
+<code>http://serverName/Blog/read/id/1</code>访问。</p>
+
+<h2>代码横跨性建议</h2>
+
+<p>ThinkPHP的SAE模式，是具有横跨性的，请不要破坏它的横跨性。比如，不要在项目配置文件中写和SAE数据库相关配置项。自己写代码时，也要尽量做到横跨性，这样就可以让同样的代码既能在SAE下运行，也能在普通环境下运行，使你在本地调试完后上传到SAE也不用修改任何代码就能运行。</p>
+
+<p><strong>下面是一些保持代码横跨性的建议：</strong></p>
+
+<p>（1）尽量少使用原生的SAE服务</p>
+
+<p>能使用ThinkPHP自带函数替代的，尽量使用ThinkPHP自带函数。比如要使用SAE的KVDB服务，在ThinkPHP中完全可以用F函数代替。如果要使用SAE的Memcache服务，都使用S函数实现。这样就不会导致你的代码从SAE转移到普通环境后性能很低。个别SAE服务无法使用ThinkPHP自带函数代替的，才考虑使用原生的SAE服务。</p>
+
+<p>（2）利用SAE专有配置</p>
+
+<p>当遇到SAE和普通环境配置需要不一样时，你可以把普通环境的配置写到项目配置文件Conf/config.php中，而将SAE需要用的配置写到SAE专有配置Conf/config_sae.php中。（大多数差异化的配置，SAE惯例配置文件已经内置处理了）</p>
+</div>
+		<div class="book-footer">
+			<div class="page"><a title="上一页" class="prev" href="196.html"><span>上一页</span></a><a title="下一页" class="next" href="198.html"><span>下一页</span></a></div>
+		</div>
+	</body>
+</html>

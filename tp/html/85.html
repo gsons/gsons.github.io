@@ -1,0 +1,113 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+	<head>
+		<meta charset="GB2312">
+		<title>快捷查询</title>
+		<link rel="stylesheet" href="../images/css/book.css">
+		<link rel="stylesheet" href="../images/prettify/prettify.css">
+		<script type="text/javascript" src="../images/js/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="../images/prettify/prettify.js"></script>
+		<script type="text/javascript">
+			$(function(){	
+				$(window).resize(function(){
+					$('.book-content').css('min-height', $(window).height() - 130);
+				}).resize();
+				
+				var $code = $(".book-content pre");
+				$code.each(function(){
+					var $this = $(this), $code = $this.children("code"), lang = $code.attr("class");
+					$this.addClass("prettyprint linenums");
+					lang && $this.addClass("lang-" + lang);					
+				});
+				
+				//调用高亮插件，高亮代码
+				prettyPrint();
+				
+				//解决表格存在边距的问题
+				$("table").attr({"cellspacing":"0", "cellpadding":"0"});
+				
+				//快捷键翻页
+				$(document).keydown(function(event){
+					if(event.keyCode == 37){ //上一页
+						$(".book-title .prev span").click();
+					} else if(event.keyCode == 39) {//下一页
+						$(".book-title .next span").click();
+					}
+				});
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div class="book-title">
+			<h1>快捷查询</h1>
+            <div class="page"><a title="上一页" class="prev" href="84.html"><span>上一页</span></a><a title="下一页" class="next" href="86.html"><span>下一页</span></a></div>
+            <div class="description"></div>
+		</div>
+		<div class="book-content"><p>快捷查询方式是一种多字段查询的简化写法，可以进一步简化查询条件的写法，在多个字段之间用<strong>|</strong>分割表示OR查询，用<strong>&amp;</strong>分割表示AND查询，可以实现下面的查询，例如：</p>
+
+<h2>一、不同字段相同的查询条件</h2>
+
+<pre><code>$User = M("User"); // 实例化User对象
+$map['name|title'] = 'thinkphp';
+// 把查询条件传入查询方法
+$User-&gt;where($map)-&gt;select(); 
+</code></pre>
+
+<p>上面的查询其实可以等效于</p>
+
+<pre><code>$User = M("User"); // 实例化User对象
+$map['name'] = 'thinkphp';
+$map['title'] = 'thinkphp';
+$map['_logic'] = 'OR';
+// 把查询条件传入查询方法
+$User-&gt;where($map)-&gt;select(); 
+</code></pre>
+
+<p>查询条件就变成
+<code>name= 'thinkphp' OR title = 'thinkphp'</code></p>
+
+<h2>二、不同字段不同的查询条件</h2>
+
+<pre><code>$User = M("User"); // 实例化User对象
+$map['status&amp;title'] =array('1','thinkphp','_multi'=&gt;true);
+// 把查询条件传入查询方法
+$User-&gt;where($map)-&gt;select(); 
+</code></pre>
+
+<p>上面的查询等效于：</p>
+
+<pre><code>$User = M("User"); // 实例化User对象
+$map['status'] = 1;
+$map['title']  = 'thinkphp';
+// 把查询条件传入查询方法
+$User-&gt;where($map)-&gt;select(); 
+</code></pre>
+
+<p><code>'_multi'=&gt;true</code>必须加在数组的最后，表示当前是多条件匹配，这样查询条件就变成
+<code>status= 1 AND title = 'thinkphp'</code></p>
+
+<p>，查询字段支持更多的，例如：</p>
+
+<pre><code>$map['status&amp;score&amp;title'] =array('1',array('gt','0'),'thinkphp','_multi'=&gt;true);
+</code></pre>
+
+<p>等效于：</p>
+
+<pre><code>$map['status'] = 1;
+$map['score'] = array('gt',0);
+$map['title'] = 'thinkphp';
+</code></pre>
+
+<p>查询条件就变成
+<code>status= 1 AND score &gt;0 AND  title = 'thinkphp'</code></p>
+
+<blockquote>
+  <p>注意：快捷查询方式中“|”和“&amp;”不能同时使用。</p>
+</blockquote>
+</div>
+		<div class="book-footer">
+			<div class="page"><a title="上一页" class="prev" href="84.html"><span>上一页</span></a><a title="下一页" class="next" href="86.html"><span>下一页</span></a></div>
+		</div>
+	</body>
+</html>

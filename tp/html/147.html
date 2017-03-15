@@ -1,0 +1,83 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+	<head>
+		<meta charset="GB2312">
+		<title>性能调试</title>
+		<link rel="stylesheet" href="../images/css/book.css">
+		<link rel="stylesheet" href="../images/prettify/prettify.css">
+		<script type="text/javascript" src="../images/js/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="../images/prettify/prettify.js"></script>
+		<script type="text/javascript">
+			$(function(){	
+				$(window).resize(function(){
+					$('.book-content').css('min-height', $(window).height() - 130);
+				}).resize();
+				
+				var $code = $(".book-content pre");
+				$code.each(function(){
+					var $this = $(this), $code = $this.children("code"), lang = $code.attr("class");
+					$this.addClass("prettyprint linenums");
+					lang && $this.addClass("lang-" + lang);					
+				});
+				
+				//调用高亮插件，高亮代码
+				prettyPrint();
+				
+				//解决表格存在边距的问题
+				$("table").attr({"cellspacing":"0", "cellpadding":"0"});
+				
+				//快捷键翻页
+				$(document).keydown(function(event){
+					if(event.keyCode == 37){ //上一页
+						$(".book-title .prev span").click();
+					} else if(event.keyCode == 39) {//下一页
+						$(".book-title .next span").click();
+					}
+				});
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div class="book-title">
+			<h1>性能调试</h1>
+            <div class="page"><a title="上一页" class="prev" href="146.html"><span>上一页</span></a><a title="下一页" class="next" href="148.html"><span>下一页</span></a></div>
+            <div class="description"></div>
+		</div>
+		<div class="book-content"><p>开发过程中，有些时候为了测试性能，经常需要调试某段代码的运行时间或者内存占用开销，系统提供了G方法可以很方便的获取某个区间的运行时间和内存占用情况。 例如：</p>
+
+<pre><code>G('begin');
+// ...其他代码段
+G('end');
+// ...也许这里还有其他代码
+// 进行统计区间
+echo G('begin','end').'s';
+</code></pre>
+
+<p>G('begin','end') 表示统计begin位置到end位置的执行时间（单位是秒），begin必须是一个已经标记过的位置，如果这个时候end位置还没被标记过，则会自动把当前位置标记为end标签，输出的结果类似于：<code>0.0056s</code></p>
+
+<p>默认的统计精度是小数点后4位，如果觉得这个统计精度不够，还可以设置例如：</p>
+
+<pre><code>G('begin','end',6).'s';
+</code></pre>
+
+<p>可能的输出会变成：<code>0.005587s</code></p>
+
+<p>如果你的环境支持内存占用统计的话，还可以使用G方法进行区间内存开销统计（单位为kb），例如：</p>
+
+<pre><code>echo G('begin','end','m').'kb';
+</code></pre>
+
+<p>第三个参数使用m表示进行内存开销统计，输出的结果可能是：<code>625kb</code></p>
+
+<p>同样，如果end标签没有被标记的话，会自动把当前位置先标记位end标签。</p>
+
+<blockquote>
+  <p>如果环境不支持内存统计，则该参数无效，仍然会进行区间运行时间统计。</p>
+</blockquote>
+</div>
+		<div class="book-footer">
+			<div class="page"><a title="上一页" class="prev" href="146.html"><span>上一页</span></a><a title="下一页" class="next" href="148.html"><span>下一页</span></a></div>
+		</div>
+	</body>
+</html>

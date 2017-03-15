@@ -1,0 +1,159 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+	<head>
+		<meta charset="GB2312">
+		<title>页面Trace</title>
+		<link rel="stylesheet" href="../images/css/book.css">
+		<link rel="stylesheet" href="../images/prettify/prettify.css">
+		<script type="text/javascript" src="../images/js/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="../images/prettify/prettify.js"></script>
+		<script type="text/javascript">
+			$(function(){	
+				$(window).resize(function(){
+					$('.book-content').css('min-height', $(window).height() - 130);
+				}).resize();
+				
+				var $code = $(".book-content pre");
+				$code.each(function(){
+					var $this = $(this), $code = $this.children("code"), lang = $code.attr("class");
+					$this.addClass("prettyprint linenums");
+					lang && $this.addClass("lang-" + lang);					
+				});
+				
+				//调用高亮插件，高亮代码
+				prettyPrint();
+				
+				//解决表格存在边距的问题
+				$("table").attr({"cellspacing":"0", "cellpadding":"0"});
+				
+				//快捷键翻页
+				$(document).keydown(function(event){
+					if(event.keyCode == 37){ //上一页
+						$(".book-title .prev span").click();
+					} else if(event.keyCode == 39) {//下一页
+						$(".book-title .next span").click();
+					}
+				});
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div class="book-title">
+			<h1>页面Trace</h1>
+            <div class="page"><a title="上一页" class="prev" href="143.html"><span>上一页</span></a><a title="下一页" class="next" href="145.html"><span>下一页</span></a></div>
+            <div class="description"></div>
+		</div>
+		<div class="book-content"><p>调试模式并不能完全满足我们调试的需要，有时候我们需要手动的输出一些调试信息。除了本身可以借助一些开发工具进行调试外，ThinkPHP还提供了一些内置的调试工具和函数。例如，页面Trace功能就是ThinkPHP提供给开发人员的一个用于开发调试的辅助工具。可以实时显示当前页面的操作的请求信息、运行情况、SQL执行、错误提示等，并支持自定义显示。</p>
+
+<p>页面Trace功能对调试模式和部署模式都有效，不过只能用于有页面输出的情况（如果你的操作没有任何输出，那么可能页面Trace功能对你帮助不大，你可能需要使用后面的调试方法）。</p>
+
+<blockquote>
+  <p>在部署模式下面，显示的调试信息没有调试模式完整，通常我们建议页面Trace配合调试模式一起使用。</p>
+</blockquote>
+
+<p>要开启页面Trace功能，需要在项目配置文件中设置：</p>
+
+<pre><code>// 显示页面Trace信息
+'SHOW_PAGE_TRACE' =&gt;true, 
+</code></pre>
+
+<p>该参数默认为关闭，开启后并且你的页面有模板输出的话，页面右下角会显示ThinkPHP的LOGO：</p>
+
+<p>我们看到的LOGO后面的数字就是当前页面的执行时间（单位是秒） 点击该图标后，会展开详细的页面Trace信息，如图：</p>
+
+<p>页面Trace框架有6个选项卡，分别是基本、文件、流程、错误、SQL和调试，点击不同的选项卡会切换到不同的Trace信息窗口。</p>
+
+<table>
+<thead>
+<tr>
+  <th>选项卡</th>
+  <th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>基本</td>
+  <td>当前页面的基本摘要信息，例如执行时间、内存开销、文件加载数、查询次数等等。</td>
+</tr>
+<tr>
+  <td>文件</td>
+  <td>详细列出当前页面执行过程中加载的文件及其大小。</td>
+</tr>
+<tr>
+  <td>流程</td>
+  <td>会列出当前页面执行到的行为和相关流程（待完善）。</td>
+</tr>
+<tr>
+  <td>错误</td>
+  <td>当前页面执行过程中的一些错误信息，包括警告错误。</td>
+</tr>
+<tr>
+  <td>SQL</td>
+  <td>当前页面执行到的SQL语句信息。</td>
+</tr>
+<tr>
+  <td>调试</td>
+  <td>开发人员在程序中进行的调试输出。</td>
+</tr>
+</tbody>
+</table>
+
+<p>页面Trace的选项卡是可以定制和扩展的，默认的配置为：</p>
+
+<pre><code>'TRACE_PAGE_TABS'=&gt;array(
+    'base'=&gt;'基本',
+     'file'=&gt;'文件',
+     'think'=&gt;'流程',
+     'error'=&gt;'错误',
+     'sql'=&gt;'SQL',
+     'debug'=&gt;'调试'
+)
+</code></pre>
+
+<p>也就是我们看到的默认情况下显示的选项卡，如果你希望增加新的选项卡：用户，则可以修改配置如下：</p>
+
+<pre><code>'TRACE_PAGE_TABS'=&gt;array(
+     'base'=&gt;'基本',
+     'file'=&gt;'文件',
+     'think'=&gt;'流程',
+     'error'=&gt;'错误',
+     'sql'=&gt;'SQL',
+     'debug'=&gt;'调试',
+     'user'=&gt;'用户'
+)
+</code></pre>
+
+<p>也可以把某几个选项卡合并，例如：</p>
+
+<pre><code>'TRACE_PAGE_TABS'=&gt;array(
+     'base'=&gt;'基本',
+     'file'=&gt;'文件',
+     'think'=&gt;'流程',
+     'error|debug|sql'=&gt;'调试',
+     'user'=&gt;'用户'
+)
+</code></pre>
+
+<p>我们把刚才的用户信息调试输出到用户选项卡，trace方法的用法如下：</p>
+
+<p><code>trace($user,'用户信息','user');</code></p>
+
+<p>第三个参数表示选项卡的标识，和我们在TRACE_PAGE_TABS中配置的对应。
+默认情况下，页面Trace窗口显示的信息是不会保存的，如果希望保存这些trace信息，我们可以配置PAGE_TRACE_SAVE参数</p>
+
+<p><code>'PAGE_TRACE_SAVE'=&gt;true</code></p>
+
+<p>开启页面trace信息保存后，每次的页面Trace信息会以日志形式保存到项目的日志目录中，命名格式是： 当前日期_trace.log，例如：12-06-21_trace.log</p>
+
+<p>如果不希望保存所有的选项卡的信息，可以设置需要保存的选项卡，例如：</p>
+
+<p><code>'PAGE_TRACE_SAVE' =&gt; array('base','file','sql');</code></p>
+
+<p>设置后只会保存base、file和sql三个选项卡的信息。</p>
+</div>
+		<div class="book-footer">
+			<div class="page"><a title="上一页" class="prev" href="143.html"><span>上一页</span></a><a title="下一页" class="next" href="145.html"><span>下一页</span></a></div>
+		</div>
+	</body>
+</html>

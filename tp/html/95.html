@@ -1,0 +1,72 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+	<head>
+		<meta charset="GB2312">
+		<title>虚拟模型</title>
+		<link rel="stylesheet" href="../images/css/book.css">
+		<link rel="stylesheet" href="../images/prettify/prettify.css">
+		<script type="text/javascript" src="../images/js/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="../images/prettify/prettify.js"></script>
+		<script type="text/javascript">
+			$(function(){	
+				$(window).resize(function(){
+					$('.book-content').css('min-height', $(window).height() - 130);
+				}).resize();
+				
+				var $code = $(".book-content pre");
+				$code.each(function(){
+					var $this = $(this), $code = $this.children("code"), lang = $code.attr("class");
+					$this.addClass("prettyprint linenums");
+					lang && $this.addClass("lang-" + lang);					
+				});
+				
+				//调用高亮插件，高亮代码
+				prettyPrint();
+				
+				//解决表格存在边距的问题
+				$("table").attr({"cellspacing":"0", "cellpadding":"0"});
+				
+				//快捷键翻页
+				$(document).keydown(function(event){
+					if(event.keyCode == 37){ //上一页
+						$(".book-title .prev span").click();
+					} else if(event.keyCode == 39) {//下一页
+						$(".book-title .next span").click();
+					}
+				});
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div class="book-title">
+			<h1>虚拟模型</h1>
+            <div class="page"><a title="上一页" class="prev" href="94.html"><span>上一页</span></a><a title="下一页" class="next" href="96.html"><span>下一页</span></a></div>
+            <div class="description"></div>
+		</div>
+		<div class="book-content"><p>虚拟模型是指虽然是模型类，但并不会真正的操作数据库的模型。有些时候，我们建立模型类但又不需要进行数据库操作，仅仅是借助模型类来封装一些业务逻辑，那么可以借助虚拟模型来完成。虚拟模型不会自动连接数据库，因此也不会自动检测数据表和字段信息，有两种方式可以定义虚拟模型：</p>
+
+<h5>第一种:继承Model类</h5>
+
+<pre><code>namespace Home\Model;
+Class UserModel extends \Think\Model {
+     Protected $autoCheckFields = false;
+}
+</code></pre>
+
+<p>设置autoCheckFields属性为false后，就会关闭字段信息的自动检测，因为ThinkPHP采用的是惰性数据库连接，只要你不进行数据库查询操作，是不会连接数据库的。</p>
+
+<h5>第二种:不继承Model类</h5>
+
+<pre><code>namespace Home\Model;
+Class UserModel {
+}
+</code></pre>
+
+<p>这种方式下面自定义模型类就是一个单纯的业务逻辑类，不能再使用模型的CURD操作方法，但是可以实例化其他的模型类进行相关操作，也可以在需要的时候直接实例化Db类进行数据库操作。</p>
+</div>
+		<div class="book-footer">
+			<div class="page"><a title="上一页" class="prev" href="94.html"><span>上一页</span></a><a title="下一页" class="next" href="96.html"><span>下一页</span></a></div>
+		</div>
+	</body>
+</html>

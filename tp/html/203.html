@@ -1,0 +1,189 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+	<head>
+		<meta charset="GB2312">
+		<title>更新日志</title>
+		<link rel="stylesheet" href="../images/css/book.css">
+		<link rel="stylesheet" href="../images/prettify/prettify.css">
+		<script type="text/javascript" src="../images/js/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="../images/prettify/prettify.js"></script>
+		<script type="text/javascript">
+			$(function(){	
+				$(window).resize(function(){
+					$('.book-content').css('min-height', $(window).height() - 130);
+				}).resize();
+				
+				var $code = $(".book-content pre");
+				$code.each(function(){
+					var $this = $(this), $code = $this.children("code"), lang = $code.attr("class");
+					$this.addClass("prettyprint linenums");
+					lang && $this.addClass("lang-" + lang);					
+				});
+				
+				//调用高亮插件，高亮代码
+				prettyPrint();
+				
+				//解决表格存在边距的问题
+				$("table").attr({"cellspacing":"0", "cellpadding":"0"});
+				
+				//快捷键翻页
+				$(document).keydown(function(event){
+					if(event.keyCode == 37){ //上一页
+						$(".book-title .prev span").click();
+					} else if(event.keyCode == 39) {//下一页
+						$(".book-title .next span").click();
+					}
+				});
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div class="book-title">
+			<h1>更新日志</h1>
+            <div class="page"><a title="上一页" class="prev" href="202.html"><span>上一页</span></a><a title="下一页" class="next" href="204.html"><span>下一页</span></a></div>
+            <div class="description"></div>
+		</div>
+		<div class="book-content"><h2>3.2.2 更新日志</h2>
+
+<blockquote>
+  <ul>
+  <li>[增加]配置文件增加yaml/json/xml/ini/自定义格式支持</li>
+  <li>[增加]增加load_config函数用于加载配置文件</li>
+  <li>[增加]增加CONF_EXT和CONF_PARSE常量，用于定义配置文件后缀及解析方法</li>
+  <li>[增加]模块增加状态配置文件</li>
+  <li>[增加]cookie函数增加httponly参数支持</li>
+  <li>[增加]增加COOKIE_HTTPONLY配置参数</li>
+  <li>[增加]增加插件的控制器访问支持</li>
+  <li>[增加]增加CONTROLLER_PATH常量用于定义控制器的命名空间路径</li>
+  <li>[增加]添加VAR_ADDON配置参数 用于设置默认的插件控制器命名空间变量</li>
+  <li>[增加]dispatcher类增加getSpace方法用于获取控制器的命名空间路径</li>
+  <li>[增加]I函数增加path和data类型变量的用法</li>
+  <li>[增加]引入composer支持（还需要完善）</li>
+  <li>[增加]xcahe和wincache驱动增加clear方法</li>
+  <li><p>[增加]自动生成机制支持多个模块的控制器和模型类的批量生成</p></li>
+  <li><p>[修正]修正上传类不能动态改变rootPath的BUG</p></li>
+  <li>[修正]修正RestController类的执行顺序</li>
+  <li>[修正]修正Model类的参数绑定的一处BUG</li>
+  <li>[修正]修正CronRun行为扩展一处错误</li>
+  <li>[修正]修正GIF类</li>
+  <li>[修正]修正rest控制器的encodeData方法</li>
+  <li>[修正]修正ViewModel可能因空格导致Order方法错误的bug</li>
+  <li>[修正]修正MongoModel类的写入数据的自增获取</li>
+  <li>[修正]修正第三方模板引擎驱动类</li>
+  <li>[修正]修正自动加载可能的一处导致重复加载的问题</li>
+  <li>[修正]修正&#95;_CONTROLLER&#95;_ 在URL不区分大小写情况下的获取</li>
+  <li>[修正]修正Route类中请求类型判断错误的bug</li>
+  <li><p>[修正]修正mysqli驱动的free方法</p></li>
+  <li><p>[改进]改进CronRun行为扩展</p></li>
+  <li>[改进]TOKEN_NAME 未设置时使用默认值&#95;_hash&#95;_</li>
+  <li>[改进]模类的_after_insert回调返回false后直接返回</li>
+  <li>[改进]Model类的save方法 如果data为空则不执行</li>
+  <li>[改进]Model类的delete方法 如果条件为空 则不执行删除操作</li>
+  <li>[改进]改进获取模块方法，支持驼峰法模块命名</li>
+  <li>[改进]改进模型的查询方法对表前缀的支持，使用当前模型设置的表前缀</li>
+  <li>[改进]视图模型的视图定义中的&#95;table属性和关联模型中的relation_table 支持 &#95;_TABLE_NAME&#95;_定义方式 </li>
+  <li>[改进]Model类的query和execute方法支持 &#95;_TABLE_NAME&#95;_定义方式</li>
+  <li>[改进]改进PDO驱动对pgsql字符转义的支持</li>
+  <li>[改进]改进Cookie函数对名称中包含“.”的支持</li>
+  <li>[改进]改进Sae上传驱动 增加file['url']信息存储</li>
+  <li>[改进]Page类添加默认的listRows值</li>
+  <li>[改进]改进IS_CGI常量的判断，支持fcgi</li>
+  <li>[改进]改进Db类的multiConnect方法 避免切换数据库的时候 配置数据被缓存</li>
+  <li>[改进]改进Db类对传入的参数 如果未设置数据编码，设置默认的编码为utf8</li>
+  <li>[改进]改进B方法支持对行为和扩展类的调用，需要传入完整的类名</li>
+  <li>[改进]改进验证码类 添加验证成功后是否重置session的参数 reset 默认为true</li>
+  <li>[改进]改进session和cookie函数，支持获取全部</li>
+  <li>[改进]调试模式下，错误的查询条件和非法数据写入会抛异常</li>
+  <li><p>[改进]改进Model类的getField方法</p></li>
+  <li><p>[调整]设置VIEW_PATH后参数后无需再定义模块子目录</p></li>
+  <li>[调整]为了避免和函数规则冲突，规则路由排除分隔符改为“-”</li>
+  </ul>
+</blockquote>
+
+<h2>3.2.1 更新日志</h2>
+
+<blockquote>
+  <ul>
+  <li>[增加] 增加Rpc控制器支持</li>
+  <li>[增加] 添加原来的部分扩展类库</li>
+  <li>[增加] 增加RestController</li>
+  <li>[增加] 添加Boris行为扩展</li>
+  <li>[增加] 增加Boris第三方类库</li>
+  <li>[增加] 增加BIND_MODULE BIND_CONTROLLER BIND_ACTION 常量定义 用于在入口文件中绑定</li>
+  <li>[增加] 增加 module_check 标签位</li>
+  <li>[增加] 增加buildLite行为 用于根据当前环境生成运行时lite文件 可以替换框架入口文件运行，提高效率</li>
+  <li>[增加] Think类增加getMap方法</li>
+  <li>[增加] C函数增加默认值功能 可以是获取配置参数的时候，当没有定义的时候获取传入的默认值</li>
+  <li>[增加] 增加Yar扩展支持</li>
+  <li>[增加] 添加jsonRPC扩展</li>
+  <li>[增加] 增加Api应用模式扩展和Mode扩展目录</li>
+  <li>[增加] 添加第三方模板引擎</li>
+  <li>[增加] 支持操作方法绑定到类</li>
+  <li>[增加] 增加Think\Auth类</li>
+  <li>[增加] 增加Hprose控制器和第三方类库包</li>
+  <li>[增加] 增加CONF_PATH常量定义</li>
+  <li><p>[增加] 应用和模块增加自动读取当前应用模式配置文件的功能</p></li>
+  <li><p>[修正] 修正正则路由的一个函数处理的bug</p></li>
+  <li>[修正] 修正模板引擎类的一处bug</li>
+  <li>[修正] 修正L函数的一处错误</li>
+  <li>[修正] 修正驱动类一处错误</li>
+  <li>[修正] 修正MongoModel一处错误</li>
+  <li>[修正] 修正Verify类对多个验证码同一个页面显示的bug</li>
+  <li>[修正] 修正找不到Log类的错误</li>
+  <li>[修正] 修正模型类的一处bug</li>
+  <li>[修正] 修正session函数一处警告错误</li>
+  <li>[修正] 修正U函数的一处警告错误</li>
+  <li>[修正] 修正compile函数的一处bug</li>
+  <li>[修正] 修正验证码的背景图片功能</li>
+  <li>[修正] Think\Image类常量修正</li>
+  <li>[修正] 修正Image类的架构方法错误</li>
+  <li>[修正] 修正Mongodb数据库驱动</li>
+  <li>[修正] 修正trace方法在CLI下面中文输出乱码</li>
+  <li><p>[修正] 修正控制器类当调用不存在的方法的报错</p></li>
+  <li><p>[改进] 改进操作方法的名称识别</p></li>
+  <li>[改进] 改进数据库驱动 支持不同的链接指定不同的charset参数</li>
+  <li>[改进] 改进get_client_ip函数</li>
+  <li>[改进] 改进L函数支持传入变量</li>
+  <li>[改进] 改进PDO驱动 当版本低于PHP5.3.6的时候禁用模拟预处理语句</li>
+  <li>[改进] 调整dispatcher类的模块、控制器和操作名获取方法</li>
+  <li>[改进] 页面trace扩展CLI下面不执行</li>
+  <li>[改进] 优化trace方法</li>
+  <li>[改进] 解决因配置文件加载顺序错误导致在SAE环境中运行出错的问题</li>
+  <li>[改进] 改进Storage类</li>
+  <li>[改进] 优化load_ext_file函数</li>
+  <li>[改进] Behavior类简化（下一版本可能会废弃）</li>
+  <li>[改进] 核心行为类简化取消对Behavior的继承</li>
+  <li>[改进] C函数并入系统函数库文件</li>
+  <li>[改进] union连贯操作方法 字符串用法支持 <strong>TABLE_NAME</strong> 方式替换</li>
+  <li>[改进] 改进Jion和table连贯操作方法，当使用<strong>TABLE_NAME</strong>解析的时候支持动态指定的表前缀 </li>
+  <li>[改进] 优化U函数</li>
+  <li>[改进] 路由类改进</li>
+  <li>[改进] 改进路由的闭包支持 闭包函数如果返回布尔值 则继续执行后续 否则中止执行</li>
+  <li>[改进] 应用模式定义文件移动到MODE_PATH目录下面 便于管理</li>
+  <li>[改进] 默认URL不区分大小写</li>
+  <li>[改进] 改进路由闭包定义</li>
+  <li>[改进] 改进路由的额外参数传入</li>
+  <li>[改进] 重写查询缓存功能</li>
+  <li>[改进] 关联模型修改</li>
+  <li>[改进] Image类水印生成支持透明度参数</li>
+  <li>[改进] 改进Image驱动</li>
+  <li>[改进] 验证码类改进</li>
+  <li>[改进] 改进上传类及驱动</li>
+  <li>[改进] session驱动类接口改进 无需定义execute方法</li>
+  <li>[改进] 静态缓存仅在get请求下生效</li>
+  <li>[改进] 改进静态缓存行为 </li>
+  <li>[改进] 语言文件更新 </li>
+  <li>[改进] Storage类的SAE驱动更新</li>
+  <li>[改进] 英文语言包修正</li>
+  <li>[改进] 改进PDO驱动</li>
+  <li><p>[改进] 默认生成的测试控制器规范改进</p></li>
+  <li><p>[删除] 废除APP_FILE_CASE参数配置 改为Windows下调试模式自动开启区分大小写</p></li>
+  </ul>
+</blockquote>
+</div>
+		<div class="book-footer">
+			<div class="page"><a title="上一页" class="prev" href="202.html"><span>上一页</span></a><a title="下一页" class="next" href="204.html"><span>下一页</span></a></div>
+		</div>
+	</body>
+</html>

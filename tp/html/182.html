@@ -1,0 +1,130 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+	<head>
+		<meta charset="GB2312">
+		<title>URL重写</title>
+		<link rel="stylesheet" href="../images/css/book.css">
+		<link rel="stylesheet" href="../images/prettify/prettify.css">
+		<script type="text/javascript" src="../images/js/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="../images/prettify/prettify.js"></script>
+		<script type="text/javascript">
+			$(function(){	
+				$(window).resize(function(){
+					$('.book-content').css('min-height', $(window).height() - 130);
+				}).resize();
+				
+				var $code = $(".book-content pre");
+				$code.each(function(){
+					var $this = $(this), $code = $this.children("code"), lang = $code.attr("class");
+					$this.addClass("prettyprint linenums");
+					lang && $this.addClass("lang-" + lang);					
+				});
+				
+				//调用高亮插件，高亮代码
+				prettyPrint();
+				
+				//解决表格存在边距的问题
+				$("table").attr({"cellspacing":"0", "cellpadding":"0"});
+				
+				//快捷键翻页
+				$(document).keydown(function(event){
+					if(event.keyCode == 37){ //上一页
+						$(".book-title .prev span").click();
+					} else if(event.keyCode == 39) {//下一页
+						$(".book-title .next span").click();
+					}
+				});
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div class="book-title">
+			<h1>URL重写</h1>
+            <div class="page"><a title="上一页" class="prev" href="181.html"><span>上一页</span></a><a title="下一页" class="next" href="183.html"><span>下一页</span></a></div>
+            <div class="description"></div>
+		</div>
+		<div class="book-content"><p>可以通过URL重写隐藏应用的入口文件index.php,下面是相关服务器的配置参考：</p>
+
+<h3>[ Apache ]</h3>
+
+<ol>
+<li>httpd.conf配置文件中加载了mod_rewrite.so模块</li>
+<li>AllowOverride None 将None改为 All</li>
+<li>把下面的内容保存为.htaccess文件放到应用入口文件的同级目录下</li>
+</ol>
+
+<pre><code>&lt;IfModule mod_rewrite.c&gt;
+ RewriteEngine on
+ RewriteCond %{REQUEST_FILENAME} !-d
+ RewriteCond %{REQUEST_FILENAME} !-f
+ RewriteRule ^(.*)$ index.php/$1 [QSA,PT,L]
+&lt;/IfModule&gt;
+</code></pre>
+
+<h3>[ IIS ]</h3>
+
+<p>如果你的服务器环境支持ISAPI_Rewrite的话，可以配置httpd.ini文件，添加下面的内容：</p>
+
+<pre><code>RewriteRule (.*)$ /index\.php\?s=$1 [I]
+</code></pre>
+
+<p>在IIS的高版本下面可以配置web.Config，在中间添加rewrite节点：</p>
+
+<pre><code>&lt;rewrite&gt;
+ &lt;rules&gt;
+ &lt;rule name="OrgPage" stopProcessing="true"&gt;
+ &lt;match url="^(.*)$" /&gt;
+ &lt;conditions logicalGrouping="MatchAll"&gt;
+ &lt;add input="{HTTP_HOST}" pattern="^(.*)$" /&gt;
+ &lt;add input="{REQUEST_FILENAME}" matchType="IsFile" negate="true" /&gt;
+ &lt;add input="{REQUEST_FILENAME}" matchType="IsDirectory" negate="true" /&gt;
+ &lt;/conditions&gt;
+ &lt;action type="Rewrite" url="index.php/{R:1}" /&gt;
+ &lt;/rule&gt;
+ &lt;/rules&gt;
+ &lt;/rewrite&gt;
+</code></pre>
+
+<h3>[ Nginx ]</h3>
+
+<p>在Nginx低版本中，是不支持PATHINFO的，但是可以通过在Nginx.conf中配置转发规则实现：</p>
+
+<pre><code>  location / { // …..省略部分代码
+   if (!-e $request_filename) {
+   rewrite  ^(.*)$  /index.php?s=$1  last;
+   break;
+    }
+ }
+</code></pre>
+
+<blockquote>
+  <p>其实内部是转发到了ThinkPHP提供的兼容模式的URL，利用这种方式，可以解决其他不支持PATHINFO的WEB服务器环境。</p>
+</blockquote>
+
+<p>如果你的ThinkPHP安装在二级目录，Nginx的伪静态方法设置如下，其中youdomain是所在的目录名称。</p>
+
+<pre><code>location /youdomain/ {
+    if (!-e $request_filename){
+        rewrite  ^/youdomain/(.*)$  /youdomain/index.php?s=$1  last;
+    }
+}
+</code></pre>
+
+<p>原来的访问URL：</p>
+
+<p><code>http://serverName/index.php/模块/控制器/操作/[参数名/参数值...]</code></p>
+
+<p>设置后，我们可以采用下面的方式访问：</p>
+
+<p><code>http://serverName/模块/控制器/操作/[参数名/参数值...]</code></p>
+
+<blockquote>
+  <p>默认情况下，URL地址中的模块不能省略，如果你需要简化某个模块的URL访问地址，可以通过设置模块列表和默认模块或者采用子域名部署到模块的方式解决，请参考后面的模块和域名部署部分。</p>
+</blockquote>
+</div>
+		<div class="book-footer">
+			<div class="page"><a title="上一页" class="prev" href="181.html"><span>上一页</span></a><a title="下一页" class="next" href="183.html"><span>下一页</span></a></div>
+		</div>
+	</body>
+</html>

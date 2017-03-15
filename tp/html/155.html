@@ -1,0 +1,177 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+	<head>
+		<meta charset="GB2312">
+		<title>静态缓存</title>
+		<link rel="stylesheet" href="../images/css/book.css">
+		<link rel="stylesheet" href="../images/prettify/prettify.css">
+		<script type="text/javascript" src="../images/js/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="../images/prettify/prettify.js"></script>
+		<script type="text/javascript">
+			$(function(){	
+				$(window).resize(function(){
+					$('.book-content').css('min-height', $(window).height() - 130);
+				}).resize();
+				
+				var $code = $(".book-content pre");
+				$code.each(function(){
+					var $this = $(this), $code = $this.children("code"), lang = $code.attr("class");
+					$this.addClass("prettyprint linenums");
+					lang && $this.addClass("lang-" + lang);					
+				});
+				
+				//调用高亮插件，高亮代码
+				prettyPrint();
+				
+				//解决表格存在边距的问题
+				$("table").attr({"cellspacing":"0", "cellpadding":"0"});
+				
+				//快捷键翻页
+				$(document).keydown(function(event){
+					if(event.keyCode == 37){ //上一页
+						$(".book-title .prev span").click();
+					} else if(event.keyCode == 39) {//下一页
+						$(".book-title .next span").click();
+					}
+				});
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div class="book-title">
+			<h1>静态缓存</h1>
+            <div class="page"><a title="上一页" class="prev" href="154.html"><span>上一页</span></a><a title="下一页" class="next" href="156.html"><span>下一页</span></a></div>
+            <div class="description"></div>
+		</div>
+		<div class="book-content"><p>要使用静态缓存功能，需要开启<code>HTML_CACHE_ON</code>参数，并且使用<code>HTML_CACHE_RULES</code>配置参数设置静态缓存规则文件 。</p>
+
+<blockquote>
+  <p>虽然也可以在应用配置文件中定义静态缓存规则，但是建议是在模块配置文件中为不同的模块定义静态缓存规则。</p>
+</blockquote>
+
+<h2>静态规则定义</h2>
+
+<p>静态规则的定义方式如下：</p>
+
+<pre><code>'HTML_CACHE_ON'     =&gt;    true, // 开启静态缓存
+'HTML_CACHE_TIME'   =&gt;    60,   // 全局静态缓存有效期（秒）
+'HTML_FILE_SUFFIX'  =&gt;    '.shtml', // 设置静态缓存文件后缀
+'HTML_CACHE_RULES'  =&gt;     array(  // 定义静态缓存规则
+     // 定义格式1 数组方式
+     '静态地址'    =&gt;     array('静态规则', '有效期', '附加规则'), 
+     // 定义格式2 字符串方式
+     '静态地址'    =&gt;     '静态规则', 
+)
+</code></pre>
+
+<p>定义格式1采用数组方式 便于单独为某个静态规则设置不同的有效期，定义格式2采用字符串方式订阅静态规则，同时采用<code>HTML_CACHE_TIME</code>设置的全局静态缓存有效期。</p>
+
+<blockquote>
+  <p>静态缓存文件的根目录在<code>HTML_PATH</code>定义的路径下面，并且只有定义了静态规则的操作才会进行静态缓存。
+  并且静态缓存支持不同的存储类型。
+  静态缓存仅在GET请求下面有效。</p>
+</blockquote>
+
+<h3>静态地址</h3>
+
+<p>静态地址包括下面几种定义格式：</p>
+
+<p>第一种是定义全局的操作静态规则，例如定义所有的read操作的静态规则为：</p>
+
+<pre><code>'read'=&gt;array('{id}',60)
+</code></pre>
+
+<p>其中，<code>{id}</code> 表示取<code>$_GET['id']</code> 为静态缓存文件名，第二个参数表示缓存60秒。</p>
+
+<p>第二种是定义全局的控制器静态规则，例如定义所有的User控制器的静态规则为：</p>
+
+<pre><code>'user:'=&gt;array('User/{:action}_{id}','600')
+</code></pre>
+
+<p>其中，<code>{:action}</code> 表示当前的操作名称</p>
+
+<p>第三种是定义某个控制器的操作的静态规则，例如，我们需要定义Blog控制器的read操作进行静态缓存</p>
+
+<pre><code>'blog:read'=&gt;array('{id}',0)
+</code></pre>
+
+<p>第四种方式是定义全局的静态缓存规则，这个属于特殊情况下的使用，任何模块的操作都适用，例如</p>
+
+<pre><code>'*'=&gt;array('{$_SERVER.REQUEST_URI|md5}'),
+</code></pre>
+
+<p>表示根据当前的URL进行缓存。</p>
+
+<h3>静态规则</h3>
+
+<p>静态规则是用于定义要生成的静态文件的名称，静态规则的定义要确保不会冲突，写法可以包括以下情况：</p>
+
+<h3>1、使用系统变量</h3>
+
+<p>包括 <code>_GET</code>、<code>_REQUEST</code>、<code>_SERVER</code>、<code>_SESSION</code>、<code>_COOKIE</code>
+格式：</p>
+
+<pre><code>{$_×××|function}
+</code></pre>
+
+<p>例如：</p>
+
+<pre><code>{$_GET.name} 
+{$_SERVER.REQUEST_URI|md5}
+</code></pre>
+
+<h3>2、使用框架特定的变量</h3>
+
+<p><code>{:module}</code> 、<code>{:controller}</code> 和<code>{:action}</code> 分别表示当前模块名、控制器名和操作名。</p>
+
+<p>例如：</p>
+
+<pre><code>{:module}/{:controller}_{:action}
+</code></pre>
+
+<h3>3、使用_GET变量</h3>
+
+<p><code>{var|function}</code>也就是说 <code>{id}</code> 其实等效于 <code>{$_GET.id}</code></p>
+
+<h4>4、直接使用函数</h4>
+
+<p>{|function} 例如：</p>
+
+<pre><code>{|time}
+</code></pre>
+
+<h3>5、支持混合定义</h3>
+
+<p>例如我们可以定义一个静态规则为：</p>
+
+<pre><code>'{id},{name|md5}' 
+</code></pre>
+
+<p>在{}之外的字符作为字符串对待，如果包含有"/"，会自动创建目录。</p>
+
+<p>例如，定义下面的静态规则：</p>
+
+<pre><code>{:module}/{:action}_{id}
+</code></pre>
+
+<p>则会在静态目录下面创建模块名称的子目录，然后写入操作名_id.shtml 文件。</p>
+
+<h3>静态缓存有效期</h3>
+
+<p>单位为秒。如果不定义，则会获取配置参数<code>HTML_CACHE_TIME</code> 的设置值，如果定义为0则表示永久缓存。</p>
+
+<h3>附加规则</h3>
+
+<p>通常用于对静态规则进行函数运算，例如</p>
+
+<pre><code>'read'=&gt;array('Think{id},{name}','60', 'md5') 
+</code></pre>
+
+<p>翻译后的静态规则是 <code>md5('Think'.$_GET['id']. ', '.$_GET['name']);</code></p>
+</div>
+		<div class="book-footer">
+			<div class="page"><a title="上一页" class="prev" href="154.html"><span>上一页</span></a><a title="下一页" class="next" href="156.html"><span>下一页</span></a></div>
+		</div>
+	</body>
+</html>

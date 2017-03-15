@@ -1,0 +1,246 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+	<head>
+		<meta charset="GB2312">
+		<title>自动完成</title>
+		<link rel="stylesheet" href="../images/css/book.css">
+		<link rel="stylesheet" href="../images/prettify/prettify.css">
+		<script type="text/javascript" src="../images/js/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="../images/prettify/prettify.js"></script>
+		<script type="text/javascript">
+			$(function(){	
+				$(window).resize(function(){
+					$('.book-content').css('min-height', $(window).height() - 130);
+				}).resize();
+				
+				var $code = $(".book-content pre");
+				$code.each(function(){
+					var $this = $(this), $code = $this.children("code"), lang = $code.attr("class");
+					$this.addClass("prettyprint linenums");
+					lang && $this.addClass("lang-" + lang);					
+				});
+				
+				//调用高亮插件，高亮代码
+				prettyPrint();
+				
+				//解决表格存在边距的问题
+				$("table").attr({"cellspacing":"0", "cellpadding":"0"});
+				
+				//快捷键翻页
+				$(document).keydown(function(event){
+					if(event.keyCode == 37){ //上一页
+						$(".book-title .prev span").click();
+					} else if(event.keyCode == 39) {//下一页
+						$(".book-title .next span").click();
+					}
+				});
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div class="book-title">
+			<h1>自动完成</h1>
+            <div class="page"><a title="上一页" class="prev" href="92.html"><span>上一页</span></a><a title="下一页" class="next" href="94.html"><span>下一页</span></a></div>
+            <div class="description"></div>
+		</div>
+		<div class="book-content"><p>自动完成是ThinkPHP提供用来完成数据自动处理和过滤的方法，使用create方法创建数据对象的时候会自动完成数据处理。</p>
+
+<p>因此，在ThinkPHP使用create方法来创建数据对象是更加安全的方式，而不是直接通过add或者save方法实现数据写入。</p>
+
+<h2>规则定义</h2>
+
+<p>自动完成通常用来完成默认字段写入，安全字段过滤以及业务逻辑的自动处理等，和自动验证的定义方式类似，自动完成的定义也支持静态定义和动态定义两种方式。</p>
+
+<ol>
+<li>静态方式：在模型类里面通过$_auto属性定义处理规则。 </li>
+<li>动态方式：使用模型类的auto方法动态创建自动处理规则。 </li>
+</ol>
+
+<p>两种方式的定义规则都采用：</p>
+
+<pre><code>array(
+     array(完成字段1,完成规则,[完成条件,附加规则]),
+     array(完成字段2,完成规则,[完成条件,附加规则]),
+     ......
+);
+</code></pre>
+
+<p>说明</p>
+
+<h5>完成字段（必须）</h5>
+
+<p>需要进行处理的数据表实际字段名称。</p>
+
+<h5>完成规则（必须）</h5>
+
+<p>需要处理的规则，配合附加规则完成。</p>
+
+<h5>完成时间（可选）</h5>
+
+<p>设置自动完成的时间，包括：</p>
+
+<table>
+<thead>
+<tr>
+  <th>设置</th>
+  <th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>self::MODEL_INSERT或者1</td>
+  <td>新增数据的时候处理（默认）</td>
+</tr>
+<tr>
+  <td>self::MODEL_UPDATE或者2</td>
+  <td>更新数据的时候处理</td>
+</tr>
+<tr>
+  <td>self::MODEL_BOTH或者3</td>
+  <td>所有情况都进行处理</td>
+</tr>
+</tbody>
+</table>
+
+<h5>附加规则（可选）</h5>
+
+<p>包括：</p>
+
+<table>
+<thead>
+<tr>
+  <th>规则</th>
+  <th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>function</td>
+  <td>使用函数，表示填充的内容是一个函数名</td>
+</tr>
+<tr>
+  <td>callback</td>
+  <td>回调方法 ，表示填充的内容是一个当前模型的方法</td>
+</tr>
+<tr>
+  <td>field</td>
+  <td>用其它字段填充，表示填充的内容是一个其他字段的值</td>
+</tr>
+<tr>
+  <td>string</td>
+  <td>字符串（默认方式）</td>
+</tr>
+<tr>
+  <td>ignore</td>
+  <td>为空则忽略（3.1.2新增）</td>
+</tr>
+</tbody>
+</table>
+
+<h2>静态定义</h2>
+
+<p>预先在模型类里面定义好自动完成的规则，我们称之为静态定义。例如，我们在模型类定义<code>_auto</code>属性：</p>
+
+<pre><code>namespace Home\Model;
+use Think\Model;
+class UserModel extends Model{
+     protected $_auto = array ( 
+         array('status','1'),  // 新增的时候把status字段设置为1
+         array('password','md5',3,'function') , // 对password字段在新增和编辑的时候使md5函数处理
+         array('name','getName',3,'callback'), // 对name字段在新增和编辑的时候回调getName方法
+         array('update_time','time',2,'function'), // 对update_time字段在更新的时候写入当前时间戳
+     );
+}
+</code></pre>
+
+<p>然后，就可以在使用create方法创建数据对象的时候自动处理：</p>
+
+<pre><code>$User = D("User"); // 实例化User对象
+if (!$User-&gt;create()){ // 创建数据对象
+     // 如果创建失败 表示验证没有通过 输出错误提示信息
+     exit($User-&gt;getError());
+}else{
+     // 验证通过 写入新增数据
+     $User-&gt;add();
+}
+</code></pre>
+
+<p>如果你没有定义任何自动验证规则的话，则不需要判断create方法的返回值：</p>
+
+<pre><code>$User = D("User"); // 实例化User对象
+$User-&gt;create(); // 生成数据对象
+$User-&gt;add(); // 新增用户数据
+</code></pre>
+
+<p>或者更简单的使用：</p>
+
+<pre><code>$User = D("User"); // 实例化User对象
+$User-&gt;create()-&gt;add(); // 生成数据对象并写入数据
+</code></pre>
+
+<p>create方法默认情况下是根据表单提交的post数据生成数据对象，我们也可以根据其他的数据源来生成数据对象，你也可以明确指定当前创建的数据对象自动处理的时间是新增还是编辑数据，例如：</p>
+
+<pre><code>$User = D("User"); // 实例化User对象
+$userData = getUserData(); // 通过方法获取用户数据
+$User-&gt;create($userData,2); // 根据userData数据创建数据对象，并指定为更新数据
+$User-&gt;add();
+</code></pre>
+
+<p>create方法的第二个参数就用于指定自动完成规则中的完成时间，也就是说create方法的自动处理规则只会处理符合完成时间的自动完成规则。
+create方法在创建数据的时候，已经自动过滤了非数据表字段数据信息，因此不需要担心表单会提交其他的非法字段信息而导致数据对象写入出错，甚至还可以自动过滤不希望用户在表单提交的字段信息（详见字段合法性过滤）。</p>
+
+<p>3.1.2版本开始新增了ignore完成规则，这一规则表示某个字段如果留空的话则忽略，通常可用于修改用户资料时候密码的输入，定义如下：</p>
+
+<pre><code>array('password','',2,'ignore') 
+</code></pre>
+
+<p>表示password字段编辑的时候留空则忽略。</p>
+
+<h2>动态完成</h2>
+
+<p>除了静态定义之外，我们也可以采用动态完成的方式来解决不同的处理规则。</p>
+
+<pre><code>$rules = array ( 
+    array('status','1'),  // 新增的时候把status字段设置为1
+    array('password','md5',3,'function') , // 对password字段在新增和编辑的时候使md5函数处理
+    array('update_time','time',2,'function'), // 对update_time字段在更新的时候写入当前时间戳
+);
+$User = M('User');
+$User-&gt;auto($rules)-&gt;create()-&gt;add();
+</code></pre>
+
+<h2>修改数据对象</h2>
+
+<p>在使用create方法创建好数据对象之后，此时的数据对象保存在内存中，因此仍然可以操作数据对象，包括修改或者增加数据对象的值，例如：</p>
+
+<pre><code>$User = D("User"); // 实例化User对象
+$User-&gt;create(); // 生成数据对象
+$User-&gt;status = 2; // 修改数据对象的status属性
+$User-&gt;register_time = NOW_TIME; // 增加register_time属性
+$User-&gt;add(); // 新增用户数据
+</code></pre>
+
+<p>一旦调用了add方法（或者save方法），创建在内存中的数据对象就会失效，如果希望创建好的数据对象在后面的数据处理中再次调用，可以保存数据对象先，例如：</p>
+
+<pre><code>$User = D("User"); // 实例化User对象
+$data = $User-&gt;create(); // 保存生成的数据对象
+$User-&gt;add();
+</code></pre>
+
+<p>不过要记得，如果你修改了内存中的数据对象并不会自动更新保存的数据对象，因此下面的用法是错误的：</p>
+
+<pre><code>$User = D("User"); // 实例化User对象
+$data = $User-&gt;create(); // 保存生成的数据对象
+$User-&gt;status = 2; // 修改数据对象的status属性
+$User-&gt;register_time = NOW_TIME; // 增加register_time属性
+$User-&gt;add($data);
+</code></pre>
+
+<p>上面的代码我们修改了数据对象，但是仍然写入的是之前保存的数据对象，因此对数据对象的更改操作将会无效。</p>
+</div>
+		<div class="book-footer">
+			<div class="page"><a title="上一页" class="prev" href="92.html"><span>上一页</span></a><a title="下一页" class="next" href="94.html"><span>下一页</span></a></div>
+		</div>
+	</body>
+</html>

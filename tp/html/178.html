@@ -1,0 +1,137 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+	<head>
+		<meta charset="GB2312">
+		<title>Widget扩展</title>
+		<link rel="stylesheet" href="../images/css/book.css">
+		<link rel="stylesheet" href="../images/prettify/prettify.css">
+		<script type="text/javascript" src="../images/js/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="../images/prettify/prettify.js"></script>
+		<script type="text/javascript">
+			$(function(){	
+				$(window).resize(function(){
+					$('.book-content').css('min-height', $(window).height() - 130);
+				}).resize();
+				
+				var $code = $(".book-content pre");
+				$code.each(function(){
+					var $this = $(this), $code = $this.children("code"), lang = $code.attr("class");
+					$this.addClass("prettyprint linenums");
+					lang && $this.addClass("lang-" + lang);					
+				});
+				
+				//调用高亮插件，高亮代码
+				prettyPrint();
+				
+				//解决表格存在边距的问题
+				$("table").attr({"cellspacing":"0", "cellpadding":"0"});
+				
+				//快捷键翻页
+				$(document).keydown(function(event){
+					if(event.keyCode == 37){ //上一页
+						$(".book-title .prev span").click();
+					} else if(event.keyCode == 39) {//下一页
+						$(".book-title .next span").click();
+					}
+				});
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div class="book-title">
+			<h1>Widget扩展</h1>
+            <div class="page"><a title="上一页" class="prev" href="177.html"><span>上一页</span></a><a title="下一页" class="next" href="179.html"><span>下一页</span></a></div>
+            <div class="description"></div>
+		</div>
+		<div class="book-content"><p>Widget扩展一般用于页面组件的扩展。</p>
+
+<p>举个例子，我们在页面中实现一个分类显示的Widget，首先我们要定义一个Widget控制器层 CateWidget，如下：</p>
+
+<pre><code>namespace Home\Widget;
+use Think\Controller;
+class CateWidget extends Controller {
+    public function menu(){
+        return 'menuWidget';
+    }
+}
+</code></pre>
+
+<p>然后，我们在模版中通过W方法调用这个Widget。</p>
+
+<pre><code>{:W('Cate/Menu')} 
+</code></pre>
+
+<p>执行后的输出结果是： menuWidget</p>
+
+<p>如果，CateWidget类的menu方法改成：</p>
+
+<pre><code>namespace Home\Widget;
+use Think\Controller;
+class CateWidget extends Controller {
+    public function menu(){
+        echo 'menuWidget';
+    }
+}
+</code></pre>
+
+<p>模版中的用法则需要改成：</p>
+
+<pre><code>{~W('Cate/Menu')} 
+</code></pre>
+
+<h2>传入参数</h2>
+
+<p>如果需要在调用Widget的时候 使用参数，可以这样定义：</p>
+
+<pre><code>namespace Home\Widget;
+use Think\Controller;
+class CateWidget extends Controller {
+    public function menu($id,$name){
+        echo $id.':'.$name;
+    }
+}
+</code></pre>
+
+<p>模版中的参数调用，使用：</p>
+
+<pre><code>{:W('Cate/Menu',array(5,'thinkphp'))} 
+</code></pre>
+
+<blockquote>
+  <p>传入的参数是一个数组，顺序对应了menu方法定义的参数顺序。</p>
+</blockquote>
+
+<p>则会输出</p>
+
+<pre><code>5:thinkphp
+</code></pre>
+
+<h2>模板支持</h2>
+
+<p>Widget可以支持使用独立的模板，例如：</p>
+
+<pre><code>namespace Home\Widget;
+use Think\Controller;
+class CateWidget extends Controller {
+    public function menu(){
+        $menu = M('Cate')-&gt;getField('id,title');
+        $this-&gt;assign('menu',$menu);
+        $this-&gt;display('Cate:menu');
+    }
+}
+</code></pre>
+
+<p>CateWiget类渲染了一个模版文件 <code>View/Cate/menu.html</code>。
+在menu.html模版文件中的用法：</p>
+
+<pre><code>&lt;foreach name="menu" item="title"&gt;
+{$key}:{$title}
+&lt;/foreach&gt;
+</code></pre>
+</div>
+		<div class="book-footer">
+			<div class="page"><a title="上一页" class="prev" href="177.html"><span>上一页</span></a><a title="下一页" class="next" href="179.html"><span>下一页</span></a></div>
+		</div>
+	</body>
+</html>

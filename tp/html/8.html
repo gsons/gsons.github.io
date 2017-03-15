@@ -1,0 +1,116 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+	<head>
+		<meta charset="GB2312">
+		<title>控制器</title>
+		<link rel="stylesheet" href="../images/css/book.css">
+		<link rel="stylesheet" href="../images/prettify/prettify.css">
+		<script type="text/javascript" src="../images/js/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="../images/prettify/prettify.js"></script>
+		<script type="text/javascript">
+			$(function(){	
+				$(window).resize(function(){
+					$('.book-content').css('min-height', $(window).height() - 130);
+				}).resize();
+				
+				var $code = $(".book-content pre");
+				$code.each(function(){
+					var $this = $(this), $code = $this.children("code"), lang = $code.attr("class");
+					$this.addClass("prettyprint linenums");
+					lang && $this.addClass("lang-" + lang);					
+				});
+				
+				//调用高亮插件，高亮代码
+				prettyPrint();
+				
+				//解决表格存在边距的问题
+				$("table").attr({"cellspacing":"0", "cellpadding":"0"});
+				
+				//快捷键翻页
+				$(document).keydown(function(event){
+					if(event.keyCode == 37){ //上一页
+						$(".book-title .prev span").click();
+					} else if(event.keyCode == 39) {//下一页
+						$(".book-title .next span").click();
+					}
+				});
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div class="book-title">
+			<h1>控制器</h1>
+            <div class="page"><a title="上一页" class="prev" href="7.html"><span>上一页</span></a><a title="下一页" class="next" href="9.html"><span>下一页</span></a></div>
+            <div class="description"></div>
+		</div>
+		<div class="book-content"><p>我们可以在自动生成的Application/Home/Controller目录下面找到一个 <code>IndexController.class.php</code> 文件，这就是默认的Index控制器文件。</p>
+
+<p>控制器类的命名方式是：<strong>控制器名（驼峰法，首字母大写）+Controller</strong></p>
+
+<p>控制器文件的命名方式是：<strong>类名+class.php（类文件后缀）</strong></p>
+
+<p>默认的欢迎页面其实就是访问的Home模块下面的Index控制器类的index操作方法
+我们修改默认的index操作方法如下：</p>
+
+<pre><code>namespace Home\Controller;
+use Think\Controller;
+class IndexController extends Controller {
+    public function index(){
+        echo 'hello,world!';
+    }
+}
+</code></pre>
+
+<p>再次运行应用入口文件，浏览器会显示：<code>hello,world!</code>。</p>
+
+<p>我们再来看下控制器类，IndexController控制器类的开头是命名空间定义：</p>
+
+<pre><code>namespace Home\Controller;
+</code></pre>
+
+<p>这是系统的规范要求，表示当前类是Home模块下的控制器类，命名空间和实际的控制器文件所在的路径是一致的，也就是说：
+<code>Home\Controller\IndexController</code>类 对应的控制器文件位于应用目录下面的
+<code>Home/Controller/IndexController.class.php</code>，如果你改变了当前的模块名，那么这个控制器类的命名空间也需要随之修改。</p>
+
+<blockquote>
+  <p>注意：命名空间定义必须写在所有的PHP代码之前声明，否则会出错</p>
+</blockquote>
+
+<pre><code>use Think\Controller;
+</code></pre>
+
+<p>表示引入 Think\Controller 命名空间便于直接使用。
+所以，</p>
+
+<pre><code>use Think\Controller;
+class IndexController extends Controller
+</code></pre>
+
+<p>等同于使用：</p>
+
+<pre><code>class IndexController extends \Think\Controller
+</code></pre>
+
+<p>对于3.1的用户而言，如果你习惯了使用Action定义控制器的话，可以这样定义：</p>
+
+<pre><code>namespace Home\Action;
+use Think\Action;
+class IndexAction extends Action{
+}
+</code></pre>
+
+<p>然后，在配置文件中，设置：</p>
+
+<pre><code>'DEFAULT_C_LAYER'=&gt;'Action'
+</code></pre>
+
+<blockquote>
+  <p>上面的设置方式通常可以用于原有3.1项目的升级。</p>
+</blockquote>
+</div>
+		<div class="book-footer">
+			<div class="page"><a title="上一页" class="prev" href="7.html"><span>上一页</span></a><a title="下一页" class="next" href="9.html"><span>下一页</span></a></div>
+		</div>
+	</body>
+</html>

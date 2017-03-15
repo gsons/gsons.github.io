@@ -1,0 +1,79 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+	<head>
+		<meta charset="GB2312">
+		<title>获取内容</title>
+		<link rel="stylesheet" href="../images/css/book.css">
+		<link rel="stylesheet" href="../images/prettify/prettify.css">
+		<script type="text/javascript" src="../images/js/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="../images/prettify/prettify.js"></script>
+		<script type="text/javascript">
+			$(function(){	
+				$(window).resize(function(){
+					$('.book-content').css('min-height', $(window).height() - 130);
+				}).resize();
+				
+				var $code = $(".book-content pre");
+				$code.each(function(){
+					var $this = $(this), $code = $this.children("code"), lang = $code.attr("class");
+					$this.addClass("prettyprint linenums");
+					lang && $this.addClass("lang-" + lang);					
+				});
+				
+				//调用高亮插件，高亮代码
+				prettyPrint();
+				
+				//解决表格存在边距的问题
+				$("table").attr({"cellspacing":"0", "cellpadding":"0"});
+				
+				//快捷键翻页
+				$(document).keydown(function(event){
+					if(event.keyCode == 37){ //上一页
+						$(".book-title .prev span").click();
+					} else if(event.keyCode == 39) {//下一页
+						$(".book-title .next span").click();
+					}
+				});
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div class="book-title">
+			<h1>获取内容</h1>
+            <div class="page"><a title="上一页" class="prev" href="106.html"><span>上一页</span></a><a title="下一页" class="next" href="108.html"><span>下一页</span></a></div>
+            <div class="description"></div>
+		</div>
+		<div class="book-content"><p>如果需要获取渲染模板的输出内容而不是直接输出，可以使用fetch方法。</p>
+
+<p>fetch方法的用法和display基本一致（只是不需要指定输出编码和输出类型）：</p>
+
+<h6>fetch('模板文件')</h6>
+
+<p>模板文件的调用方法和display方法完全一样，区别就在于fetch方法渲染后不是直接输出，而是返回渲染后的内容，例如：</p>
+
+<pre><code>$content = $this-&gt;fetch('Member:edit');
+</code></pre>
+
+<p>使用fetch方法获取渲染内容后，你可以进行过滤和替换等操作，或者用于对输出的复杂需求。</p>
+
+<h2>渲染内容</h2>
+
+<p>如果你没有定义任何模板文件，或者把模板内容存储到数据库中的话，你就需要使用show方法来渲染输出了，show方法的调用格式：</p>
+
+<h6>show('渲染内容'[,'字符编码'][,'输出类型'])</h6>
+
+<p>例如，<code>$this-&gt;show($content);</code></p>
+
+<p>也可以指定编码和类型：
+<code>$this-&gt;show($content, 'utf-8', 'text/xml');</code></p>
+
+<blockquote>
+  <p>show方法中的内容也可以支持模板解析。</p>
+</blockquote>
+</div>
+		<div class="book-footer">
+			<div class="page"><a title="上一页" class="prev" href="106.html"><span>上一页</span></a><a title="下一页" class="next" href="108.html"><span>下一页</span></a></div>
+		</div>
+	</body>
+</html>

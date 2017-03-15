@@ -1,0 +1,157 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+	<head>
+		<meta charset="GB2312">
+		<title>模板渲染</title>
+		<link rel="stylesheet" href="../images/css/book.css">
+		<link rel="stylesheet" href="../images/prettify/prettify.css">
+		<script type="text/javascript" src="../images/js/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="../images/prettify/prettify.js"></script>
+		<script type="text/javascript">
+			$(function(){	
+				$(window).resize(function(){
+					$('.book-content').css('min-height', $(window).height() - 130);
+				}).resize();
+				
+				var $code = $(".book-content pre");
+				$code.each(function(){
+					var $this = $(this), $code = $this.children("code"), lang = $code.attr("class");
+					$this.addClass("prettyprint linenums");
+					lang && $this.addClass("lang-" + lang);					
+				});
+				
+				//调用高亮插件，高亮代码
+				prettyPrint();
+				
+				//解决表格存在边距的问题
+				$("table").attr({"cellspacing":"0", "cellpadding":"0"});
+				
+				//快捷键翻页
+				$(document).keydown(function(event){
+					if(event.keyCode == 37){ //上一页
+						$(".book-title .prev span").click();
+					} else if(event.keyCode == 39) {//下一页
+						$(".book-title .next span").click();
+					}
+				});
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div class="book-title">
+			<h1>模板渲染</h1>
+            <div class="page"><a title="上一页" class="prev" href="104.html"><span>上一页</span></a><a title="下一页" class="next" href="106.html"><span>下一页</span></a></div>
+            <div class="description"></div>
+		</div>
+		<div class="book-content"><p>模板定义后就可以渲染模板输出，系统也支持直接渲染内容输出，模板赋值必须在模板渲染之前操作。</p>
+
+<h2>渲染模板</h2>
+
+<p>渲染模板输出最常用的是使用display方法，调用格式：</p>
+
+<h6>display('[模板文件]'[,'字符编码'][,'输出类型'])</h6>
+
+<p>模板文件的写法支持下面几种：
+<table>
+<thead>
+<tr>
+  <th>用法</th>
+  <th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>不带任何参数</td>
+  <td>自动定位当前操作的模板文件</td>
+</tr>
+<tr>
+  <td>[模块@][控制器:][操作]</td>
+  <td>常用写法，支持跨模块 模板主题可以和theme方法配合</td>
+</tr>
+<tr>
+  <td>完整的模板文件名</td>
+  <td>直接使用完整的模板文件名（包括模板后缀）</td>
+</tr>
+</tbody>
+</table></p>
+
+<p>下面是一个最典型的用法，不带任何参数：</p>
+
+<pre><code>// 不带任何参数 自动定位当前操作的模板文件
+$this-&gt;display();
+</code></pre>
+
+<p>表示系统会按照默认规则自动定位模板文件，其规则是：</p>
+
+<p>如果当前没有启用模板主题则定位到：<code>当前模块/默认视图目录/当前控制器/当前操作.html</code>
+如果有启用模板主题则定位到：<code>当前模块/默认视图目录/当前主题/当前控制器/当前操作.html</code></p>
+
+<p>如果有更改TMPL_FILE_DEPR设置（假设 <code>'TMPL_FILE_DEPR'=&gt;'_'</code>）的话，则上面的自动定位规则变成：
+<code>当前模块/默认视图目录/当前控制器_当前操作.html</code> 和 <code>当前模块/默认视图目录/当前主题/当前控制器_当前操作.html</code>。</p>
+
+<p>所以通常display方法无需带任何参数即可输出对应的模板，这是模板输出的最简单的用法。</p>
+
+<blockquote>
+  <p>通常默认的视图目录是View</p>
+</blockquote>
+
+<p>如果没有按照模板定义规则来定义模板文件（或者需要调用其他控制器下面的某个模板），可以使用：</p>
+
+<pre><code>// 指定模板输出
+$this-&gt;display('edit'); 
+</code></pre>
+
+<p>表示调用当前模块下面的edit模板</p>
+
+<pre><code>$this-&gt;display('Member:read');
+</code></pre>
+
+<p>表示调用Member模块下面的read模板。</p>
+
+<p>如果我们使用了模板主题功能，那么也可以支持跨主题调用，使用：</p>
+
+<pre><code>$this-&gt;theme('blue')-&gt;display('User:edit'); 
+</code></pre>
+
+<p>表示调用blue主题下面的User控制器的edit模板。</p>
+
+<p>如果你不希望每个主题都重复定义一些相同的模版文件的话，还可以启用差异主题定义方式，设置：</p>
+
+<pre><code>'TMPL_LOAD_DEFAULTTHEME'=&gt;true
+</code></pre>
+
+<p>设置后，如果blue主题下面不存在edit模板的话，就会自动定位到默认主题中的edit模板。</p>
+
+<p>渲染输出不需要写模板文件的路径和后缀，确切地说，这里面的控制器和操作并不一定需要有实际对应的控制器和操作，只是一个目录名称和文件名称而已，例如，你的项目里面可能根本没有Public控制器，更没有Public控制器的menu操作，但是一样可以使用</p>
+
+<pre><code>$this-&gt;display('Public:menu');
+</code></pre>
+
+<p>输出这个模板文件。理解了这个，模板输出就清晰了。</p>
+
+<p>display方法支持在渲染输出的时候指定输出编码和类型，例如，可以指定编码和类型：</p>
+
+<pre><code>$this-&gt;display('read', 'utf-8', 'text/xml');
+</code></pre>
+
+<p>表示输出XML页面类型（配合你的应用需求可以输出很多类型）。</p>
+
+<p>事情总有特例，如果的模板目录是自定义的，或者根本不需要按模块进行分目录存放，那么默认的display渲染规则就不能处理，这个时候，我们就需要使用另外一种方式来应对，直接传入模板文件名即可，例如：</p>
+
+<pre><code>$this-&gt;display('./Template/Public/menu.html');
+</code></pre>
+
+<p>这种方式需要指定模板路径和后缀，这里的Template/Public目录是位于当前项目入口文件位置下面。如果是其他的后缀文件，也支持直接输出，例如：<code>$this-&gt;display('./Template/Public/menu.tpl');</code></p>
+
+<p>只要<code>./Template/Public/menu.tpl</code>是一个实际存在的模板文件。</p>
+
+<blockquote>
+  <p>要注意模板文件位置是相对于项目的入口文件，而不是模板目录。</p>
+</blockquote>
+</div>
+		<div class="book-footer">
+			<div class="page"><a title="上一页" class="prev" href="104.html"><span>上一页</span></a><a title="下一页" class="next" href="106.html"><span>下一页</span></a></div>
+		</div>
+	</body>
+</html>

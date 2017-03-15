@@ -1,0 +1,88 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+	<head>
+		<meta charset="GB2312">
+		<title>模块</title>
+		<link rel="stylesheet" href="../images/css/book.css">
+		<link rel="stylesheet" href="../images/prettify/prettify.css">
+		<script type="text/javascript" src="../images/js/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="../images/prettify/prettify.js"></script>
+		<script type="text/javascript">
+			$(function(){	
+				$(window).resize(function(){
+					$('.book-content').css('min-height', $(window).height() - 130);
+				}).resize();
+				
+				var $code = $(".book-content pre");
+				$code.each(function(){
+					var $this = $(this), $code = $this.children("code"), lang = $code.attr("class");
+					$this.addClass("prettyprint linenums");
+					lang && $this.addClass("lang-" + lang);					
+				});
+				
+				//调用高亮插件，高亮代码
+				prettyPrint();
+				
+				//解决表格存在边距的问题
+				$("table").attr({"cellspacing":"0", "cellpadding":"0"});
+				
+				//快捷键翻页
+				$(document).keydown(function(event){
+					if(event.keyCode == 37){ //上一页
+						$(".book-title .prev span").click();
+					} else if(event.keyCode == 39) {//下一页
+						$(".book-title .next span").click();
+					}
+				});
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div class="book-title">
+			<h1>模块</h1>
+            <div class="page"><a title="上一页" class="prev" href="6.html"><span>上一页</span></a><a title="下一页" class="next" href="8.html"><span>下一页</span></a></div>
+            <div class="description"></div>
+		</div>
+		<div class="book-content"><p>3.2发布版本自带了一个应用目录结构，并且带了一个默认的应用入口文件，方便部署和测试，默认的应用目录是Application（实际部署过程中可以随意设置）。</p>
+
+<p>通常情况下3.2无需使用多应用模式，因为大多数情况下，我们都可以通过多模块化以及多入口的设计来解决应用的扩展需求。</p>
+
+<h2>模块设计</h2>
+
+<p>新版采用模块化的设计架构，下面是一个应用目录下面的模块目录结构，每个模块可以方便的卸载和部署，并且支持公共模块。</p>
+
+<pre><code>Application      默认应用目录（可以设置）
+├─Common         公共模块（不能直接访问）
+├─Home           前台模块
+├─Admin          后台模块
+├─...            其他更多模块
+├─Runtime        默认运行时目录（可以设置）
+</code></pre>
+
+<blockquote>
+  <p>注意：3.2版本在原来3.1.3的独立分组的基础上进行了改进，改进后的独立分组就是新版的模块，之前的模块则改称为控制器。</p>
+</blockquote>
+
+<p>每个模块是相对独立的，其目录结构如下：</p>
+
+<pre><code>├─Module         模块目录
+│  ├─Conf        配置文件目录
+│  ├─Common      公共函数目录
+│  ├─Controller  控制器目录
+│  ├─Model       模型目录
+│  ├─Logic       逻辑目录（可选）
+│  ├─Service     Service目录（可选）
+│  ... 更多分层目录可选
+│  └─View        视图目录
+</code></pre>
+
+<blockquote>
+  <p>由于采用多层的MVC机制，除了Conf和Common目录外，每个模块下面的目录结构可以根据需要灵活设置和添加，所以并不拘泥于上面展现的目录</p>
+</blockquote>
+</div>
+		<div class="book-footer">
+			<div class="page"><a title="上一页" class="prev" href="6.html"><span>上一页</span></a><a title="下一页" class="next" href="8.html"><span>下一页</span></a></div>
+		</div>
+	</body>
+</html>

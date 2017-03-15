@@ -1,0 +1,296 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+	<head>
+		<meta charset="GB2312">
+		<title>数据创建</title>
+		<link rel="stylesheet" href="../images/css/book.css">
+		<link rel="stylesheet" href="../images/prettify/prettify.css">
+		<script type="text/javascript" src="../images/js/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="../images/prettify/prettify.js"></script>
+		<script type="text/javascript">
+			$(function(){	
+				$(window).resize(function(){
+					$('.book-content').css('min-height', $(window).height() - 130);
+				}).resize();
+				
+				var $code = $(".book-content pre");
+				$code.each(function(){
+					var $this = $(this), $code = $this.children("code"), lang = $code.attr("class");
+					$this.addClass("prettyprint linenums");
+					lang && $this.addClass("lang-" + lang);					
+				});
+				
+				//调用高亮插件，高亮代码
+				prettyPrint();
+				
+				//解决表格存在边距的问题
+				$("table").attr({"cellspacing":"0", "cellpadding":"0"});
+				
+				//快捷键翻页
+				$(document).keydown(function(event){
+					if(event.keyCode == 37){ //上一页
+						$(".book-title .prev span").click();
+					} else if(event.keyCode == 39) {//下一页
+						$(".book-title .next span").click();
+					}
+				});
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div class="book-title">
+			<h1>数据创建</h1>
+            <div class="page"><a title="上一页" class="prev" href="74.html"><span>上一页</span></a><a title="下一页" class="next" href="76.html"><span>下一页</span></a></div>
+            <div class="description"></div>
+		</div>
+		<div class="book-content"><p>在进行数据操作之前，我们往往需要手动创建需要的数据，例如对于提交的表单数据：</p>
+
+<pre><code>// 获取表单的POST数据
+$data['name'] = $_POST['name'];
+$data['email'] = $_POST['email'];
+// 更多的表单数据值获取
+//……
+</code></pre>
+
+<h2>创建数据对象</h2>
+
+<p>ThinkPHP可以帮助你快速地创建数据对象，最典型的应用就是自动根据表单数据创建数据对象，这个优势在一个数据表的字段非常之多的情况下尤其明显。</p>
+
+<p>很简单的例子：</p>
+
+<pre><code>// 实例化User模型
+$User = M('User');
+// 根据表单提交的POST数据创建数据对象
+$User-&gt;create();
+</code></pre>
+
+<p>Create方法支持从其它方式创建数据对象，例如，从其它的数据对象，或者数组等</p>
+
+<pre><code>$data['name'] = 'ThinkPHP';
+$data['email'] = 'ThinkPHP@gmail.com';
+$User-&gt;create($data);
+</code></pre>
+
+<p>甚至还可以支持从对象创建新的数据对象</p>
+
+<pre><code>// 从User数据对象创建新的Member数据对象
+$User = stdClass();
+$User-&gt;name = 'ThinkPHP';
+$User-&gt;email = 'ThinkPHP@gmail.com';
+$Member = M("Member");
+$Member-&gt;create($User);
+</code></pre>
+
+<p>创建完成的数据可以直接读取和修改，例如：</p>
+
+<pre><code>$data['name'] = 'ThinkPHP';
+$data['email'] = 'ThinkPHP@gmail.com';
+$User-&gt;create($data);
+// 创建完成数据对象后可以直接读取数据
+echo $User-&gt;name;
+echo $User-&gt;email;
+// 也可以直接修改创建完成的数据
+$User-&gt;name = 'onethink'; // 修改name字段数据
+$User-&gt;status = 1; // 增加新的字段数据
+</code></pre>
+
+<h2>数据操作状态</h2>
+
+<p>create方法的第二个参数可以指定创建数据的操作状态，默认情况下是自动判断是写入还是更新操作。</p>
+
+<p>也可以显式指定操作状态，例如：</p>
+
+<pre><code>$Member = M("User");
+// 指定更新数据操作状态
+$Member-&gt;create($_POST,Model::MODEL_UPDATE);
+</code></pre>
+
+<p>系统内置的数据操作包括<code>Model::MODEL_INSERT</code>（或者1）和<code>Model::MODEL_UPDATE</code>（或者2），当没有指定的时候，系统根据数据源是否包含主键数据来自动判断，如果存在主键数据，就当成<code>Model::MODEL_UPDATE</code>操作。</p>
+
+<p>不同的数据操作状态可以定义不同的数据验证和自动完成机制，所以，你可以自定义自己需要的数据操作状态，例如，可以设置登录操作的数据状态（假设为3）：</p>
+
+<pre><code>$Member = M("User");
+// 指定更新数据操作状态
+$Member-&gt;create($_POST,3);
+</code></pre>
+
+<p>事实上，create方法所做的工作远非这么简单，在创建数据对象的同时，完成了一系列的工作，我们来看下create方法的工作流程就能明白：</p>
+
+<table>
+<thead>
+<tr>
+  <th>步骤</th>
+  <th>说明</th>
+  <th>返回</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>1</td>
+  <td>获取数据源（默认是POST数组）</td>
+  <td></td>
+</tr>
+<tr>
+  <td>2</td>
+  <td>验证数据源合法性（非数组或者对象会过滤）</td>
+  <td>失败则返回false</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td>检查字段映射</td>
+  <td></td>
+</tr>
+<tr>
+  <td>4</td>
+  <td>判断数据状态（新增或者编辑，指定或者自动判断）</td>
+  <td></td>
+</tr>
+<tr>
+  <td>5</td>
+  <td>数据自动验证</td>
+  <td>失败则返回false</td>
+</tr>
+<tr>
+  <td>6</td>
+  <td>表单令牌验证</td>
+  <td>失败则返回false</td>
+</tr>
+<tr>
+  <td>7</td>
+  <td>表单数据赋值（过滤非法字段和字符串处理）</td>
+  <td></td>
+</tr>
+<tr>
+  <td>8</td>
+  <td>数据自动完成</td>
+  <td></td>
+</tr>
+<tr>
+  <td>9</td>
+  <td>生成数据对象（保存在内存）</td>
+  <td></td>
+</tr>
+</tbody>
+</table>
+
+<p>因此，我们熟悉的令牌验证、<a href="#auto_validate">自动验证</a>和<a href="#auto_operate">自动完成</a>功能，其实都必须通过create方法才能生效。</p>
+
+<p>如果没有定义自动验证的话，create方法的返回值是创建完成的数据对象数组，例如：</p>
+
+<pre><code>$data['name'] = 'thinkphp';
+$data['email'] = 'thinkphp@gmail.com';
+$data['status'] = 1;
+$User = M('User');
+$data = $User-&gt;create($data);
+dump($data);
+</code></pre>
+
+<p>输出结果为：</p>
+
+<pre><code>array (size=3)
+  'name' =&gt; string 'thinkphp' (length=8)
+  'email' =&gt; string 'thinkphp@gmail.com' (length=18)
+  'status'=&gt; int 1
+</code></pre>
+
+<p>Create方法创建的数据对象是保存在内存中，并没有实际写入到数据库中，直到使用<code>add</code>或者<code>save</code>方法才会真正写入数据库。</p>
+
+<p>因此在没有调用add或者save方法之前，我们都可以改变create方法创建的数据对象，例如：</p>
+
+<pre><code>$User = M('User');
+$User-&gt;create(); //创建User数据对象
+$User-&gt;status = 1; // 设置默认的用户状态
+$User-&gt;create_time = time(); // 设置用户的创建时间
+$User-&gt;add(); // 把用户对象写入数据库
+</code></pre>
+
+<p>如果只是想简单创建一个数据对象，并不需要完成一些额外的功能的话，可以使用data方法简单的创建数据对象。
+使用如下：</p>
+
+<pre><code>// 实例化User模型
+$User = M('User');
+// 创建数据后写入到数据库
+$data['name'] = 'ThinkPHP';
+$data['email'] = 'ThinkPHP@gmail.com';
+$User-&gt;data($data)-&gt;add();
+</code></pre>
+
+<p>Data方法也支持传入数组和对象，使用data方法创建的数据对象不会进行自动验证和过滤操作，请自行处理。但在进行add或者save操作的时候，数据表中不存在的字段以及非法的数据类型（例如对象、数组等非标量数据）是会自动过滤的，不用担心非数据表字段的写入导致SQL错误的问题。</p>
+
+<h2>支持的连贯操作</h2>
+
+<p>在执行create方法之前，我们可以调用相关的连贯操作方法，配合完成数据创建操作。</p>
+
+<p>create方法支持的连贯操作方法包括：
+<table>
+<thead>
+<tr>
+  <th>连贯操作</th>
+  <th>作用</th>
+  <th>支持的参数类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>field</td>
+  <td>用于定义合法的字段</td>
+  <td>字符串和数组</td>
+</tr>
+<tr>
+  <td>validate</td>
+  <td>用于数据自动验证</td>
+  <td>数组</td>
+</tr>
+<tr>
+  <td>auto</td>
+  <td>用于数据自动完成</td>
+  <td>数组</td>
+</tr>
+<tr>
+  <td>token</td>
+  <td>用于令牌验证</td>
+  <td>布尔值</td>
+</tr>
+</tbody>
+</table></p>
+
+<p>更多的用法参考后续的内容。</p>
+
+<h2>字段合法性过滤</h2>
+
+<p>如果在create方法之前调用field方法，则表示只允许创建指定的字段数据，其他非法字段将会被过滤，例如：</p>
+
+<pre><code>$data['name'] = 'thinkphp';
+$data['email'] = 'thinkphp@gmail.com';
+$data['status'] = 1;
+$data['test'] = 'test';
+$User = M('User');
+$data = $User-&gt;field('name,email')-&gt;create($data);
+dump($data);
+</code></pre>
+
+<p>输出结果为：</p>
+
+<pre><code>array (size=2)
+  'name' =&gt; string 'thinkphp' (length=8)
+  'email' =&gt; string 'thinkphp@gmail.com' (length=18)
+</code></pre>
+
+<p>最终只有<code>name</code>和<code>email</code>字段的数据被允许写入，<code>status</code>和<code>test</code>字段直接被过滤了，哪怕status也是数据表中的合法字段。</p>
+
+<p>如果我们有自定义模型类，对于数据新增和编辑操作的话，我们还可以直接在模型类里面通过设置<code>insertFields</code>和<code>updateFields</code>属性来定义允许的字段，例如：</p>
+
+<pre><code>namespace Home\Model;
+use Think\Model;
+class UserModel extends Model{
+    protected $insertFields = 'name,email'; // 新增数据的时候允许写入name和email字段
+    protected $updateFields = 'email'; // 编辑数据的时候只允许写入email字段
+}
+</code></pre>
+</div>
+		<div class="book-footer">
+			<div class="page"><a title="上一页" class="prev" href="74.html"><span>上一页</span></a><a title="下一页" class="next" href="76.html"><span>下一页</span></a></div>
+		</div>
+	</body>
+</html>

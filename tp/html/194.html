@@ -1,0 +1,261 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+	<head>
+		<meta charset="GB2312">
+		<title>图像处理</title>
+		<link rel="stylesheet" href="../images/css/book.css">
+		<link rel="stylesheet" href="../images/prettify/prettify.css">
+		<script type="text/javascript" src="../images/js/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="../images/prettify/prettify.js"></script>
+		<script type="text/javascript">
+			$(function(){	
+				$(window).resize(function(){
+					$('.book-content').css('min-height', $(window).height() - 130);
+				}).resize();
+				
+				var $code = $(".book-content pre");
+				$code.each(function(){
+					var $this = $(this), $code = $this.children("code"), lang = $code.attr("class");
+					$this.addClass("prettyprint linenums");
+					lang && $this.addClass("lang-" + lang);					
+				});
+				
+				//调用高亮插件，高亮代码
+				prettyPrint();
+				
+				//解决表格存在边距的问题
+				$("table").attr({"cellspacing":"0", "cellpadding":"0"});
+				
+				//快捷键翻页
+				$(document).keydown(function(event){
+					if(event.keyCode == 37){ //上一页
+						$(".book-title .prev span").click();
+					} else if(event.keyCode == 39) {//下一页
+						$(".book-title .next span").click();
+					}
+				});
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div class="book-title">
+			<h1>图像处理</h1>
+            <div class="page"><a title="上一页" class="prev" href="193.html"><span>上一页</span></a><a title="下一页" class="next" href="195.html"><span>下一页</span></a></div>
+            <div class="description"></div>
+		</div>
+		<div class="book-content"><p>使用Think\Image类进行图像处理功能，支持Gd库和Imagick库，包括对GIf图像处理的支持。</p>
+
+<h2>实例化类库</h2>
+
+<pre><code>$image = new \Think\Image(); 
+</code></pre>
+
+<p>默认使用GD库进行图像操作，如果需要使用Imagick库操作的话，需要改成：</p>
+
+<pre><code>$image = new \Think\Image(\Think\Image::IMAGE_IMAGICK); 
+// 或者采用
+$image = new \Think\Image('Imagick'); 
+</code></pre>
+
+<h2>图像操作</h2>
+
+<p>下面来看下基础的图像操作功能的使用方法。</p>
+
+<h3>打开图像文件</h3>
+
+<p>假设当前入口文件目录下面有一个1.jpg文件，如图所示：</p>
+
+<p><img src="../images/img/10.png" alt="1" /></p>
+
+<p>使用open方法打开图像文件进行相关操作：</p>
+
+<pre><code>$image = new \Think\Image(); 
+$image-&gt;open('./1.jpg');
+</code></pre>
+
+<p>也可以简化成下面的方式：</p>
+
+<pre><code>$image = new \Think\Image(\Think\Image::IMAGE_GD,'./1.jpg'); // GD库
+// 或者
+$image = new \Think\Image(\Think\Image::IMAGE_IMAGICK,'./1.jpg');  // imagick库
+</code></pre>
+
+<h3>获取图像信息</h3>
+
+<p>可以获取打开图片的信息，包括图像大小、类型等，例如：</p>
+
+<pre><code>$image = new \Think\Image(); 
+$image-&gt;open('./1.jpg');
+$width = $image-&gt;width(); // 返回图片的宽度
+$height = $image-&gt;height(); // 返回图片的高度
+$type = $image-&gt;type(); // 返回图片的类型
+$mime = $image-&gt;mime(); // 返回图片的mime类型
+$size = $image-&gt;size(); // 返回图片的尺寸数组 0 图片宽度 1 图片高度
+</code></pre>
+
+<h3>裁剪图片</h3>
+
+<p>使用crop和save方法完成裁剪图片功能。</p>
+
+<pre><code>$image = new \Think\Image(); 
+$image-&gt;open('./1.jpg');
+//将图片裁剪为400x400并保存为corp.jpg
+$image-&gt;crop(400, 400)-&gt;save('./crop.jpg');
+</code></pre>
+
+<p>生成的图片如图：</p>
+
+<p><img src="../images/img/11.png" alt="crop" /></p>
+
+<p>支持从某个坐标开始裁剪，例如下面从（100，30）开始裁剪：</p>
+
+<pre><code>$image = new \Think\Image(); 
+$image-&gt;open('./1.jpg');
+//将图片裁剪为400x400并保存为corp.jpg
+$image-&gt;crop(400, 400,100,30)-&gt;save('./crop.jpg');
+</code></pre>
+
+<p>生成的图片如图：</p>
+
+<p><img src="../images/img/12.png" alt="crop" /></p>
+
+<h3>生成缩略图</h3>
+
+<p>使用thumb方法生成缩略图</p>
+
+<pre><code>$image = new \Think\Image(); 
+$image-&gt;open('./1.jpg');
+// 按照原图的比例生成一个最大为150*150的缩略图并保存为thumb.jpg
+$image-&gt;thumb(150, 150)-&gt;save('./thumb.jpg');
+</code></pre>
+
+<p>生成的缩略图如图所示：</p>
+
+<p><img src="../images/img/13.png" alt="thumb" /></p>
+
+<p>我们看到实际生成的缩略图并不是150*150，因为默认采用原图等比例缩放的方式生成缩略图，最大宽度是150。</p>
+
+<p>可以支持其他类型的缩略图生成，设置包括Think\Image的下列常量或者对应的数字：</p>
+
+<pre><code>IMAGE_THUMB_SCALE     =   1 ; //等比例缩放类型
+IMAGE_THUMB_FILLED    =   2 ; //缩放后填充类型
+IMAGE_THUMB_CENTER    =   3 ; //居中裁剪类型
+IMAGE_THUMB_NORTHWEST =   4 ; //左上角裁剪类型
+IMAGE_THUMB_SOUTHEAST =   5 ; //右下角裁剪类型
+IMAGE_THUMB_FIXED     =   6 ; //固定尺寸缩放类型
+</code></pre>
+
+<p>例如：</p>
+
+<h4>居中裁剪</h4>
+
+<pre><code>$image = new \Think\Image(); 
+$image-&gt;open('./1.jpg');
+// 生成一个居中裁剪为150*150的缩略图并保存为thumb.jpg
+$image-&gt;thumb(150, 150,\Think\Image::IMAGE_THUMB_CENTER)-&gt;save('./thumb.jpg');
+</code></pre>
+
+<p>居中裁剪后生成的缩略图效果如图：</p>
+
+<p><img src="../images/img/14.png" alt="thumb" /></p>
+
+<h4>左上角剪裁</h4>
+
+<pre><code>$image = new \Think\Image(); 
+$image-&gt;open('./1.jpg');
+// 生成一个左上角裁剪为150*150的缩略图并保存为thumb.jpg
+$image-&gt;thumb(150, 150,\Think\Image::IMAGE_THUMB_NORTHWEST)-&gt;save('./thumb.jpg');
+</code></pre>
+
+<p>左上角裁剪后生成的缩略图效果如图：</p>
+
+<p><img src="../images/img/15.png" alt="thumb" /></p>
+
+<h4>缩放填充</h4>
+
+<pre><code>$image = new \Think\Image(); 
+$image-&gt;open('./1.jpg');
+// 生成一个缩放后填充大小150*150的缩略图并保存为thumb.jpg
+$image-&gt;thumb(150, 150,\Think\Image::IMAGE_THUMB_FILLED)-&gt;save('./thumb.jpg');
+</code></pre>
+
+<p>缩放填充后生成的缩略图效果如图：</p>
+
+<p><img src="../images/img/16.png" alt="thumb" /></p>
+
+<h4>固定大小</h4>
+
+<pre><code>$image = new \Think\Image(); 
+$image-&gt;open('./1.jpg');
+// 生成一个固定大小为150*150的缩略图并保存为thumb.jpg
+$image-&gt;thumb(150, 150,\Think\Image::IMAGE_THUMB_FIXED)-&gt;save('./thumb.jpg');
+</code></pre>
+
+<p>采用固定大小的缩略图可能会有所变形，生成的缩略图效果如图：</p>
+
+<p><img src="../images/img/17.png" alt="thumb" /></p>
+
+<h3>添加图片水印</h3>
+
+<pre><code>$image = new \Think\Image(); 
+$image-&gt;open('./1.jpg');
+//将图片裁剪为440x440并保存为corp.jpg
+$image-&gt;crop(440, 440)-&gt;save('./crop.jpg');
+// 给裁剪后的图片添加图片水印（水印文件位于./logo.png），位置为右下角，保存为water.gif
+$image-&gt;water('./logo.png')-&gt;save("water.gif");
+// 给原图添加水印并保存为water_o.gif（需要重新打开原图）
+$image-&gt;open('./1.jpg')-&gt;water('./logo.png')-&gt;save("water_o.gif"); 
+</code></pre>
+
+<p>water方法的第二个参数表示水印的位置，可以传入下列Think\Imag类的常量或者对应的数字：</p>
+
+<pre><code>IMAGE_WATER_NORTHWEST =   1 ; //左上角水印
+IMAGE_WATER_NORTH     =   2 ; //上居中水印
+IMAGE_WATER_NORTHEAST =   3 ; //右上角水印
+IMAGE_WATER_WEST      =   4 ; //左居中水印
+IMAGE_WATER_CENTER    =   5 ; //居中水印
+IMAGE_WATER_EAST      =   6 ; //右居中水印
+IMAGE_WATER_SOUTHWEST =   7 ; //左下角水印
+IMAGE_WATER_SOUTH     =   8 ; //下居中水印
+IMAGE_WATER_SOUTHEAST =   9 ; //右下角水印
+</code></pre>
+
+<p>例如：</p>
+
+<pre><code>$image = new \Think\Image(); 
+// 在图片左上角添加水印（水印文件位于./logo.png） 并保存为water.jpg
+$image-&gt;open('./1.jpg')-&gt;water('./logo.png',\Think\Image::IMAGE_WATER_NORTHWEST)-&gt;save("water.jpg"); 
+</code></pre>
+
+<p>生成的图片效果如下：</p>
+
+<p><img src="../images/img/18.png" alt="water" /></p>
+
+<p>还可以支持水印图片的透明度（0~100，默认值是80），例如：</p>
+
+<pre><code>$image = new \Think\Image(); 
+// 在图片左上角添加水印（水印文件位于./logo.png） 水印图片的透明度为50 并保存为water.jpg
+$image-&gt;open('./1.jpg')-&gt;water('./logo.png',\Think\Image::IMAGE_WATER_NORTHWEST,50)-&gt;save("water.jpg"); 
+</code></pre>
+
+<p>生成的效果如下：</p>
+
+<p><img src="../images/img/19.png" alt="water" /></p>
+
+<p>也可以支持给图片添加文字水印（假设在入口文件的同级目录下存在1.ttf字体文件），例如：</p>
+
+<pre><code>$image = new \Think\Image(); 
+// 在图片右下角添加水印文字 ThinkPHP 并保存为new.jpg
+$image-&gt;open('./1.jpg')-&gt;text('ThinkPHP','./1.ttf',20,'#000000',\Think\Image::IMAGE_WATER_SOUTHEAST)-&gt;save("new.jpg"); 
+</code></pre>
+
+<p>生成的图片效果：</p>
+
+<p><img src="../images/img/20.png" alt="new" /></p>
+</div>
+		<div class="book-footer">
+			<div class="page"><a title="上一页" class="prev" href="193.html"><span>上一页</span></a><a title="下一页" class="next" href="195.html"><span>下一页</span></a></div>
+		</div>
+	</body>
+</html>

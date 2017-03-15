@@ -1,0 +1,97 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+	<head>
+		<meta charset="GB2312">
+		<title>IF标签</title>
+		<link rel="stylesheet" href="../images/css/book.css">
+		<link rel="stylesheet" href="../images/prettify/prettify.css">
+		<script type="text/javascript" src="../images/js/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="../images/prettify/prettify.js"></script>
+		<script type="text/javascript">
+			$(function(){	
+				$(window).resize(function(){
+					$('.book-content').css('min-height', $(window).height() - 130);
+				}).resize();
+				
+				var $code = $(".book-content pre");
+				$code.each(function(){
+					var $this = $(this), $code = $this.children("code"), lang = $code.attr("class");
+					$this.addClass("prettyprint linenums");
+					lang && $this.addClass("lang-" + lang);					
+				});
+				
+				//调用高亮插件，高亮代码
+				prettyPrint();
+				
+				//解决表格存在边距的问题
+				$("table").attr({"cellspacing":"0", "cellpadding":"0"});
+				
+				//快捷键翻页
+				$(document).keydown(function(event){
+					if(event.keyCode == 37){ //上一页
+						$(".book-title .prev span").click();
+					} else if(event.keyCode == 39) {//下一页
+						$(".book-title .next span").click();
+					}
+				});
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div class="book-title">
+			<h1>IF标签</h1>
+            <div class="page"><a title="上一页" class="prev" href="126.html"><span>上一页</span></a><a title="下一页" class="next" href="128.html"><span>下一页</span></a></div>
+            <div class="description"></div>
+		</div>
+		<div class="book-content"><p>用法示例：</p>
+
+<pre><code>&lt;if condition="($name eq 1) OR ($name gt 100) "&gt; value1
+&lt;elseif condition="$name eq 2"/&gt;value2
+&lt;else /&gt; value3
+&lt;/if&gt;
+</code></pre>
+
+<p>在condition属性中可以支持eq等判断表达式，同上面的比较标签，但是不支持带有”>”、”&lt;”等符号的用法，因为会混淆模板解析，所以下面的用法是错误的：</p>
+
+<pre><code>&lt;if condition="$id &lt; 5 "&gt;value1
+    &lt;else /&gt; value2
+&lt;/if&gt;
+</code></pre>
+
+<p>必须改成：</p>
+
+<pre><code>&lt;if condition="$id lt 5 "&gt;value1
+&lt;else /&gt; value2
+&lt;/if&gt;
+</code></pre>
+
+<p>除此之外，我们可以在condition属性里面使用php代码，例如：</p>
+
+<pre><code>&lt;if condition="strtoupper($user['name']) neq 'THINKPHP'"&gt;ThinkPHP
+&lt;else /&gt; other Framework
+&lt;/if&gt;
+</code></pre>
+
+<p>condition属性可以支持点语法和对象语法，例如：
+自动判断user变量是数组还是对象</p>
+
+<pre><code>&lt;if condition="$user.name neq 'ThinkPHP'"&gt;ThinkPHP
+&lt;else /&gt; other Framework
+&lt;/if&gt;
+</code></pre>
+
+<p>或者知道user变量是对象</p>
+
+<pre><code>&lt;if condition="$user:name neq 'ThinkPHP'"&gt;ThinkPHP
+&lt;else /&gt; other Framework
+&lt;/if&gt;
+</code></pre>
+
+<p>由于if标签的condition属性里面基本上使用的是php语法，尽可能使用判断标签和Switch标签会更加简洁，原则上来说，能够用switch和比较标签解决的尽量不用if标签完成。因为switch和比较标签可以使用变量调节器和系统变量。如果某些特殊的要求下面，IF标签仍然无法满足要求的话，可以使用原生php代码或者PHP标签来直接书写代码。</p>
+</div>
+		<div class="book-footer">
+			<div class="page"><a title="上一页" class="prev" href="126.html"><span>上一页</span></a><a title="下一页" class="next" href="128.html"><span>下一页</span></a></div>
+		</div>
+	</body>
+</html>

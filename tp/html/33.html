@@ -1,0 +1,161 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+	<head>
+		<meta charset="GB2312">
+		<title>实例说明</title>
+		<link rel="stylesheet" href="../images/css/book.css">
+		<link rel="stylesheet" href="../images/prettify/prettify.css">
+		<script type="text/javascript" src="../images/js/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="../images/prettify/prettify.js"></script>
+		<script type="text/javascript">
+			$(function(){	
+				$(window).resize(function(){
+					$('.book-content').css('min-height', $(window).height() - 130);
+				}).resize();
+				
+				var $code = $(".book-content pre");
+				$code.each(function(){
+					var $this = $(this), $code = $this.children("code"), lang = $code.attr("class");
+					$this.addClass("prettyprint linenums");
+					lang && $this.addClass("lang-" + lang);					
+				});
+				
+				//调用高亮插件，高亮代码
+				prettyPrint();
+				
+				//解决表格存在边距的问题
+				$("table").attr({"cellspacing":"0", "cellpadding":"0"});
+				
+				//快捷键翻页
+				$(document).keydown(function(event){
+					if(event.keyCode == 37){ //上一页
+						$(".book-title .prev span").click();
+					} else if(event.keyCode == 39) {//下一页
+						$(".book-title .next span").click();
+					}
+				});
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div class="book-title">
+			<h1>实例说明</h1>
+            <div class="page"><a title="上一页" class="prev" href="32.html"><span>上一页</span></a><a title="下一页" class="next" href="34.html"><span>下一页</span></a></div>
+            <div class="description"></div>
+		</div>
+		<div class="book-content"><p>我们已经了解了如何定义路由规则，下面我们来举个例子加深印象。</p>
+
+<p>假设我们定义了News控制器如下（代码实现仅供参考）：</p>
+
+<pre><code>namespace Home\Controller;
+use Think\Controller;
+class NewsController extends Controller{
+    public function read(){
+        $New = M('New');
+        if(isset($_GET['id'])) {
+            // 根据id查询结果
+            $data = $New-&gt;find($_GET['id']);
+        }elseif(isset($_GET['name'])){
+            // 根据name查询结果
+            $data = $New-&gt;getByName($_GET['name']);
+        }
+        $this-&gt;data = $data;
+        $this-&gt;display();
+    }
+
+    public function archive(){
+        $New = M('New');
+        $year   =   $_GET['year'];
+        $month  =   $_GET['month'];
+        $begin_time = strtotime($year . $month . "01");
+        $end_time = strtotime("+1 month", $begin_time);
+        $map['create_time'] =  array(array('gt',$begin_time),array('lt',$end_time));
+        $map['status']  =   1;
+        $list = $New-&gt;where($map)-&gt;select();
+        $this-&gt;list =   $list;
+        $this-&gt;display();
+    }
+}
+</code></pre>
+
+<p>定义路由规则如下：</p>
+
+<pre><code>'URL_ROUTER_ON'   =&gt; true, //开启路由
+'URL_ROUTE_RULES' =&gt; array( //定义路由规则 
+    'new/:id\d'    =&gt; 'News/read',
+    'new/:name'    =&gt; 'News/read',
+    'new/:year\d/:month\d'  =&gt; 'News/archive',
+),
+</code></pre>
+
+<p>然后，我们访问：
+<code>http://serverName/index.php/Home/new/8</code></p>
+
+<p>会匹配到第一个路由规则，实际执行的效果等效于访问：
+<code>http://serverName/index.php/Home/News/read/id/8</code></p>
+
+<p>当访问：
+<code>http://serverName/index.php/Home/new/hello</code></p>
+
+<p>会匹配到第二个路由规则，实际执行的效果等效于访问：
+<code>http://serverName/index.php/Home/News/read/name/hello</code></p>
+
+<p>那么如果访问：
+<code>http://serverName/index.php/Home/new/2012/03</code></p>
+
+<p>是否会匹配第三个路由规则呢？我们期望的实际执行的效果能够等效于访问：
+<code>http://serverName/index.php/Home/News/archive/year/2012/month/03</code></p>
+
+<p>事实上却没有，因为<code>http://serverName/index.php/Home/new/2012/</code>这个URL在进行路由匹配过程中已经优先匹配到了第一个路由规则了，把2012当成id的值传入了，这种情况属于路由规则的冲突，解决办法有两个：</p>
+
+<p><strong>1、调整定义顺序</strong></p>
+
+<p>路由定义改成：</p>
+
+<pre><code>'URL_ROUTE_RULES' =&gt; array( //定义路由规则
+    'new/:year\d/:month\d'  =&gt; 'News/archive',
+    'new/:id\d'                    =&gt; 'News/read',
+    'new/:name'    =&gt; 'News/read',
+),
+</code></pre>
+
+<p>接下来，当我们再次访问：
+<code>http://serverName/index.php/Home/new/2012/03</code></p>
+
+<p>的时候，达到了预期的访问效果。所以如果存在可能规则冲突的情况，尽量把规则复杂的规则定义放到前面，确保最复杂的规则可以优先匹配到。但是如果路由规则定义多了之后，仍然很容易混淆，所以需要寻找更好的解决办法。</p>
+
+<p><strong>2、利用完全匹配功能</strong></p>
+
+<p>现在我们来利用路由的完全匹配定义功能，把路由定义改成：</p>
+
+<pre><code>'URL_ROUTE_RULES' =&gt; array( //定义路由规则
+    'new/:id\d$'                    =&gt; 'News/read',
+    'new/:name$'    =&gt; 'News/read',
+    'new/:year\d/:month\d$'  =&gt; 'News/archive',
+),
+</code></pre>
+
+<p>在规则最后加上$符号之后，表示完整匹配当前的路由规则，就可以避免规则定义的冲突了。对于规则路由来说，简单的理解就是URL里面的参数数量或者类型约束要完全一致。
+所以，如果我们访问
+<code>http://serverName/index.php/Home/new/2012/03/01</code></p>
+
+<p>的话，是不会匹配成功任何一条路由的。</p>
+
+<p><strong>3、利用正则路由</strong></p>
+
+<p>当然，解决问题的办法总是不止一种，对于复杂的情况，我们不要忘了使用正则路由规则定义，在你找不到解决方案的时候，正则路由总能帮到你。
+要实现上面的同样路由功能的话，还可以用下面的规则定义：</p>
+
+<pre><code>'URL_ROUTE_RULES' =&gt; array( //定义路由规则
+    '/^new\/(\d+)$/'        =&gt; 'News/read?id=:1',
+    '/^new\/(\w+)$/'        =&gt; 'News/read?name=:1',
+    '/^new\/(\d{4})\/(\d{2})$/' =&gt; 'News/achive?year=:1&amp;month=:2',
+),
+</code></pre>
+</div>
+		<div class="book-footer">
+			<div class="page"><a title="上一页" class="prev" href="32.html"><span>上一页</span></a><a title="下一页" class="next" href="34.html"><span>下一页</span></a></div>
+		</div>
+	</body>
+</html>

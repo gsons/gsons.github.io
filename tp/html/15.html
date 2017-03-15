@@ -1,0 +1,92 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+	<head>
+		<meta charset="GB2312">
+		<title>扩展配置</title>
+		<link rel="stylesheet" href="../images/css/book.css">
+		<link rel="stylesheet" href="../images/prettify/prettify.css">
+		<script type="text/javascript" src="../images/js/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="../images/prettify/prettify.js"></script>
+		<script type="text/javascript">
+			$(function(){	
+				$(window).resize(function(){
+					$('.book-content').css('min-height', $(window).height() - 130);
+				}).resize();
+				
+				var $code = $(".book-content pre");
+				$code.each(function(){
+					var $this = $(this), $code = $this.children("code"), lang = $code.attr("class");
+					$this.addClass("prettyprint linenums");
+					lang && $this.addClass("lang-" + lang);					
+				});
+				
+				//调用高亮插件，高亮代码
+				prettyPrint();
+				
+				//解决表格存在边距的问题
+				$("table").attr({"cellspacing":"0", "cellpadding":"0"});
+				
+				//快捷键翻页
+				$(document).keydown(function(event){
+					if(event.keyCode == 37){ //上一页
+						$(".book-title .prev span").click();
+					} else if(event.keyCode == 39) {//下一页
+						$(".book-title .next span").click();
+					}
+				});
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div class="book-title">
+			<h1>扩展配置</h1>
+            <div class="page"><a title="上一页" class="prev" href="14.html"><span>上一页</span></a><a title="下一页" class="next" href="16.html"><span>下一页</span></a></div>
+            <div class="description"></div>
+		</div>
+		<div class="book-content"><p>扩展配置可以支持自动加载额外的自定义配置文件，并且配置格式和项目配置一样。
+设置扩展配置的方式如下（多个文件用逗号分隔）：</p>
+
+<pre><code>// 加载扩展配置文件
+'LOAD_EXT_CONFIG' =&gt; 'user,db', 
+</code></pre>
+
+<p>假设扩展配置文件<code>user.php</code> 和<code>db.php</code>分别用于用户配置和数据库配置，这样做的好处是哪怕以后关闭调试模式，你修改db配置文件后依然会自动生效。</p>
+
+<p>如果在应用公共设置文件中配置的话，那么会自动加载应用公共配置目录下面的配置文件<code>Application/Common/Conf/user.php</code>和<code>Application/Common/Conf/db.php</code>。</p>
+
+<p>如果在模块（假设是Home模块）的配置文件中配置的话，则会自动加载模块目录下面的配置文件 <code>Application/Home/Conf/user.php</code> 和
+<code>Application/Home/Conf/db.php</code>。</p>
+
+<p>默认情况下，扩展配置文件中的设置参数会并入项目配置文件中。也就是默认都是一级配置参数，例如user.php中的配置参数如下：</p>
+
+<pre><code>&lt;?php
+//用户配置文件
+return array(
+    'USER_TYPE'      =&gt; 2, //用户类型
+    'USER_AUTH_ID'   =&gt; 10, //用户认证ID
+    'USER_AUTH_TYPE' =&gt; 2, //用户认证模式
+);
+</code></pre>
+
+<p>那么，最终获取用户参数的方式是：</p>
+
+<pre><code>C('USER_AUTH_ID');
+</code></pre>
+
+<p>如果配置文件改成：</p>
+
+<pre><code>// 加载扩展配置文件
+'LOAD_EXT_CONFIG' =&gt; array('USER'=&gt;'user','DB'=&gt;'db'), 
+</code></pre>
+
+<p>则最终获取用户参数的方式改成：</p>
+
+<pre><code>C('USER.USER_AUTH_ID');
+</code></pre>
+</div>
+		<div class="book-footer">
+			<div class="page"><a title="上一页" class="prev" href="14.html"><span>上一页</span></a><a title="下一页" class="next" href="16.html"><span>下一页</span></a></div>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+	<head>
+		<meta charset="GB2312">
+		<title>项目编译</title>
+		<link rel="stylesheet" href="../images/css/book.css">
+		<link rel="stylesheet" href="../images/prettify/prettify.css">
+		<script type="text/javascript" src="../images/js/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="../images/prettify/prettify.js"></script>
+		<script type="text/javascript">
+			$(function(){	
+				$(window).resize(function(){
+					$('.book-content').css('min-height', $(window).height() - 130);
+				}).resize();
+				
+				var $code = $(".book-content pre");
+				$code.each(function(){
+					var $this = $(this), $code = $this.children("code"), lang = $code.attr("class");
+					$this.addClass("prettyprint linenums");
+					lang && $this.addClass("lang-" + lang);					
+				});
+				
+				//调用高亮插件，高亮代码
+				prettyPrint();
+				
+				//解决表格存在边距的问题
+				$("table").attr({"cellspacing":"0", "cellpadding":"0"});
+				
+				//快捷键翻页
+				$(document).keydown(function(event){
+					if(event.keyCode == 37){ //上一页
+						$(".book-title .prev span").click();
+					} else if(event.keyCode == 39) {//下一页
+						$(".book-title .next span").click();
+					}
+				});
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div class="book-title">
+			<h1>项目编译</h1>
+            <div class="page"><a title="上一页" class="prev" href="24.html"><span>上一页</span></a><a title="下一页" class="next" href="26.html"><span>下一页</span></a></div>
+            <div class="description"></div>
+		</div>
+		<div class="book-content"><p>应用编译机制作为ThinkPHP独创的功能特色，从1.0版本就延续至今，3.2版本的编译机制更加具有特色。</p>
+
+<h2>应用编译缓存</h2>
+
+<p>编译缓存的基础原理是第一次运行的时候把核心需要加载的文件去掉空白和注释后合并到一个文件中，第二次运行的时候就直接载入编译缓存而无需载入众多的核心文件。当第二次执行的时候就会根据当前的应用模式直接载入编译过的缓存文件，从而省去很多IO开销，加快执行速度。</p>
+
+<p>项目编译机制对运行没有任何影响，预编译机制只会执行一次，因此无论在预编译过程中做了多少复杂的操作，对后面的执行没有任何效率的缺失。</p>
+
+<p>编译缓存文件默认生成在应用目录的Runtime目录下面，我们可以在Application/Runtime目录下面看到有一个<code>common~runtime.php</code>文件，这个就是普通模式的编译缓存文件。如果你当前运行在其他的应用模式下面，那么编译缓存文件就是：<code>应用模式~runtime.php</code></p>
+
+<p>例如，如果你当前用的是SAE模式，那么生成的编译缓存文件则会变成<code>sae~runtime.php</code>。</p>
+
+<p>普通模式的编译缓存的内容包括：系统函数库、系统基础核心类库、核心行为类库、项目函数文件，当然这些是可以改变的。</p>
+
+<h2>运行Lite文件</h2>
+
+<p><strong>这是3.2.1版本的新特性。</strong> 运行Lite文件的作用是替换框架的入口文件或者替换应用入口文件，提高运行效率。因为默认生成的文件名为lite.php，并且是运行时动态生成，因此称之为<strong>运行Lite文件</strong>。</p>
+
+<p>Lite文件的特点包括：</p>
+
+<ul>
+<li>运行时动态生成；</li>
+<li>常量定义为针对当前环境；</li>
+<li>支持定义需要编译的文件列表；</li>
+<li>支持生成Lite文件的名称；</li>
+</ul>
+
+<p>如何生成Lite文件，请参考部署部分的<a href="#lite_file">替换入口</a>。</p>
+</div>
+		<div class="book-footer">
+			<div class="page"><a title="上一页" class="prev" href="24.html"><span>上一页</span></a><a title="下一页" class="next" href="26.html"><span>下一页</span></a></div>
+		</div>
+	</body>
+</html>

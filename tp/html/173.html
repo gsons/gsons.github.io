@@ -1,0 +1,110 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+	<head>
+		<meta charset="GB2312">
+		<title>存储驱动</title>
+		<link rel="stylesheet" href="../images/css/book.css">
+		<link rel="stylesheet" href="../images/prettify/prettify.css">
+		<script type="text/javascript" src="../images/js/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="../images/prettify/prettify.js"></script>
+		<script type="text/javascript">
+			$(function(){	
+				$(window).resize(function(){
+					$('.book-content').css('min-height', $(window).height() - 130);
+				}).resize();
+				
+				var $code = $(".book-content pre");
+				$code.each(function(){
+					var $this = $(this), $code = $this.children("code"), lang = $code.attr("class");
+					$this.addClass("prettyprint linenums");
+					lang && $this.addClass("lang-" + lang);					
+				});
+				
+				//调用高亮插件，高亮代码
+				prettyPrint();
+				
+				//解决表格存在边距的问题
+				$("table").attr({"cellspacing":"0", "cellpadding":"0"});
+				
+				//快捷键翻页
+				$(document).keydown(function(event){
+					if(event.keyCode == 37){ //上一页
+						$(".book-title .prev span").click();
+					} else if(event.keyCode == 39) {//下一页
+						$(".book-title .next span").click();
+					}
+				});
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div class="book-title">
+			<h1>存储驱动</h1>
+            <div class="page"><a title="上一页" class="prev" href="172.html"><span>上一页</span></a><a title="下一页" class="next" href="174.html"><span>下一页</span></a></div>
+            <div class="description"></div>
+		</div>
+		<div class="book-content"><p>存储驱动完成了不同环境下面的文件存取操作，也是ThinkPHP支持分布式和云平台的基础。</p>
+
+<p>默认的存储驱命名空间位于<code>Think\Storage\Driver</code>,每个存储驱动必须继承Think\Storage，并且实现下列接口方法（具体参数可以参考现有的存储驱动类库）：
+<table>
+<thead>
+<tr>
+  <th>驱动方法</th>
+  <th>方法说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>架构方法</td>
+  <td>__construct($config='')</td>
+</tr>
+<tr>
+  <td>读取文件内容</td>
+  <td>read($filename,$type='')</td>
+</tr>
+<tr>
+  <td>写文件</td>
+  <td>put($filename,$content,$type='')</td>
+</tr>
+<tr>
+  <td>文件追加</td>
+  <td>append($filename,$content,$type='')</td>
+</tr>
+<tr>
+  <td>加载文件</td>
+  <td>load($filename,$vars=null,$type='')</td>
+</tr>
+<tr>
+  <td>判断文件是否存在</td>
+  <td>has($filename,$type='')</td>
+</tr>
+<tr>
+  <td>删除文件</td>
+  <td>unlink($filename,$type='')</td>
+</tr>
+<tr>
+  <td>读取文件信息</td>
+  <td>get($filename,$name,$type='')</td>
+</tr>
+</tbody>
+</table></p>
+
+<p>其中type参数是为了区分不同的读写场景而设置的。</p>
+
+<p>目前使用到的场景包括 runtime（用于编译缓存的文件操作）、html（用于静态缓存的文件操作）和F（用于F函数的文件操作）。</p>
+
+<p>要使用自己定义的存储驱动的话，需要在应用入口文件定义：</p>
+
+<pre><code>define('STORAGE_TYPE',  'MyStorage');
+</code></pre>
+
+<blockquote>
+  <p>存储类型的特殊性决定了我们只能在入口文件中改变存储类型</p>
+</blockquote>
+</div>
+		<div class="book-footer">
+			<div class="page"><a title="上一页" class="prev" href="172.html"><span>上一页</span></a><a title="下一页" class="next" href="174.html"><span>下一页</span></a></div>
+		</div>
+	</body>
+</html>

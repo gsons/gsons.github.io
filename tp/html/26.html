@@ -1,0 +1,129 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+	<head>
+		<meta charset="GB2312">
+		<title>系统流程</title>
+		<link rel="stylesheet" href="../images/css/book.css">
+		<link rel="stylesheet" href="../images/prettify/prettify.css">
+		<script type="text/javascript" src="../images/js/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="../images/prettify/prettify.js"></script>
+		<script type="text/javascript">
+			$(function(){	
+				$(window).resize(function(){
+					$('.book-content').css('min-height', $(window).height() - 130);
+				}).resize();
+				
+				var $code = $(".book-content pre");
+				$code.each(function(){
+					var $this = $(this), $code = $this.children("code"), lang = $code.attr("class");
+					$this.addClass("prettyprint linenums");
+					lang && $this.addClass("lang-" + lang);					
+				});
+				
+				//调用高亮插件，高亮代码
+				prettyPrint();
+				
+				//解决表格存在边距的问题
+				$("table").attr({"cellspacing":"0", "cellpadding":"0"});
+				
+				//快捷键翻页
+				$(document).keydown(function(event){
+					if(event.keyCode == 37){ //上一页
+						$(".book-title .prev span").click();
+					} else if(event.keyCode == 39) {//下一页
+						$(".book-title .next span").click();
+					}
+				});
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div class="book-title">
+			<h1>系统流程</h1>
+            <div class="page"><a title="上一页" class="prev" href="25.html"><span>上一页</span></a><a title="下一页" class="next" href="27.html"><span>下一页</span></a></div>
+            <div class="description"></div>
+		</div>
+		<div class="book-content"><p>我们来系统的了解下ThinkPHP框架开发的应用的标准执行流程：</p>
+
+<pre><code>用户URL请求
+调用应用入口文件（通常是网站的index.php）
+载入框架入口文件（ThinkPHP.php）
+记录初始运行时间和内存开销
+系统常量判断及定义
+载入框架引导类（Think\Think）并执行Think::start方法进行应用初始化
+设置错误处理机制和自动加载机制
+调用Think\Storage类进行存储初始化（由STORAGE_TYPE常量定义存储类型）
+部署模式下如果存在应用编译缓存文件则直接加载（直接跳转到步骤22）
+读取应用模式（由APP_MODE常量定义）的定义文件（以下以普通模式为例说明）
+加载当前应用模式定义的核心文件（普通模式是 ThinkPHP/Mode/common.php）
+加载惯例配置文件（普通模式是 ThinkPHP/Conf/convention.php）
+加载应用配置文件（普通模式是 Application/Common/Conf/config.php）
+加载系统别名定义
+判断并读取应用别名定义文件（普通模式是 Application/Common/Conf/alias.php）
+加载系统行为定义
+判断并读取应用行为定义文件（普通模式是 Application/Common/Conf/tags.php）
+加载框架底层语言包（普通模式是 ThinkPHP/Lang/zh-cn.php）
+如果是部署模式则生成应用编译缓存文件
+加载调试模式系统配置文件（ThinkPHP/Conf/debug.php）
+判断并读取应用的调试配置文件（默认是 Application/Common/Conf/debug.php）
+判断应用状态并读取状态配置文件（如果APP_STATUS常量定义不为空的话）
+检测应用目录结构并自动生成（如果CHECK_APP_DIR配置开启并且RUNTIME_PATH目录不存在的情况下）
+调用Think\App类的run方法启动应用
+应用初始化（app_init）标签位侦听并执行绑定行为
+判断并加载动态配置和函数文件
+调用Think\Dispatcher::dispatch方法进行URL请求调度
+自动识别兼容URL模式和命令行模式下面的$_SERVER['PATH_INFO']参数
+检测域名部署以及完成模块和控制器的绑定操作（APP_SUB_DOMAIN_DEPLOY参数开启）
+分析URL地址中的PATH_INFO信息
+获取请求的模块信息
+检测模块是否存在和允许访问
+判断并加载模块配置文件、别名定义、行为定义及函数文件
+判断并加载模块的动态配置和函数文件
+模块的URL模式判断
+模块的路由检测（URL_ROUTER_ON开启）
+PATH_INFO处理（path_info）标签位侦听并执行绑定行为
+URL后缀检测（URL_DENY_SUFFIX以及URL_HTML_SUFFIX处理）
+获取当前控制器和操作，以及URL其他参数
+URL请求调度完成（url_dispatch）标签位侦听并执行绑定行为
+应用开始（app_begin）标签位侦听并执行绑定行为
+调用SESSION_OPTIONS配置参数进行Session初始化（如果不是命令行模式）
+根据请求执行控制器方法
+如果控制器不存在则检测空控制器是否存在
+控制器开始（action_begin）标签位侦听并执行绑定行为
+默认调用系统的ReadHtmlCache行为读取静态缓存（HTML_CACHE_ON参数开启）
+判断并调用控制器的_initialize初始化方法
+判断操作方法是否存在，如果不存在则检测是否定义空操作方法
+判断前置操作方法是否定义，有的话执行
+Action参数绑定检测，自动匹配操作方法的参数
+如果有模版渲染（调用控制器display方法）
+视图开始（view_begin）标签位侦听并执行绑定行为
+调用Think\View的fetch方法解析并获取模版内容
+自动识别当前主题以及定位模版文件
+视图解析（view_parse）标签位侦听并执行绑定行为
+默认调用内置ParseTemplate行为解析模版（普通模式下面）
+模版引擎解析模版内容后生成模版缓存
+模版过滤替换（template_filter）标签位侦听并执行绑定行为
+默认调用系统的ContentReplace行为进行模版替换
+输出内容过滤（view_filter）标签位侦听并执行绑定行为
+默认调用系统的WriteHtmlCache行为写入静态缓存（HTML_CACHE_ON参数开启）
+调用Think\View类的render方法输出渲染内容
+视图结束（view_end）标签位侦听并执行绑定行为
+判断后置操作方法是否定义，有的话执行
+控制器结束（action_end）标签位侦听并执行绑定行为
+应用结束（app_end）标签位侦听并执行绑定行为
+执行系统的ShowPageTrace行为（SHOW_PAGE_TRACE参数开启并且不是AJAX请求）
+日志信息存储写入
+</code></pre>
+
+<p>如果你绑定了更多的应用行为的话，流程可能会更加复杂。</p>
+
+<blockquote>
+  <p>如果是部署模式下面的第二次请求的话，上面的流程中的步骤10~21是可以省略的。</p>
+</blockquote>
+</div>
+		<div class="book-footer">
+			<div class="page"><a title="上一页" class="prev" href="25.html"><span>上一页</span></a><a title="下一页" class="next" href="27.html"><span>下一页</span></a></div>
+		</div>
+	</body>
+</html>
