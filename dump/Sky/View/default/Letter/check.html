@@ -1,0 +1,111 @@
+<extend name="Tpl:Base" />
+<block name="body">
+<style>
+    .table > tbody > tr:hover{
+        background: #cacaca;
+    }
+    .temp .layui-layer-content{
+        padding: 10px 20px;
+    }
+</style>
+    <!-- Main content -->
+    <section class="content">
+
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title iframe-title">信件列表</h3>
+                    <div class="btn-toolbar">
+                        <a class="btn btn-primary ajax-submit ajax-post ajax-del" data-form="form" data-href="{:U('')}">通过审核</a>
+                        <a class="btn btn-danger ajax-submit ajax-post ajax-del" data-form="form" data-href="{:U('del',array('letter'=>'1'))}">删除</a>
+                    </div>
+                <form action="" method="get" id="search_form">
+                    <div class="search">
+                    <?php /* ?>
+                        <select name="type" class="form-control select2 select2-hidden-accessible" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                            <option value="">请选择</option>
+                        </select>
+                    <?php */ ?>
+                        <input type="text" name="keyword" class="form-control" value="{:I('get.keyword')}">
+                        <input type="submit" value="搜索" class="btn btn-info">
+                    </div>
+                </form>
+            </div><!-- /.box-header -->
+            <div class="box-body no-padding">
+            <form action="" method="post" id="form">
+                <table class="table table-striped">
+                    <tbody>
+                    <tr>
+                        <th width="50px"><input type="checkbox" data-check="check-all" data-name="ids[]"/></th><th width="100px">操作</th><th width="70px">编号</th><th>名称</th><th>类型</th><th>是否公开</th><th>当前状态</th><th>发布日期</th>
+                    </tr>
+                    <volist name="list" id="vo">
+                        <tr>
+                            <td><input type="checkbox" name="ids[]" value="{$vo.id}"/></td>
+                            <td>
+                               <a class="ajax-submit ajax-get ajax-del" data-href="{:U('Letter/check',array('id'=>$vo['id'],'status'=>($vo['status']!=-1?-1:0)))}">{:$vo['status'] != -1 ? '取消审核' : '通过审核'}</a>
+                            </td>
+                            <td>{$vo.id}</td>
+                            <td> <a href="javascript:void(0);" onclick="show_content({$vo.id});">{$vo.title}</a></td>
+                            <td>{$vo.type_id|get_field='LetterType','name'}</td>
+                            <td>{: $vo['is_public'] ? '是' : '否' }</td>
+                            <td>{$status[$vo[status]]}</td>
+                            <td>{$vo.datetime|FormatDate}</td>
+                        </tr>
+                    </volist>
+                    </tbody></table>
+            </form>
+            </div><!-- /.box-body -->
+            <div class="box-footer">
+                <!--<ul class="pagination">
+                    <li class="paginate_button previous disabled"><a href="#" >上一页</a> </li>
+                    <li class="paginate_button active"><a href="#">1</a></li>
+                    <li class="paginate_button "><a href="#">2</a></li>
+                    <li class="paginate_button next"><a href="#">下一页</a></li>
+                </ul>-->
+                {$page}
+            </div>
+        </div>
+
+    </section><!-- /.content -->
+
+</block>
+
+</block>
+
+
+<block name="script">
+    <script src="__PUBLIC__/AdminLTE/layer/layer.js"></script>
+
+    <script>
+    /*function show_content(id){
+                $.post('',{'id':id},function(content){
+                    layer.open({
+                      title: ['信件详情','font-size:18px;'],
+                      type: 1,
+                      shadeClose: true,
+                      area: ['900px'],
+                      skin:'temp',
+                      content: content
+                    });
+                })
+            }*/
+    ///////////////
+    function show_content(id){
+        var url = '{:U('LetterEdit',array('id'=>'###','show'=>'false'))}';
+        url = url.replace('/%23%23%23', '/'+id);
+        OpenFrame(url,'信件详情','90%','600px');
+    }
+
+        
+       // esc关闭弹窗
+        $(document).keyup(function(e){
+        console.log(e.keyCode);
+        if(e.keyCode==27){
+            
+            $(".layui-layer").remove();
+        $(".layui-layer-shade").remove();
+        }
+        
+    });
+
+    </script>
+</block>

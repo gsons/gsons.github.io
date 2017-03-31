@@ -1,0 +1,24 @@
+<li data-id="{$vo.id}" style="margin-left:{$level*20}px;">
+    <div class="slider fa fa-fw fa-minus-square-o fa-plus-square-o"></div>
+    <div class="sort">
+        <input type="text" class="form-control" name="sort" value="{$vo.sort}" id="{$vo.id}" />
+    </div>
+    <div class="status">
+        <eq name="vo.status" value="1">正常</eq>
+        <eq name="vo.status" value="0">禁用</eq>
+    </div>
+    <div class="name">
+        <em style="margin-left:{$level*20}px;"></em>
+        <span>
+            <a href="{:U('Article/Article',array('type'=>$vo['id']))}">{$vo.name} <i class="navigation count">(0)</i></a>
+            <a href="{:U('TypeEdit',array('pid'=>$vo['id']))}"><i class="fa fa-fw fa-plus-square"></i></a>
+        </span>
+    </div>
+    <div class="action">
+        <a href="{:U('TypeEdit',array('id'=>$vo['id']))}">编辑</a>
+        <a href="javascript:" data-href="{:U('Combine',array('id'=>$vo['id']))}"  onclick="OpenFrame(this.getAttribute('data-href'),'合并','50%','400px')" >合并</a>
+        <a href="javascript:" data-href="{:U('Move',array('id'=>$vo['id']))}"  onclick="OpenFrame(this.getAttribute('data-href'),'移动','50%','400px')" >移动</a>
+        <a class="navigation ajax-submit ajax-get ajax-del" data-href="{:U('TypeEdit',array('id'=>$vo['id']))}">删除</a>
+    </div>
+    <div class="clear"></div>
+</li>

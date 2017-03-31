@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{:C('CMS_TITLE')} {$SITE_TITLE}</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.5 -->
+    <link rel="stylesheet" href="__PLUS__/bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="__PUBLIC__/AdminLTE/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="__PUBLIC__/AdminLTE/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="__PUBLIC__/AdminLTE/css/AdminLTE.css">
+
+    <link rel="stylesheet" href="__PLUS__/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="__PUBLIC__/AdminLTE/css/skins/_all-skins.min.css">
+    <!-- iCheck -->
+
+    <!-- Extend -->
+    <link rel="stylesheet" href="__PUBLIC__/AdminLTE/css/extend.css">
+
+</head>
+<body class="hold-transition skin-green sidebar-mini">
+<div class="wrapper">
+
+    <block name="header">
+        <header class="main-header">
+            <!-- Logo -->
+            <a href="" class="logo">
+                <!-- mini logo for sidebar mini 50x50 pixels -->
+                <span class="logo-mini"><b>Sky</b></span>
+                <!-- logo for regular state and mobile devices -->
+                <span class="logo-lg"><b>{:C('CMS_TITLE')}</b></span>
+            </a>
+            <!-- Header Navbar: style can be found in header.less -->
+            <nav class="navbar navbar-static-top" role="navigation">
+                <!-- Sidebar toggle button-->
+                <a href="javascript:" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                    <span class="sr-only">折叠菜单</span>
+                </a>
+
+                <a href="javascript:" id="refresh_iframe" class="refresh_iframe ion-refresh" title="刷新">
+                    <span class="sr-only">刷新</span>
+                </a>
+
+                <a href="javascript:" data-href="{:U('Public/ClearCache')}" class="refresh_iframe clearcache ion-trash-b ajax-submit ajax-get" title="清除缓存">
+                    <span class="sr-only">清除缓存</span>
+                </a>
+
+                <a href="http://{:C('DOMAIN')}__ROOT__/index.php" class="refresh_iframe ion-home" title="主页" target="_blank" >
+                    <span class="sr-only">主页</span>
+                </a>
+
+                <div class="navbar-custom-menu">
+                    <ul class="nav navbar-nav">
+
+                        <!-- Messages: style can be found in dropdown.less 留言信息提示 -->
+                      <!--  <li class="dropdown messages-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-envelope-o"></i>
+                                <span class="label label-success">4</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li class="header">你有4条留言</li>
+                                <li>
+                                    &lt;!&ndash; inner menu: contains the actual data &ndash;&gt;
+                                    <ul class="menu">
+                                        <li>
+                                            &lt;!&ndash; start message &ndash;&gt;
+                                            <a href="#">
+                                                <div class="pull-left">
+                                                    <img src="__PUBLIC__/AdminLTE/img/user2-160x160.jpg"
+                                                         class="img-circle"
+                                                         alt="User Image">
+                                                </div>
+                                                <h4>
+                                                    Support Team
+                                                    <small><i class="fa fa-clock-o"></i> 5 mins</small>
+                                                </h4>
+                                                <p>Why not buy a new awesome theme?</p>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="footer"><a href="#">查看所有留言</a></li>
+                            </ul>
+                        </li>-->
+
+                        <!--&lt;!&ndash; Notifications: style can be found in dropdown.less 通知 &ndash;&gt;
+                        <li class="dropdown notifications-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-bell-o"></i>
+                                <span class="label label-warning">10</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li class="header">你有10条通知</li>
+                                <li>
+                                    &lt;!&ndash; inner menu: contains the actual data &ndash;&gt;
+                                    <ul class="menu">
+                                        <li>
+                                            <a href="#">
+                                                <i class="fa fa-users text-aqua"></i> 5 new members joined today
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="footer"><a href="#">更多</a></li>
+                            </ul>
+                        </li>
+-->
+
+                        <!-- Tasks: style can be found in dropdown.less 备忘录 -->
+                        <!--<li class="dropdown tasks-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-weixin"></i><span class="hidden-xs">
+                                <empty name="w_name">
+                                    请选择当前微信
+                                    <else />
+                                    {$w_name}
+                                </empty></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li class="header">快捷选择微信号</li>
+                                <li>
+                                    &lt;!&ndash; inner menu: contains the actual data &ndash;&gt;
+                                    <ul class="menu">
+                                        <volist name="wechat" id="vo">
+                                            <li>&lt;!&ndash; Task item &ndash;&gt;
+                                                <a href="javascript:" style="color:#666;" data-href="{:U('Wechat/Set',array('id'=>$vo['id']))}" class="ajax-submit ajax-get">
+                                                    <span class="pull-left">{$vo.name}</span>
+                                                    <eq name="vo.id" value="$wid">
+                                                        <small class="pull-right label label-success">当前</small>
+                                                    </eq>
+                                                    <div class="clear"></div>
+                                                </a>
+                                            </li>
+                                        </volist>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>-->
+
+                        <!-- User Account: style can be found in dropdown.less 用户控制面板 -->
+                        <li class="dropdown user user-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <img src="__PUBLIC__/AdminLTE/img/default-220x220.jpg" class="user-image"
+                                     alt="User Image">
+                                <span class="hidden-xs">{$Admindata.admin}</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <!-- User image -->
+                                <li class="user-header">
+                                    <img src="__PUBLIC__/AdminLTE/img/default-220x220.jpg" class="img-circle"
+                                         alt="User Image">
+                                    <p>
+                                        {$Admindata.admin} - 管理员
+                                        <small>最后登录 {$Admindata.last_login|FormatDate}</small>
+                                    </p>
+                                </li>
+                                <!--      &lt;!&ndash; Menu Body &ndash;&gt;
+                                      <li class="user-body">
+                                          <div class="col-xs-4 text-center">
+                                              <a href="#">Followers</a>
+                                          </div>
+                                          <div class="col-xs-4 text-center">
+                                              <a href="#">Sales</a>
+                                          </div>
+                                          <div class="col-xs-4 text-center">
+                                              <a href="#">Friends</a>
+                                          </div>
+                                      </li>-->
+                                <!-- Menu Footer-->
+                                <li class="user-footer">
+                                     <div class="pull-left">
+                                        <a href="#" class="btn btn-default btn-flat" onclick="OpenFrame('{:U("User/Profile")}','个人资料','600px','500px')">修改密码</a>
+                                        <a href="#" class="btn btn-default btn-flat" onclick="OpenFrame('{:U("Member/Info")}','个人资料','600px','710px')">个人设置</a>
+                                    </div>
+                                    <div class="pull-right">
+                                        <a href="{:U('User/Logout')}" class="btn btn-default btn-flat">退 出</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <!-- Control Sidebar Toggle Button -->
+                        <!--<li>-->
+                            <!--<a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>-->
+                        <!--</li>-->
+
+                    </ul>
+
+                </div>
+            </nav>
+        </header>
+    </block>
+
+
+    <block name="menu">
+        <!-- Left side column. contains the logo and sidebar -->
+        <aside class="main-sidebar">
+            <!-- sidebar: style can be found in sidebar.less -->
+            <section class="sidebar">
+                <ul class="sidebar-menu">
+                    <li class="header">主导航</li>
+                    <!-- 四级层下拉菜单结构 -->
+                    <volist name="Skymenu" id="vo">
+
+                        <notempty name="vo.child">
+
+                            <li class="treeview">
+
+                                <a href="javascript:">
+                                    <i class="{$vo.icon}"></i>&nbsp;&nbsp;<span>{$vo.name}</span>   <!--第一层菜单-->
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </a>
+
+                                <notempty name="vo.child">
+                                    <ul class="treeview-menu">
+                                        <volist name="vo.child" id="ch">
+                                            <li class="btn-menu" data-src="{:U($ch['src'],$ch['extension'])}"><a href="javascript:"><i class="{$ch.icon}"></i>&nbsp;&nbsp;{$ch.name}</a></li> <!--第二层菜单-->
+                                        </volist>
+                                    </ul>
+                                </notempty>
+
+                            </li>
+
+                            <else />
+
+                            <li class="btn-menu treeview"  data-src="{:U($vo['src'],$vo['extension'])}">
+                                <a href="javascript:">
+                                    <i class="{$vo.icon}"></i>&nbsp;&nbsp;<span>{$vo.name}</span>   <!--第一层菜单-->
+                                </a>
+                            </li>
+
+                        </notempty>
+                        <!-- END -->
+                    </volist>
+
+
+                    <li class="btn-menu treeview"  data-src="">
+                        <a href="__ROOT__/open.php">
+                            <i class="fa fa-fw fa-tv"></i>&nbsp;&nbsp;<span>公开目录系统</span>   <!--第一层菜单-->
+                        </a>
+                    </li>
+                    <li class="header">计划任务</li>
+                    <volist name="cron" id="vo">
+                        <PHP>
+                            $run = get_cron_status($vo['id']);
+                        </PHP>
+                        <eq name="run" value="1">
+                            <li><a href="#"><i class="fa fa-circle-o text-success"></i> <span>{$vo.name}</span></a></li>
+                            <else />
+                            <li class="btn-menu treeview" data-src="{:U('Addons/Cron')}"><a href="#"><i class="fa fa-circle-o text-red"></i> <span>{$vo.name}</span></a></li>
+                        </eq>
+                    </volist>
+                    <li class="header"></li>
+                    <li class="header"></li>
+                    <li class="header"></li>
+                  <!--  <li>
+                        <a href="pages/widgets.html">
+                            <i class="fa fa-th"></i> <span>Widgets</span>
+                            <small class="label pull-right bg-green">new</small>
+                        </a>
+                    </li>-->
+
+                    <!--<li><a href="documentation/Index.html"><i class="fa fa-book"></i> <span>Documentation</span></a></li>-->
+
+
+                </ul>
+            </section>
+            <!-- /.sidebar -->
+
+        </aside>
+    </block>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <iframe id="iframe_content" name="iframe" src="{:U('Index/Overall')}" frameborder="0" style="width:100%;background:none;height:100%;" ></iframe>
+    </div>
+    <!-- /.content-wrapper -->
+
+    <footer class="main-footer">
+        <!--<strong>Copyright &copy; 2009-2016 <a href="http://www.simplexun.com">广州深普迅信息科技有限公司</a>.</strong> 版权所有-->
+    </footer>
+
+    <block name="ControlSidebar">
+        <!-- Control Sidebar -->
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Create the tabs -->
+            <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+                <li><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"></i></a></li>
+                <li><a href="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-gears"></i></a></li>
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content">
+
+                <!-- Home tab content -->
+                <div class="tab-pane" id="control-sidebar-home-tab">
+                    <h3 class="control-sidebar-heading">配置面板</h3>
+                    <ul class="control-sidebar-menu">
+                        <li>
+                            <a href="javascript:;">
+                                <i class="menu-icon fa fa-birthday-cake bg-red"></i>
+
+                                <div class="menu-info">
+                                    <h4 class="control-sidebar-subheading">标题</h4>
+
+                                    <p>描述</p>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- /.control-sidebar-menu -->
+
+                    <h3 class="control-sidebar-heading">事件进度</h3>
+                    <ul class="control-sidebar-menu">
+                        <li>
+                            <a href="javascript:;">
+                                <h4 class="control-sidebar-subheading">
+                                    事件名称
+                                    <span class="label label-danger pull-right">70%</span>
+                                </h4>
+
+                                <div class="progress progress-xxs">
+                                    <div class="progress-bar progress-bar-danger" style="width: 70%"></div>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- /.control-sidebar-menu -->
+
+                </div>
+                <!-- /.tab-pane -->
+
+                <!-- Stats tab content -->
+                <div class="tab-pane" id="control-sidebar-stats-tab">Stats Tab Content</div>
+                <!-- /.tab-pane -->
+
+                <!-- Settings tab content -->
+                <div class="tab-pane" id="control-sidebar-settings-tab">
+                    <form method="post">
+                        <h3 class="control-sidebar-heading">基础配置</h3>
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">
+                                配置
+                                <input type="checkbox" class="pull-right" checked>
+                            </label>
+                            <p>
+                                配置说明
+                            </p>
+                        </div>
+                        <!-- /.form-group -->
+                    </form>
+                </div>
+                <!-- /.tab-pane -->
+
+            </div>
+        </aside>
+        <!-- /.control-sidebar -->
+
+        <!-- Add the sidebar's background. This div must be placed
+             immediately after the control sidebar -->
+        <div class="control-sidebar-bg"></div>
+    </block>
+
+</div>
+<!-- ./wrapper -->
+
+</body>
+</html>
+
+<!-- jQuery 2.1.4 -->
+<script src="__COMMON__/js/jquery214.js"></script>
+<script src="__COMMON__/js/common.js"></script>
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="__PUBLIC__/AdminLTE/css/html5shiv.min.js"></script>
+<script src="__PUBLIC__/AdminLTE/css/respond.min.js"></script>
+<![endif]-->
+
+<!-- jQuery UI 1.11.4 -->
+<script src="__PLUS__/jQueryUI/jquery-ui.min.js"></script>
+<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+<script>
+    $.widget.bridge('uibutton', $.ui.button);
+</script>
+<!-- Bootstrap 3.3.5 -->
+<script src="__PLUS__/bootstrap/js/bootstrap.min.js"></script>
+<!-- Sparkline -->
+
+<script src="__PUBLIC__/AdminLTE/js/app.js"></script>
+<script src="__PUBLIC__/AdminLTE/js/demo.js"></script>
+
+<!-- Slimscroll -->
+<script src="__PLUS__/slimScroll/jquery.slimscroll.min.js"></script>
+<style>.slimScrollBar { background:#ccc!important; } </style>
+<!-- FastClick -->
+<script src="__PLUS__/fastclick/fastclick.min.js"></script>
+
+<!--layer-->
+<link rel="stylesheet" href="__PLUS__/layer/skin/layer.css"/>
+<script src="__PLUS__/layer/layer.js"></script>
+
+<script>
+    $(document).on('click','.btn-menu',(function(){
+        iframe_loading()
+        var src = $(this).attr('data-src');
+        var height = $('#iframe_content').css('height');
+        var iframe = '<iframe frameborder="0" id="iframe_content" name="iframe" style="width: 100%; background: transparent none repeat scroll 0% 0%; height: 100%; min-height: '+height+';" src="'+src+'"></iframe>'
+        $('#iframe_content').remove();
+        $('.content-wrapper').append(iframe);
+        $('.sidebar-menu li').removeClass('active');
+        $(this).addClass('active');
+    }))
+
+    $('#refresh_iframe').click(function(){
+        window.parent['iframe'].location.reload();iframe_loading();
+    })
+
+    $('.sidebar-menu li').eq(1).addClass('active');
+
+    var Siderbar = $('.sidebar').html();
+    function initSidebar(){
+        var sidebar_height = $(window).height() - 60
+        if( sidebar_height < 500 ){
+            sidebar_height = 500;
+        }
+        $('.sidebar').html(Siderbar)
+        $('.sidebar-menu').slimScroll({
+            height : sidebar_height+'px'
+        })
+    }
+    initSidebar();
+    $(window).resize(function(){
+        initSidebar();
+    })
+
+    $(document).keydown(function(e){
+        var code = e.keyCode;
+        if( code == 116  ){
+            e.preventDefault();
+            window.frames['iframe'].location.reload();
+        }
+    })
+
+
+</script>

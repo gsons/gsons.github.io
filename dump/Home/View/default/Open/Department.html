@@ -1,0 +1,35 @@
+<extend name="Tpl/Base" />
+<block name="Friend"></block>
+<block name="body">
+    <div class="container">
+        <div class="wrapper">
+            <include file="Breadcrumb" />
+            <div class="APList-banner">
+                <img src="__PUBLIC__/Home/img/AP-banner.jpg" />
+            </div>
+            <div class="info-content APApply APApplySearch-content">
+
+                <include file="Public/ProvinceSearch" />
+                <include file="Public/ApplySearch" />
+                <style>
+                    .province-search { margin-bottom:25px;border-bottom:1px solid #ddd!important; }
+                </style>
+                <div class="APApply-department">
+                    <volist name="category" id="vo">
+                        <div class="APdepartment-list">
+                            <div class="title">
+                                {$vo.name}
+                            </div>
+                            <div class="all">
+                                <volist name="vo.child" id="item">
+                                    <a href="{:U('Open/Ls',array('id'=>$item['id']))}">{$item.title}</a>
+                                </volist>
+                                <div class="clear"></div>
+                            </div>
+                        </div>
+                    </volist>
+                </div>
+            </div>
+        </div>
+    </div>
+</block>

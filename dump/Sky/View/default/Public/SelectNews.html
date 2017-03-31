@@ -1,0 +1,71 @@
+<extend name="Tpl:Basic" />
+<block name="body">
+    <div class="box box-success">
+        <div class="box-body">
+            <div class="container-fluid">
+                <div class="row news">
+                    <volist name="list" id="vo">
+                        <div class="box" data-id="{$vo.id}">
+                            <div class="box-header with-border">
+                                <button type="button" class="btn btn-info" onclick="ChooseNews(this)">选择</button>
+                            </div>
+                            <div class="box-body" title="{$vo.description}">
+                                <volist name="vo.articles" id="item" offset="0" length="1">
+                                    <div class="top">
+                                        <img src="{$item.thumb_media_id|getMediaSrc}" alt=""/>
+                                        <span>{$item.title}</span>
+                                    </div>
+                                </volist>
+                                <ul class="others">
+                                    <volist name="vo.articles" id="item" offset="1">
+                                        <li>
+                                            <span>{$item.title}</span>
+                                            <img src="{$item.thumb_media_id|getMediaSrc}" alt=""/>
+                                            <div class="clear"></div>
+                                        </li>
+                                    </volist>
+                                </ul>
+                            </div>
+                        </div>
+                    </volist>
+                  </div>
+            </div>
+        </div>
+        <div class="box-footer">
+            {$page}
+        </div>
+    </div>
+</block>
+<block name="script">
+    <style>
+        #waterfall-message { display:none; }
+        a { margin-top:20px;padding:5px!important; }
+        a img { width:100%;border:1px solid #f1f1f1;padding:2px; }
+    </style>
+    <!--layer-->
+    <link rel="stylesheet" href="__PLUS__/layer/skin/layer.css"/>
+    <script src="__PLUS__/layer/layer.js"></script>
+    <script src="__PLUS__/waterfall/src/waterfall.js"></script>
+    <script>
+        $('.news').waterfall({
+            itemCls: 'box',
+            colWidth: 280,
+            gutterWidth: 15,
+            gutterHeight: 15,
+            checkImagesLoaded: false,
+            path: function(page) {
+                return '';
+            }
+        });
+
+        function ChooseNews(obj){
+            var id = $(obj).parent().parent().attr('data-id')
+            var box = $(obj).parent().next().html();
+            $('#tab_1-5 .right-bar',parent.document).html('');
+            $('#tab_1-5 .right-bar',parent.document).html('<div class="news"><div class="box"><div class="box-body" title="">'+box+'</div></div></div><input type="hidden" name="news" value="'+id+'"/>');
+            $('#sub_type_id',parent.document).val(5);
+            var index = parent.layer.getFrameIndex(window.name);
+            parent.layer.close(index)
+        }
+    </script>
+</block>

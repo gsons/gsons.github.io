@@ -1,0 +1,97 @@
+<extend name="Tpl:Base" />
+<block name="body">
+    <!-- Main content -->
+    <section class="content">
+
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title iframe-title">模板列表</h3>
+                <div class="btn-toolbar">
+                    <a href="javascript:" class="btn btn-success ajax-submit ajax-get">获取模板</a>
+                </div>
+            </div><!-- /.box-header -->
+            <div class="box-body no-padding">
+                <table class="table table-striped">
+                    <tbody>
+                    <tr>
+                        <!--<th><input type="checkbox" class="check-all" data-name="ids[]"/></th>-->
+                        <th>编号</th>
+                        <th>标题</th>
+                        <th>一级行业</th>
+                        <th>二级行业</th>
+                        <th>详情</th>
+                        <th>例子</th>
+                    </tr>
+                    <volist name="list" id="vo">
+                        <tr>
+                            <!--<td><input type="checkbox" name="ids[]" value="{$vo.id}"/></td>-->
+                            <td>{$vo.id}</td>
+                            <td>{$vo.title}</td>
+                            <td>{$vo.primary_industry}</td>
+                            <td>{$vo.deputy_industry}</td>
+                            <td><a href="javascript:" data-content="{$vo.content}" onclick="ShowContent(this)">内容</a></td>
+                            <td><a href="javascript:" data-content="{$vo.example}" onclick="ShowContent(this)">例子</a></td>
+                        </tr>
+                    </volist>
+                    </tbody></table>
+            </div><!-- /.box-body -->
+            <div class="box-footer">
+                <!--<ul class="pagination">
+                    <li class="paginate_button previous disabled"><a href="#" >上一页</a> </li>
+                    <li class="paginate_button active"><a href="#">1</a></li>
+                    <li class="paginate_button "><a href="#">2</a></li>
+                    <li class="paginate_button next"><a href="#">下一页</a></li>
+                </ul>-->
+                {$page}
+            </div>
+        </div>
+    </section><!-- /.content -->
+
+    <div class="modal fade" id="AddGroup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title">新建分组</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-inline" action="{:U('Wechat/AddGroup')}" style="width:100%;" id="add">
+                        <input type="text" class="form-control" name="name" style="width:80%" />
+                        <button type="submit" style="width:18%;" class="btn btn-success ajax-submit ajax-post" data-form="add">提交</button>
+                    </form>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+
+    <div class="modal fade" id="GroupUser" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title">新建分组</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-inline" action="{:U('Wechat/GroupUser')}" style="width:100%;" id="Group">
+                        <input type="hidden" name="ids" />
+                        <select name="group_id" class="form-control" style="width:80%">
+                            <volist name="group" id="vo">
+                                <option value="{$vo.id}">{$vo.name}</option>
+                            </volist>
+                        </select>
+                        <button type="submit" style="width:18%;" class="btn btn-success ajax-submit ajax-post" data-form="Group">提交</button>
+                    </form>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+</block>
+<block name="script">
+    <script>
+        function ShowContent(obj){
+            layer.tips('<pre>'+$(obj).attr('data-content')+'</pre>', $(obj), {
+                tips: 1
+            });
+        }
+    </script>
+</block>

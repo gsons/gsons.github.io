@@ -1,0 +1,33 @@
+<extend name="Tpl/Base" />
+<block name="body">
+    <div class="container">
+        <div class="wrapper">
+            <include file="Breadcrumb" />
+            <div class="APList-banner">
+                <a href="{:U('Apply/Department')}"><img src="__PUBLIC__/Home/img/APApply-banner.jpg" /></a>
+            </div>
+
+            <div class="info-content APApply">
+
+                <include file="Public/ApplySearch" />
+
+                <div class="APApply-department">
+                    <volist name="category" id="vo">
+                        <div class="APdepartment-list">
+                            <div class="title">
+                                {$vo.name}
+                            </div>
+                            <div class="all">
+                                <volist name="vo.child" id="item">
+                                    <a href="{:U('Agree',array('id'=>$item['id']))}">{$item.title}</a>
+                                </volist>
+                                <div class="clear"></div>
+                            </div>
+                        </div>
+                    </volist>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</block>

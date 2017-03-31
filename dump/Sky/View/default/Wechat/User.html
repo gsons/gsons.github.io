@@ -1,0 +1,163 @@
+<extend name="Tpl:Base" />
+<block name="body">
+    <!-- Main content -->
+    <section class="content">
+
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title iframe-title">关注用户管理</h3>
+                <div class="btn-toolbar">
+                    <a href="javascript:" class="btn btn-success" onclick="SyncUser()">同步用户</a>
+                    <a href="javascript:" class="btn btn-success" onclick="GroupUser()">批量分组</a>
+                    <!--<a href="javascript:" class="btn btn-success" onclick="TplUser()">批量模板消息</a>-->
+                </div>
+            </div><!-- /.box-header -->
+            <div class="box-body no-padding">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <div class="box box-solid">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title"><a href="{:U('Wechat/Group')}">分组</a></h3>
+                                    <div class="box-tools">
+                                        <button class="btn btn-box-tool"><i class="fa fa-plus" onclick="AddGroup();"></i></button>
+                                    </div>
+                                </div>
+                                <div class="box-body no-padding">
+                                    <ul class="nav nav-pills nav-stacked">
+                                        <li <empty name="group_id">class="active"</empty> ><a href="{:U('')}"><i class="fa fa-inbox"></i> 全部<span class="label label-primary pull-right">{$count}</span></a></li>
+                                        <volist name="group" id="vo">
+                                            <li <eq name="group_id" value="$vo.id">class="active"</eq> >
+                                            <a href="{:U('',array('group_id'=>$vo['id']))}">
+                                                <i class="fa fa-inbox"></i>
+                                                {$vo.name}
+                                                <span class="label label-primary pull-right">{$vo.count}</span>
+                                            </a>
+                                            </li>
+                                        </volist>
+                                    </ul>
+                                </div><!-- /.box-body -->
+                            </div>
+                        </div>
+                        <div class="col-xs-9">
+                            <form method="post" id="ids">
+                            <table class="table table-striped">
+                                <tbody>
+                                <tr>
+                                    <th><input type="checkbox" class="check-all" data-name="ids[]"/></th>
+                                    <th>编号</th>
+                                    <th>OpenID</th>
+                                    <th>昵称</th>
+                                    <th>最后关注日期</th>
+                                    <th>状态</th>
+                                    <th>操作</th>
+                                </tr>
+                                <volist name="list" id="vo">
+                                    <tr>
+                                        <td><input type="checkbox" name="ids[]" value="{$vo.id}"/></td>
+                                        <td>{$vo.id}</td>
+                                        <td>{$vo.openid}</td>
+                                        <td><span class="wechat-nickname">{$vo.nickname|html_entity_decode|json_decode}</span></td>
+                                        <td>{$vo.sub_date|FormatDate="Y-m-d H:i"}</td>
+                                        <td>
+                                            <eq name="vo.is_sub" value="1">
+                                                <span class="green">关注</span>
+                                                <else />
+                                                <span class="red">取消关注</span>
+                                            </eq>
+                                        </td>
+                                        <td>
+                                            <a href="javascript:" onclick="GroupUser('ids[]={$vo.id}')">分组</a>
+                                            <!--<a href="{:U('Wechat/ReplyEdit',array('id'=>$vo['id']))}">模板消息</a>-->
+                                        </td>
+                                    </tr>
+                                </volist>
+                                </tbody></table>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div><!-- /.box-body -->
+            <div class="box-footer">
+                <!--<ul class="pagination">
+                    <li class="paginate_button previous disabled"><a href="#" >上一页</a> </li>
+                    <li class="paginate_button active"><a href="#">1</a></li>
+                    <li class="paginate_button "><a href="#">2</a></li>
+                    <li class="paginate_button next"><a href="#">下一页</a></li>
+                </ul>-->
+                {$page}
+            </div>
+        </div>
+    </section><!-- /.content -->
+
+    <div class="modal fade" id="AddGroup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title">新建分组</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-inline" action="{:U('Wechat/AddGroup')}" style="width:100%;" id="add">
+                        <input type="text" class="form-control" name="name" style="width:80%" />
+                        <button type="submit" style="width:18%;" class="btn btn-success ajax-submit ajax-post" data-form="add">提交</button>
+                    </form>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+
+    <div class="modal fade" id="GroupUser" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title">移动分组</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-inline" action="{:U('Wechat/GroupUser')}" style="width:100%;" id="Group">
+                        <input type="hidden" name="ids" />
+                        <select name="group_id" class="form-control" style="width:80%">
+                            <volist name="group" id="vo">
+                                <option value="{$vo.id}">{$vo.name}</option>
+                            </volist>
+                        </select>
+                        <button type="submit" style="width:18%;" class="btn btn-success ajax-submit ajax-post" data-form="Group">提交</button>
+                    </form>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+</block>
+<block name="script">
+    <script>
+        function SyncUser(){
+            layer.open({
+                type: 2,
+                skin:'layui-layer-molv',
+                title: '同步云记录',
+                shadeClose: true,
+                shade: 0.1,
+                area: ['90%', '500px'],
+                content: '{:U("Wechat/UserSync")}' //iframe的url
+            });
+        }
+
+        function AddGroup(){
+            $('#AddGroup').modal('show')
+        }
+
+        function GroupUser(data){
+            if( data == '' || data== undefined ) {
+                if ($('input[name="ids[]"]:checked').val() == undefined || $('input[name="ids[]"]:checked').val() == '') {
+                    layer.msg('请至少选择一个用户', {icon: 0})
+                    return false;
+                }
+                data = $('#ids').serialize();
+            }
+            $('#GroupUser').modal('show')
+            $('#Group input').val(data);
+        }
+    </script>
+</block>

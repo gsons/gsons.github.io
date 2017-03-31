@@ -1,0 +1,83 @@
+<extend name="Tpl:Base"/>
+<block name="body">
+    <!-- Main content -->
+    <section class="content">
+        <a href="#" class="ion-reply history-back" onclick="history.back(1)">&nbsp;返回</a>
+        <div class="nav-tabs-custom">
+            <form action="" id="form">
+                <div class="box box-success">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">批量设置权限</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="form-group rules-list">
+                            <label>权限列表：</label>
+                            <br />
+                            <br />
+                            <input type="checkbox" data-name="rules[]" data-check="check-all" /> <label>全选/全不选</label>
+                            <input type="checkbox" data-name="rules[]" data-check="check-opposite" /> <label>反选</label>
+                            <hr/>
+                            <PHP>
+                                $ids = explode(',',$info['rules']);
+                            </PHP>
+                            <volist name="top" id="item">
+                                <div>
+                                    <h4 style="border-bottom:1px solid #ccc;display:block;width:220px;padding-bottom:10px;margin-bottom:15px"><input type="checkbox" name="rules[]" value="{$item.id}" {:checkPoint($ids,$item["id"])} > {$item.name}</h4>
+                                    <ul class="Authlist">
+                                        <volist name="item.child" id="vo">
+                                            <li>
+                                                <div class="checkbox-control">
+                                                    <input type="checkbox" name="rules[]" value="{$vo.id}" {:checkPoint($ids,$vo["id"])} >
+                                                    <label>{$vo.name}</label>
+                                                </div>
+                                            </li>
+                                        </volist>
+                                        <div class="clear"></div>
+                                    </ul>
+                                    <hr/>
+                                </div>
+                            </volist>
+                            <div class="clear"></div>
+                        </div>
+                        <br>
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        <input type="hidden" name="ids" value="" />
+                        <button type="button" class="btn btn-primary ajax-submit ajax-post" data-form="form">提交</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+    <!-- /.content -->
+</block>
+<block name="script">
+    <script>
+        $.each( $('.rules-list h4 input'), function(){
+            var obj = $(this);
+            $.each(  $(this).parent().parent().next().find('input') ,function(){
+                if( $(this).prop('checked') ){
+                    obj.iCheck('check')
+                }
+            })
+            if( !$(this).prop('checked') ){
+                $(this).parent().parent().next().find('input').iCheck('disable');
+            }else{
+                $(this).parent().parent().next().find('input').iCheck('enable');
+            }
+        })
+
+        $('.rules-list h4 input').on('ifChanged',(function(){
+            if( $(this).prop('checked') ){
+                $(this).parent().parent().next().find('input').iCheck('enable');
+                $(this).parent().parent().next().find('input').iCheck('check');
+            }else{
+                $(this).parent().parent().next().find('input').iCheck('disable');
+            }
+        }))
+
+        $('input[name=ids]').val($('#form',parent.document).serialize());
+
+    </script>
+</block>

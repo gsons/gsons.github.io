@@ -1,0 +1,18 @@
+<li>
+    <div class="slider fa fa-fw fa-minus-square-o fa-plus-square-o"></div>
+    <div class="sort">
+        <input type="text" class="form-control" name="sort" value="{$vo.sort}" id="{$vo.id}" />
+    </div>
+    <div class="status">
+        <eq name="vo.status" value="1">正常</eq>
+        <eq name="vo.status" value="0">禁用</eq>
+    </div>
+    <div class="name">
+        <em style="margin-left:{$level*20}px;"></em>
+        <span>{$vo.name}</span>
+    </div>
+    <div class="action">
+        <input type="checkbox" name="type_id[]" value="{$vo.id}" data-name="{$vo.name}" class="navigation"  />
+    </div>
+    <div class="clear"></div>
+</li>

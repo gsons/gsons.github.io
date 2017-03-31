@@ -1,0 +1,522 @@
+<extend name="Tpl:Base"/>
+<block name="body">
+    <!-- Main content -->
+    <section class="content">
+        <a href="#" class="ion-reply history-back" onclick="history.back(1)">&nbsp;返回</a>
+
+        <div class="nav-tabs-custom">
+            <form action="" id="form">
+                <div class="box box-success">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">图文消息增加/修改</h3>
+                    </div>
+                    <div class="box-body">
+
+                        <div class="form-group">
+                            <label>关键词[双击删除]：<a href="javascript:" onclick="SelectKeyword()"><i
+                                    class="fa fa-fw fa-plus-circle"></i></a></label>
+
+                            <div class="box box-default">
+                                <div class="box-body" id="keyword-list">
+                                    <volist name="keyword" id="vo">
+                                        <label class="label label-default" onclick="Remove(this);"><input type="hidden"
+                                                                                                          name="keyword[]"
+                                                                                                          value="{$vo.id}"/>{$vo.keyword}</label>
+                                    </volist>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+
+                        <div class="news">
+                            <div class="box">
+                                <div class="box-body">
+                                    <div id="top" class="top on" data-id="1" onclick="changeEditor(this)">
+                                        <div class="img">
+                                            <empty name="info">
+                                                <i class="ion-image"></i>
+                                                <else/>
+                                                <img src="{$info[0]['image']['src']|makeMediaSrc}" alt=""/>
+                                            </empty>
+                                        </div>
+                                        <span>{$info[0].title}</span>
+                                    </div>
+                                    <ul class="others">
+                                        <volist name="info" id="vo" offset="1">
+                                            <li id="selector-{$i+1}" data-id="{$i+1}" onclick="changeEditor(this)">
+                                                <span>{$vo.title}</span>
+
+                                                <div class="img">
+                                                    <img src="{$vo.image.src|makeMediaSrc}" style="width:100%;" alt=""/>
+                                                </div>
+                                                <div class="clear"></div>
+                                            </li>
+                                        </volist>
+                                    </ul>
+                                    <empty name="info">
+                                        <a href="javascript:" id="add" onclick="addArticle()"><i
+                                                class="ion-plus"></i></a>
+                                    </empty>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="editor">
+                            <empty name="info">
+                                <div id="editor-1" class="editor">
+                                    <include file="Wechat/NewsEditContent"/>
+                                </div>
+                                <else/>
+
+                                <volist name="info" id="vo">
+                                    <if condition="$i == 1">
+                                        <div id="editor-{$i}" class="editor">
+                                            <include file="Wechat/NewsEditContent"/>
+                                        </div>
+                                        <else/>
+                                        <div id="editor-{$i}" class="editor" style="display:none;">
+                                            <include file="Wechat/NewsEditContent"/>
+                                        </div>
+                                    </if>
+
+                                </volist>
+
+                            </empty>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        <input type="hidden" name="sort" value="" />
+                        <input type="hidden" name="id" value="{:I('get.id')}"/>
+                        <button type="submit" class="btn btn-primary ajax-submit ajax-post" data-form="form" style="margin-left:430px;">提交</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+
+    </section>
+    <!-- /.content -->
+
+
+</block>
+<block name="script">
+    <style>
+        #keyword-list label {
+            cursor: pointer;
+        }
+
+        .news {
+            position: absolute;
+            z-index: 100;
+        }
+
+        .news .box {
+            width: 400px;
+        }
+
+        .news .box img {
+            height: auto !important;
+        }
+
+        .news .box .top {
+            border: 2px solid #fff;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .news .box .top.on {
+            border-color: #008d4c
+        }
+
+        .news .box .top span {
+            line-height: 24px;
+            font-size: 16px;
+            max-height: 50px;
+        }
+
+        .news .box .top .img {
+            font-size: 32px;
+            text-align: center;
+            overflow: hidden
+        }
+
+        .news .box .toolbar {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 66px;
+            transition: all 0.3s
+        }
+
+        .news .box .toolbar a {
+            float: left;
+            opacity: 0.4;
+            height: 100%;
+            width: 66px;
+            text-align: center;
+            color: #fff;
+            z-index: 100;
+            background: #444;
+            font-size: 32px;
+            line-height: 66px;
+        }
+
+        .news .box .toolbar a:hover {
+            opacity: 1
+        }
+
+        .news .box .others li {
+            position: relative;
+            overflow: hidden;
+            border: 2px solid #fff !important;
+            border-bottom: 2px solid #444 !important;
+            cursor: pointer;
+            margin-top: 4px;
+            height: 70px;
+        }
+
+        .news .box .others li.on {
+            border: 2px solid #008d4c !important;
+        }
+
+        .news .box .others li span {
+            font-size: 16px !important;
+            line-height: 26px;
+            overflow: hidden;
+            max-height: 100%;
+        }
+
+        .news .box .others li .img {
+            font-size: 32px;
+            text-align: center;
+            overflow: hidden;
+            padding: 0;
+            line-height: 66px;
+        }
+
+        .news .box .others li .img img {
+            padding: 0;
+        }
+
+        .news .box .others li .toolbar {
+            left: 0;
+        }
+
+        .news .box .others li .toolbar.off {
+            left: -132px;
+        }
+
+        #add {
+            height: 62px;
+            line-height: 62px;
+            font-size: 32px;
+            text-align: center;
+            display: block;
+        }
+
+        #editor {
+            margin-left: 420px;
+        }
+    </style>
+    <script src="__PLUS__/ueditor/ueditor.config.js"></script>
+    <script src="__PLUS__/ueditor/ueditor.all.js"></script>
+    <script src="__PLUS__/ueditor/ueditor.parse.min.js"></script>
+    <script>
+        var toolbars = [[
+            'source','undo', 'redo', '|',
+            'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'removeformat', 'formatmatch', '|', 'forecolor', 'backcolor',
+            'rowspacingtop', 'rowspacingbottom', 'lineheight', '|',
+            'fontfamily', 'fontsize', '|',
+            'indent', '|',
+            'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|', 'touppercase', 'tolowercase', '|', 'simpleupload', 'insertimage',
+            'link', 'imagenone', 'imageleft', 'imageright', 'imagecenter', 'wordimage', '|',
+            'drafts'
+        ]];
+        var editor = new Array();
+        editor[1] = UE.getEditor('details-1', {
+            toolbars: toolbars
+        });
+    </script>
+    <volist name="info" id="vo" offset="1">
+        <script>
+            UE.getEditor('details-{$i+1}', {
+                toolbars: toolbars
+            });
+        </script>
+    </volist>
+    <script>
+
+        getSort();
+
+        $.each($('.news .top .img'), function () {
+            $(this).css({
+                'height': parseInt($(this).css('width')) / 2 + 'px',
+                'line-height': parseInt($(this).css('width')) / 2 + 'px'
+            })
+        })
+
+        $(window).scroll(function () {
+            var toTop = $('body').scrollTop();
+            if (toTop > 180) {
+                $('.news').css({
+                    position: 'fixed',
+                    top: '10px'
+                })
+            } else {
+                $('.news').css({
+                    position: 'absolute',
+                    top: 'auto'
+                })
+            }
+        })
+
+        function addArticle() {
+            loading()
+            var length = $('.news .others li').length;
+            if (length >= 7) {
+                layer.msg('每篇图文消息最多发送8篇文章', {icon: 0})
+                loaded()
+                return false;
+            }
+            console.log(length);
+
+            if (length == 0) {
+                var last = 2;
+            } else {
+                var max = 0;
+                $.each($('.others li'), function () {
+                    var now = parseInt($(this).attr('data-id'));
+                    if (now > max) {
+                        max = now;
+                    }
+                })
+                last = max + 1;
+
+            }
+            console.log(last);
+
+            var tool = '<div class="toolbar off">' +
+                    '<a href="javascript:" class="moveup-article"><i class="ion-arrow-up-a"></i></a>' +
+                    '<a href="javascript:" class="remove-article"><i class="ion-android-delete"></i></a>' +
+                    '<div class="clear"></div></div>'
+            $('.news .others').append('<li id="selector-' + last + '" data-id="' + last + '" onclick="changeEditor(this)"><span>标题</span><div class="img"><i class="ion-image"></i></div><div class="clear"></div>' + tool + '</li>')
+            $.get('{:U("Wechat/NewsEditContent")}', function (data) {
+
+                $('#editor').append('<div id="editor-' + last + '" class="editor">' + data + '</div>')
+
+                $('#editor-' + last + ' .detail-editor').attr('id', 'details-' + last)
+                $('#editor-' + last + ' .detail-editor').attr('name', 'content-' + last)
+                $('#editor-' + last + ' .cover').prev().attr('data-id', last)
+                $('#editor-' + last + ' input[name="show_cover_pic[]"]').attr('value', last)
+
+                editor[last] =  UE.getEditor('details-' + last, {
+                    toolbars: toolbars
+                });
+
+                $('#editor-' + last + ' input').iCheck({
+                    checkboxClass: 'icheckbox_square-blue',
+                    radioClass: 'iradio_square-blue',
+                    increaseArea: '20%' // optional
+                });
+
+                $('.news .others li').last().addClass('on').siblings().removeClass('on');
+                $('.top').removeClass('on')
+                $('.editor').hide();
+                $('.editor').last().fadeIn();
+
+                loaded()
+                getSort()
+            });
+        }
+
+        $(document).on('focusin', 'input[type=text]', (function () {
+            var input = $(this);
+            $(document).keyup(function () {
+                var val = input.val();
+                if (val == '') {
+                    val = '标题'
+                }
+                if (input.attr('name') == 'title[]') {
+                    var id = $(input).parent().parent().parent().parent().parent().attr('id');
+                    var arr = id.split('-');
+
+                    var key = 1;
+                    $.each($('.editor'), function (data) {
+                        if ($(this).attr('id') == id) {
+                            return false;
+                        }
+                        key++;
+                    })
+
+                    if (key == 1) {
+                        $('.top span').html(val);
+                    } else {
+                        $('#selector-' + arr[1]).find('span').html(val);
+                    }
+                }
+                var max = input.attr('maxlength');
+                var status;
+                if (val.length > max) {
+                    status = 'red'
+                } else {
+                    status = 'green'
+                }
+                input.next().html('<span class="' + status + '">' + val.length + '/' + max + '</span>')
+            })
+        }))
+
+        $(document).on('focusin', 'textarea', (function () {
+            var textarea = $(this);
+            $(document).keydown(function () {
+                var val = textarea.val();
+                var max = textarea.attr('maxlength');
+                var status;
+                if (val.length > max) {
+                    status = 'red'
+                } else {
+                    status = 'green'
+                }
+                textarea.next().html('<span class="' + status + '">' + val.length + '/' + max + '</span>')
+            })
+        }))
+
+        var is_change = false;
+
+        $(document).on('click', '.moveup-article', (function (event) {
+            is_change = true;
+            var li = $(this).parent().parent();
+            var is_first = li.prev().length;
+            var self_id = li.attr('data-id')
+            if (!is_first) {
+                var self_img = li.children().eq(1).html();
+                var self_title = li.children().eq(0).html();
+
+                var target_id = $('.news .top').attr('data-id');
+                var target_img = $('.news .top .img').html();
+                var target_title = $('.news .top span').html();
+
+                $('.news .top').attr('data-id', self_id);
+                $('.news .top .img').html(self_img);
+                $('.news .top span').html(self_title);
+
+                $('.others li').eq(0).attr('data-id', target_id);
+                $('.others li').eq(0).attr('id', 'selector-'+target_id);
+                $('.others li').eq(0).children().eq(1).html(target_img);
+                $('.others li').eq(0).children().eq(0).html(target_title);
+
+                var self_content = editor[self_id].getContent();
+                var position = $('#editor-' + self_id + ' #details-' + self_id).prev();
+                editor[self_id].destroy();
+                $('textarea[name=content-'+self_id+']').remove();
+                $('#editor-' + self_id + ' #details-' + self_id).remove();
+                position.after('<script name="content-'+self_id+'" id="details-'+self_id+'" class="detail-editor" type="text/plain" style="height:300px;">'+self_content+'<\/script>');
+
+                $('#editor-' + self_id).insertBefore($('#editor-' + target_id))
+                $('#editor-' + self_id).fadeIn().siblings().hide();
+
+                editor[self_id] = UE.getEditor('details-' + self_id, {
+                    toolbars: toolbars
+                });
+
+                $('.top').addClass('on');
+                $('.others li').removeClass('on')
+
+            } else {
+                var target = li.prev();
+                var target_id = target.attr('data-id');
+
+                var self_content = editor[self_id].getContent();
+                var position = $('#editor-' + self_id + ' #details-' + self_id).prev();
+                editor[self_id].destroy();
+                $('textarea[name=content-'+self_id+']').remove();
+                $('#editor-' + self_id + ' #details-' + self_id).remove();
+                position.after('<script name="content-'+self_id+'" id="details-'+self_id+'" class="detail-editor" type="text/plain" style="height:300px;">'+self_content+'<\/script>');
+
+                $(li).insertBefore(target);
+
+                $('#editor-' + self_id).insertBefore($('#editor-' + target_id))
+                $('#editor-' + self_id).fadeIn().siblings().hide();
+
+                editor[self_id] = UE.getEditor('details-' + self_id, {
+                    toolbars: toolbars
+                });
+
+                var now = $('.others .on').attr('data-id');
+                if (now != li.attr('data-id')) {
+                    li.addClass('on').siblings().removeClass('on');
+                    $('.top').removeClass('on')
+                }
+
+            }
+            getSort();
+            return false;
+        }))
+
+        $(document).on('click', '.remove-article', (function (event) {
+            is_change = true;
+            var id = $(this).parent().parent().attr('data-id');
+            editor[id].destroy();
+            $('textarea[name=content-'+id+']').remove();
+            $(this).parent().parent().remove();
+            $('.top').addClass('on');
+            $('#editor-' + id).remove();
+            $('.others li').removeClass('on')
+            $('.editor').first().fadeIn();
+            return false;
+        }))
+
+        function changeEditor(obj) {
+            setTimeout(function () {
+                if (is_change) {
+                    is_change = false;
+                    return false;
+                }
+                var id = $(obj).attr('data-id');
+                if ($(obj).hasClass('top')) {
+                    $(obj).addClass('on')
+                    $('.news .others li').removeClass('on')
+                } else {
+                    $('.top').removeClass('on')
+                    $(obj).addClass('on').siblings().removeClass('on');
+                }
+                $('#editor-' + id).fadeIn().siblings().hide();
+            }, 100)
+        }
+
+        function getCover(obj) {
+            var id = $(obj).attr('data-id');
+            var url = '{:U("Wechat/SelectCover")}?id=' + id;
+            OpenFrame(url);
+        }
+
+        function getSort(){
+            var sort = new Array();
+            sort[0] = $('#top').attr('data-id')
+            var i = 1;
+            $.each($('.others li'),function(){
+                sort[i] = $(this).attr('data-id')
+                i++;
+            })
+            $('input[name=sort]').val(sort.join(','))
+        }
+
+        $('.top').mouseover(function () {
+            $(this).find('.toolbar').removeClass('off')
+        })
+
+        $('.top').mouseleave(function () {
+            $(this).find('.toolbar').addClass('off')
+        })
+
+        $(document).on('mouseover', '.others li', (function () {
+            $(this).find('.toolbar').removeClass('off')
+        }))
+
+        $(document).on('mouseleave', '.others li', (function () {
+            $(this).find('.toolbar').addClass('off')
+        }))
+
+    </script>
+</block>

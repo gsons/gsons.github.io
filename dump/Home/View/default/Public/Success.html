@@ -1,0 +1,16 @@
+<extend name="Tpl/Base" />
+<block name="body">
+    <div class="container">
+        <div class="wrapper">
+            <include file="Breadcrumb" />
+            <div class="APApplySystemResult">
+                <div class="success">
+                    <span><img src="__PUBLIC__/Home/img/success.png" /></span>
+                    <span class="tip">{$message}</span>
+                    <div class="clear"></div>
+                </div>
+                <a href="<?php echo($jumpUrl); ?>" class="return">返回</a>
+            </div>
+        </div>
+    </div>
+</block>

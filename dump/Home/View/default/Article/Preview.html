@@ -1,0 +1,119 @@
+<extend name="Tpl/Base" />
+<block name="body">
+    <div class="container">
+        <div class="wrapper">
+            <div class="info-content news-detail">
+                <div class="news-detail-left">
+                    <div class="news-detail-info-title">
+                        {$arc.title}
+                    </div>
+                    <div class="news-detail-info-describe">
+                        <span class="desc-span">作者：{$arc.source}</span>
+                        <span class="desc-span">来源：{$arc.writer}</span>
+                        <span class="desc-span">发布时间：{$arc.create_date|date='Y年m月d日',###}</span>
+                        <span class="desc-span">点击数： {$arc.click} 次</span>
+                    </div>
+                    <div class="news-detail-info-setting">
+                        <a href="javascript:void(0);" title="打印页面" class="print-a" >打印页面</a>
+                        <div class="fontsize">
+                            <span>字号：</span>
+                            <a href="javascript:void(0);" class="t1"></a>
+                            <a href="javascript:void(0);" class="t2"></a>
+                            <a href="javascript:void(0);" class="t3"></a>
+                            <span class="clear_f"></span>
+                        </div>
+                        <div class="bgcolor">
+                            <span>视力保护：</span>
+                            <a href="javascript:void(0);" class="c1"></a>
+                            <a href="javascript:void(0);" class="c2"></a>
+                            <a href="javascript:void(0);" class="c3"></a>
+                            <a href="javascript:void(0);" class="c4"></a>
+                            <a href="javascript:void(0);" class="c5"></a>
+                            <span class="clear_f"></span>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                    <div class="news-detail-info-content">
+                        <div id="video"></div>
+                        {$arc.content|htmlspecialchars_decode|makeImgSrc}
+                        </p></td>
+                        </tr>
+                        </table>
+                    </div>
+
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+    </div>
+</block>
+<block name="Friend"></block>
+<block name="script">
+    <PHP>
+        $video = json_decode(htmlspecialchars_decode($arc['video']),true);
+        if($video){
+    </PHP>
+        <script type="text/javascript" src="__PLUS__/ckplayer/ckplayer.js" charset="utf-8"></script>
+        <script type="text/javascript">
+            var flashvars={
+                f:'__UPLOAD__/{$video.src}',
+                c:0,
+                p:1,
+                b:1,
+                i:'__UPLOAD__/{$arc.src}'
+            };
+            var params= { bgcolor:'#FFF',allowFullScreen:true,allowScriptAccess:'always',wmode:'transparent' };
+            CKobject.embedSWF('__PLUS__/ckplayer/ckplayer.swf','video','ckplayer_a1','705','450',flashvars,params);
+        </script>
+    <PHP>
+        }
+    </PHP>
+    <script src="__PUBLIC__/Home/js/jquery.PrintArea.min.js"></script>
+    <script>
+
+        /*文章详情设置*/
+        $(function(){
+            $('.news-detail-info-setting .bgcolor a').click(function(){
+                $('.news-detail-comment-title').css('background','transparent')
+                $('.news-detail-info-describe').css('background','transparent')
+
+            })
+            $('.news-detail-info-setting .bgcolor a.c1').click(function(){
+                $('.news-detail-comment-title').css('background','#eee')
+                $('.news-detail .news-detail-left').css('background-color','#fff')
+                $('.news-detail-info-describe').css('background-color','#F1F1F1')
+                $('.news-detail-info-setting').css('border-color','#ccc')
+            })
+            $('.news-detail-info-setting .bgcolor a.c2').click(function(){
+                $('.news-detail .news-detail-left').css('background-color','#FEF2C8')
+
+                $('.news-detail-info-setting').css('border-color','#ccc')
+            })
+            $('.news-detail-info-setting .bgcolor a.c3').click(function(){
+                $('.news-detail .news-detail-left').css('background-color','#CEEFFF')
+                $('.news-detail-info-setting').css('border-color','#ccc')
+            })
+            $('.news-detail-info-setting .bgcolor a.c4').click(function(){
+                $('.news-detail .news-detail-left').css('background-color','#C4FDDD')
+                $('.news-detail-info-setting').css('border-color','#ccc')
+            })
+            $('.news-detail-info-setting .bgcolor a.c5').click(function(){
+                $('.news-detail .news-detail-left').css('background-color','#D9D9FF')
+                $('.news-detail-info-setting').css('border-color','#ccc')
+            })
+            $(' .news-detail-info-setting .qrcode a').hover(function(){
+                $(' .news-detail-info-setting .qrcode a p.qrcodeoutput').toggle()
+            })
+            $(".news-detail-info-setting .print-a ").click(function(){
+                $(".news-detail-info-describe").remove();
+                $(".news-detail-info-setting").remove();
+                $(".news-detail .news-detail-left ").printArea();
+                window.location.reload();
+            });
+            $('.news-detail-info-setting .fontsize a.t1').click(function(){
+            })
+        })
+
+
+    </script>
+</block>

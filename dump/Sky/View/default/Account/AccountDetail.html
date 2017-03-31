@@ -1,0 +1,266 @@
+<extend name="Tpl:Base"/>
+<block name="body">
+    <!-- Main content -->
+    <section class="content">
+        <a href="#" class="ion-reply history-back" onclick="history.back(1)">&nbsp;返回</a>
+
+        <div class="box">
+
+            <div class="box-header">
+                <h3 class="box-title">用户基础信息</h3>
+            </div>
+            <!-- /.box-header -->
+
+            <div class="box-body no-padding">
+                <table class="table">
+                    <tbody>
+                    <tr>
+                        <td width="100px;">用户名</td>
+                        <td>{$info.username}</td>
+                    </tr>
+                    <tr>
+                        <td>用户编码</td>
+                        <td>{$info.code}</td>
+                    </tr>
+                    <tr>
+                        <td>用户昵称</td>
+                        <td>{$info.nickname}</td>
+                    </tr>
+                    <tr>
+                        <td>用户头像</td>
+                        <td>
+                            <notempty name="info.avatar"><img src="__UPLOAD__/{$info.avatar}" alt=""/></notempty>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>用户姓名</td>
+                        <td>{$info.realname}</td>
+                    </tr>
+                    <tr>
+                        <td>用户城市</td>
+                        <td>{$info.city}</td>
+                    </tr>
+                    <tr>
+                        <td>用户生日</td>
+                        <td>{$info.birthday|FormatDate}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.box-body -->
+
+        </div>
+
+        <div class="box">
+
+            <div class="box-header">
+                <h3 class="box-title">用户身份信息</h3>
+            </div>
+            <!-- /.box-header -->
+
+            <div class="box-body no-padding">
+                <table class="table">
+                    <tbody>
+                    <tr>
+                        <td width="100px;">身份证</td>
+                        <td>{$info.idcard}</td>
+                    </tr>
+                    <tr>
+                        <td>身份证正面照</td>
+                        <td>
+                            <notempty name="info.idcard_front"><img src="__UPLOAD__/{$info.idcard_front}" alt=""/>
+                            </notempty>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>身份证反面照</td>
+                        <td>
+                            <notempty name="info.idcard_back"><img src="__UPLOAD__/{$info.idcard_back}" alt=""/>
+                            </notempty>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.box-body -->
+
+        </div>
+
+        <div class="box">
+
+            <div class="box-header">
+                <h3 class="box-title">用户状态信息</h3>
+            </div>
+            <!-- /.box-header -->
+
+            <div class="box-body no-padding">
+                <table class="table">
+                    <tbody>
+                    <tr>
+                        <td width="100px;">创建日期</td>
+                        <td>{$info.create_date|FormatDate}</td>
+                    </tr>
+                    <tr>
+                        <td>更新日期</td>
+                        <td>{$info.update_date|FormatDate}</td>
+                    </tr>
+                    <tr>
+                        <td>注册IP</td>
+                        <td>{$info.ip}</td>
+                    </tr>
+                    <tr>
+                        <td>审核</td>
+                        <td>
+                            <eq name="info.status" value="1"> 审核通过
+                                <else/>
+                                未审核
+                            </eq>
+                            {$info.ip}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>状态</td>
+                        <td>
+                            <eq name="info.locked" value="1"> 锁定
+                                <else/>
+                                正常
+                            </eq>
+                            {$info.ip}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.box-body -->
+
+        </div>
+
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">用户浏览记录</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <div class="dataTables_wrapper form-inline dt-bootstrap">
+                    <div class="row">
+                        <div class="col-sm-6"></div>
+                        <div class="col-sm-6"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                <tr role="row">
+                                    <th rowspan="1" colspan="1" >编号
+                                    </th>
+                                    <th rowspan="1" colspan="1">类型
+                                    </th>
+                                    <th rowspan="1" colspan="1">数据名称
+                                    </th>
+                                </thead>
+                                <tbody>
+                                <tr role="row" class="odd">
+                                    <td class="sorting_1">Gecko</td>
+                                    <td>Firefox 1.0</td>
+                                    <td>Win 98+ / OSX.2+</td>
+                                </tr>
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <th rowspan="1" colspan="1">编号</th>
+                                    <th rowspan="1" colspan="1">类型</th>
+                                    <th rowspan="1" colspan="1">名称</th>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <div class="dataTables_info">
+                                1-10条 共 50条
+                            </div>
+                        </div>
+                        <div class="col-sm-7">
+                            <div class="dataTables_paginate paging_simple_numbers">
+                                <ul class="pagination">
+                                    <li class="paginate_button previous disabled"><a href="#" >上一页</a> </li>
+                                    <li class="paginate_button active"><a href="#">1</a></li>
+                                    <li class="paginate_button "><a href="#">2</a></li>
+                                    <li class="paginate_button next"><a href="#">下一页</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.box-body -->
+        </div>
+
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">用户下载记录</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <div class="dataTables_wrapper form-inline dt-bootstrap">
+                    <div class="row">
+                        <div class="col-sm-6"></div>
+                        <div class="col-sm-6"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                <tr role="row">
+                                    <th rowspan="1" colspan="1" >编号
+                                    </th>
+                                    <th rowspan="1" colspan="1">类型
+                                    </th>
+                                    <th rowspan="1" colspan="1">数据名称
+                                    </th>
+                                </thead>
+                                <tbody>
+                                <tr role="row" class="odd">
+                                    <td class="sorting_1">Gecko</td>
+                                    <td>Firefox 1.0</td>
+                                    <td>Win 98+ / OSX.2+</td>
+                                </tr>
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <th rowspan="1" colspan="1">编号</th>
+                                    <th rowspan="1" colspan="1">类型</th>
+                                    <th rowspan="1" colspan="1">名称</th>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <div class="dataTables_info">
+                                1-10条 共 50条
+                            </div>
+                        </div>
+                        <div class="col-sm-7">
+                            <div class="dataTables_paginate paging_simple_numbers">
+                                <ul class="pagination">
+                                    <li class="paginate_button previous disabled"><a href="#" >上一页</a> </li>
+                                    <li class="paginate_button active"><a href="#">1</a></li>
+                                    <li class="paginate_button "><a href="#">2</a></li>
+                                    <li class="paginate_button next"><a href="#">下一页</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.box-body -->
+        </div>
+
+    </section>
+    <!-- /.content -->
+</block>

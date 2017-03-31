@@ -1,0 +1,58 @@
+<extend name="Tpl/Base" />
+<block name="body">
+    <div class="container interact">
+        <div class="wrapper interact-interview">
+            <div class="interview-head">
+                <a href="" class="interview-title">在线访谈</a>
+                <a href="" class="interview-title" style="margin-left: 510px;">往期访谈</a>
+            </div>
+            <div class="interview-content">
+                <div class="interview-left">
+                    <span class="left-head">本期节目</span>
+                    <div class="left-box">
+                        <a href=""><img src="__PUBLIC__/Home/img/online-img.png"/></a>
+                        <div class="box-main">
+                            <div class="list">
+                                <span>主题 :</span>
+                                <span class="text"><a href="">郁南县金融工作专题访谈郁南县金融工作专题访谈</a></span>
+                            </div>
+                            <div class="list">
+                                <span>嘉宾 :</span>
+                                <span class="text">郁南县人民政府金融工作办公室</span>
+                            </div>
+                            <div class="list">
+                                <span>时间 :</span>
+                                <span class="text">2016-10-26</span>
+                            </div>
+                            <div class="list">
+                                <span>摘要 :</span>
+                                <span class="text">郁南县金融工作专题访谈</span>
+                            </div>
+                            </table>
+                            <a href="" class="enter">【进入会场】</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="interview-right">
+                    <a href=""></a>
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+        <div class="wrapper interact-buttom">
+        </div>
+        <div class="wrapper interact-mailbox">
+        </div>
+    </div>
+</block>
+<block name="script">
+    <script>
+        /*新闻焦点图*/
+        jQuery(".slideBox").slide({mainCell:".bd ul",autoPlay:true,effect:'left',interTime:3000});
+        /*专题栏目轮播图*/
+        jQuery(".about-features .picScroll-left").slide({titCell:".hd ul",mainCell:".bd ul",autoPage:true,effect:"left",autoPlay:true,vis:4,trigger:"click"});
+        /*专题栏目轮播图*/
+        jQuery(".picScroll-left").slide({titCell:".hd ul",mainCell:".bd ul",autoPage:true,effect:"left",autoPlay:true,vis:3,trigger:"click"});
+
+    </script>
+</block>

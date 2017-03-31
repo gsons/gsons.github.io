@@ -1,0 +1,58 @@
+<extend name="Tpl:Base"/>
+<block name="body">
+    <!-- Main content -->
+    <section class="content">
+        <a href="#" class="ion-reply history-back" onclick="history.back(1)">&nbsp;返回</a>
+        <div class="nav-tabs-custom">
+            <form action="" id="form">
+                <div class="box box-success">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">导航增加/修改</h3>
+                    </div>
+                    <div class="box-body">
+                        <br>
+                        <div class="form-group">
+                            <label>名称：</label>
+                            <input type="text" class="form-control" placeholder="名称" name="name"
+                                   value="{$info.name}">
+                        </div>
+                        <br>
+                        <div class="form-group">
+                            <label>链接：</label>
+                            <input type="text" class="form-control" placeholder="链接" name="src"
+                                   value="{$info.src}">
+                        </div>
+                        <br>
+                        <div class="form-group">
+                            <label>显示：</label>
+                            <input type="radio" class="form-control" name="usage" value="1" <notempty name="info.usage"><eq name="info.usage" value="1">checked</eq> <else/> checked </notempty> /> 显示 &nbsp;
+                            <input type="radio" class="form-control" name="usage" value="0" <eq name="info.usage" value="0">checked</eq> /> 隐藏
+                        </div>
+                        <br>
+                        <div class="form-group">
+                            <label>是否为弹出新页面：</label>
+                            <input type="radio" class="form-control" name="jump" value="1" <notempty name="info.jump"><eq name="info.jump" value="1">checked</eq> <else/> checked </notempty> /> 是 &nbsp;
+                            <input type="radio" class="form-control" name="jump" value="0" <eq name="info.jump" value="0">checked</eq> /> 否
+                        </div>
+                        <br>
+                        <div class="form-group">
+                            <label>排序：</label>
+                            <input type="text" class="form-control" placeholder="排序" name="sort"
+                                   value="{$info.sort}">
+                        </div>
+                        <br>
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        <input type="hidden" name="id" value="{:I('get.id')}" />
+                        <button type="button" class="btn btn-primary ajax-submit ajax-post" data-form="form">提交</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+
+    </section>
+    <!-- /.content -->
+
+</block>

@@ -1,0 +1,42 @@
+<extend name="Tpl/Search" />
+<block name="body">
+    <div class="container index-top">
+        <div class="top-tap">
+            <a href="./mobile.php">手机端</a>
+            <span>|</span>
+            <a href="{:U('Index/Index')}">返回首页</a><!--
+            <span>|</span>
+            <a href="">设为首页</a>-->
+        </div>
+    </div>
+    <div class="wrapper index-main">
+        <img src="__PUBLIC__/Home/img/logo.png"/>
+        <form action="{:U('Lists')}" method="get" id="search">
+            <div class="index-search">
+                <input type="text" name="search" value="" placeholder="输入关键字进行搜索"/>
+                <a href="javascript:;" onclick="$('#search').submit();"></a>
+            </div>
+        </form>
+    </div>
+    <div class="wrapper index-footer">
+        <div class="index-footer-box">
+            <div class="index-code" style="margin-left: 100px;width: 200px;">
+                <div class="Tencent-blog">
+                    <img src="__PUBLIC__/Home/img/code.png" />
+                    微信公众号
+                </div>
+            </div>
+            <div class="index-other">
+                <p>
+                    <a href="">设为首页</a>
+                    <a href="">关于我们</a>
+                <div class="clear"></div>
+                </p>
+                <p>版权：广东郁南版权所有</p>
+                <p>粤ICP备05139918</p>
+            </div>
+            <div class="clear"></div>
+        </div>
+
+    </div>
+</block>

@@ -1,0 +1,19 @@
+<?php
+namespace Sky\Model;
+use Sky\Logic\BaseLogic;
+
+class ArticleTypeModel extends BaseLogic {
+
+    protected $_validate = array(
+
+        array('name','require','请填写分类'),
+
+    );
+
+    protected $_auto = array(
+        array('create_date','time',BaseLogic::MODEL_INSERT,'function'),
+        array('update_date','time',BaseLogic::MODEL_BOTH,'function'),
+
+    );
+
+}

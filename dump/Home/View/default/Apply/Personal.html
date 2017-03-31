@@ -1,0 +1,254 @@
+<extend name="Tpl/Base" />
+<block name="body">
+    <div class="container">
+        <div class="wrapper">
+            <include file="Breadcrumb" />
+            <div class="APList-banner">
+                <a href="{:U('Apply/Department')}"><img src="__PUBLIC__/Home/img/APApply-banner.jpg" /></a>
+            </div>
+            <div class="info-content APApply APApplySearch-content">
+
+                <include file="Public/ApplySearch" />
+
+                <div class="APApplySystemTable" id="content">
+                    <form action="" id="apply">
+                        <div class="interact-apply">
+                            <table>
+                                <tr>
+                                    <td class="title" colspan="8">{$name}信息公开申请表</td>
+                                </tr>
+                                <tr>
+                                    <td class="notice" colspan="8">
+                                        <span style="font-weight: bold;">公民</span>（注意：标有 <em>*</em> 的必须填写；请填写电子邮箱，以方便我们向您反馈处理信息）
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th style="padding-top:15px;"><em>*</em> 姓 名</th>
+                                    <td style="padding-top:15px;"><input type="text" name="realname" /></td>
+
+                                    <th style="padding-top:15px;"> 工作单位</th>
+                                    <td style="padding-top:15px;"><input type="text" name="company" /></td>
+                                </tr>
+                                <tr>
+                                    <th><em>*</em>身份证号码</th>
+                                    <td><input type="text" name="identity_number"/></td>
+
+                                    <th><em>*</em>邮政编码</th>
+                                    <td><input type="text" name="zipcode" /></td>
+                                </tr>
+                                <tr>
+                                    <th><em>*</em> 联系电话</th>
+                                    <td><input type="text" name="telephone" /></td>
+
+                                    <th><em>*</em> 手机号码</th>
+                                    <td><input type="text" name="phone_number"/></td>
+                                </tr>
+                                <tr>
+                                    <th><em>*</em> 电子邮箱</th>
+                                    <td><input type="text" name="email" /></td>
+                                </tr>
+                                <tr>
+                                    <th style="padding-bottom:15px;"><em>*</em> 通信地址</th>
+                                    <td colspan="7" style="padding-bottom:15px;"><input type="text" name="address" style="width: 600px;" /></td>
+                                </tr>
+                                <tr>
+                                    <td class="notice" colspan="8">
+                                        <span style="font-weight: bold;">所需的政府信息</span>（注意：标有 <em>*</em> 的必须填写）
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th style="padding-top:15px;">文件名称</th>
+                                    <td style="padding-top:15px;"><input type="text" name="file_name" /></td>
+                                    <th style="padding-top:15px;">文号</th>
+                                    <td colspan="7" style="padding-top:15px;"><input type="text" name="document_number" /></td>
+                                </tr>
+
+                                <tr>
+                                    <th style="vertical-align:top;padding-top:10px;"><em>*</em>其他特征描述</th>
+                                    <td colspan="7" style="padding-top:10px;padding-bottom:10px;">
+                                        <textarea name="description"></textarea>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="notice" colspan="8" style="text-align: left;padding-left: 30px;">
+                                        <em>* </em>所需政府信息用途(请上传自身特殊需要的相关证明)：
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td style="padding-top:10px;" class="other" colspan="8" >
+                                        <div class="radio-box">
+                                            <input type="radio" checked="checked" class="radio-a" name="purpose" value="0" />
+                                            <span>自身生活需要</span>
+                                        </div>
+                                        <div class="radio-box">
+                                            <input type="radio" class="radio-a"  name="purpose" value="1" />
+                                            <span>自身生产需要</span>
+                                        </div>
+                                        <div class="radio-box">
+                                            <input type="radio" class="radio-a"  name="purpose" value="2" />
+                                            <span>自身科研需要</span>
+                                        </div>
+                                        <div class="radio-box">
+                                            <input type="radio" class="radio-a"  name="purpose" value="3" />
+                                            <span>查验自身信息</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td  class="other" colspan="8" >
+                                        <input type="hidden" id="attach" name="usage_attach" />
+                                        <input type="text" id="name" name="usage_attach" />
+                                        <input id="file_upload" name="file_upload" type="file" readonly >
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="8" class="other">（本系统只支持上传word文档、jpg图片以及rar、zip等压缩文件，若上传多个文件，请采用rar或zip进行压缩）</td>
+                                </tr>
+                                <tr>
+                                    <th class="notice" colspan="8" style="text-align: left;padding-left: 30px;">
+                                        <em>* </em> 是否申请减免费用（请上传申请减免的相关证明）：
+                                    </th>
+                                </tr>
+
+                                <tr>
+                                    <td style="padding-top:10px;" class="other" colspan="8" >
+                                        <div class="radio-box">
+                                            <input type="radio" checked="checked" class="radio-a" name="fee_waivers" value="1" />
+                                            <span>是</span>
+                                        </div>
+                                        <div class="radio-box">
+                                            <input type="radio" class="radio-a" name="fee_waivers" value="0" />
+                                            <span>否</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="8" class="other" style="font-size: 14px;">(如果选择“是”请上传申请减免的相关证明)</td>
+                                </tr>
+                                <tr>
+                                    <td class="other" colspan="8" >
+                                        <input type="hidden" id="attach1" name="discount_attach" />
+                                        <input type="text" id="name1" name="discount_name" />
+                                        <input id="file_upload1" name="file_upload" type="file" readonly>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="8" class="other">（本系统只支持上传word文档、jpg图片以及rar、zip等压缩文件，若上传多个文件，请采用rar或zip进行压缩）</td>
+                                </tr>
+                                <tr>
+                                    <th class="notice" colspan="8" style="text-align: left;padding-left: 30px;">
+                                        <em>* </em>提供政府信息的指定方式(单选)：
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td style="padding-top:10px;" class="other" colspan="8" >
+                                        <div class="radio-box">
+                                            <input type="radio" checked="checked" class="radio-a" name="provide_mode" value="0"/>
+                                            <span>电子邮件</span>
+                                        </div>
+                                        <div class="radio-box">
+                                            <input type="radio" class="radio-a" name="provide_mode" value="1"/>
+                                            <span>纸质</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="notice" colspan="8" style="text-align: left;padding-left: 30px;">
+                                        <em>* </em> 获取政府信息的方式(单选)：
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td style="padding-top:10px;" class="other" colspan="8" >
+                                        <div class="radio-box">
+                                            <input type="radio" checked="checked" class="radio-a" name="get_mode" value="1"/>
+                                            <span>网上获取</span>
+                                        </div>
+                                        <div class="radio-box">
+                                            <input type="radio" class="radio-a" name="get_mode" value="2"/>
+                                            <span>邮寄</span>
+                                        </div>
+                                        <div class="radio-box">
+                                            <input type="radio" class="radio-a" name="get_mode" value="3"/>
+                                            <span>自行获取</span>
+                                        </div>
+                                        <div class="radio-box">
+                                            <input type="radio" class="radio-a" name="get_mode" value="4"/>
+                                            <span>当场查阅、抄录</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="notice" colspan="8" style="text-align: left;padding-left: 30px;">
+                                        <em>* </em>依法合理使用政府信息承诺协议：
+                                    </th>
+                                </tr>
+                                <tr style="border-bottom: 1px solid #eee;">
+                                    <td style="padding-top:10px;" class="other" colspan="8" >
+                                        <div class="radio-box">
+                                            <input type="checkbox" checked="checked" class="radio-a" name="agree" value="1" />
+                                            <span>本人承诺所获取的政府信息,只用于自身的特殊需要,不作任何炒作及随意扩大公开范围。 </span>
+                                        </div>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="notice code" colspan="8" >
+                                        <span class="verifycode"><em>* </em>验证码：</span>
+                                        <input type="text" style="width:150px;float:left;"/>
+                                        <img src="{:U('Verify')}" height="36px" id="code"  style="float:left;margin-left:15px;cursor:pointer;" onclick="refreshCode()" alt=""/>
+                                    </th>
+                                </tr>
+                            </table>
+                            <div class="interact-apply-btn" style="margin-top: 40px;">
+                                <input type="hidden" name="apply_type" value="{$type}" />
+                                <input type="hidden" name="department_id" value="{$department_id}" />
+                                <button class="ajax-submit ajax-post" data-form="apply" type="submit">提交</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</block>
+<block name="script">
+    <script src="__PLUS__/uploadify/jquery.uploadify.js"></script>
+    <link rel="stylesheet" href="__PLUS__/uploadify/uploadify.css" />
+    <script>
+        $('#file_upload').uploadify({
+            'swf'      : '__PLUS__/uploadify/uploadify.swf',
+            'uploader' : '{:U("Public/UploadFile")}',
+            'buttonText' : '上传附件',
+            'height': 36,
+            'onUploadSuccess' : uploadCallback
+        });
+
+        $('#file_upload1').uploadify({
+            'swf'      : '__PLUS__/uploadify/uploadify.swf',
+            'uploader' : '{:U("Public/UploadFile")}',
+            'buttonText' : '上传附件',
+            'height': 36,
+            'onUploadSuccess' : uploadCallback1
+        });
+
+        function uploadCallback(a,b){
+            var data = JSON.parse(b);
+            if(data.status == '1'){
+                $('#attach').val( data.info.Filedata.savepath + data.info.Filedata.savename )
+                $('#name').val( data.info.Filedata.name )
+            }else{
+                layer.alert(data.info);
+            }
+        }
+
+        function uploadCallback1(a,b){
+            var data = JSON.parse(b);
+            if(data.status == '1'){
+                $('#attach1').val( data.info.Filedata.savepath + data.info.Filedata.savename )
+                $('#name1').val( data.info.Filedata.name )
+            }else{
+                layer.alert(data.info);
+            }
+        }
+    </script>
+</block>

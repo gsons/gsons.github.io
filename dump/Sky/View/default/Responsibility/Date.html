@@ -1,0 +1,46 @@
+<extend name="Tpl:Basic" />
+<block name="body">
+    <form action="" id="form">
+        <div class="box box-success">
+            <div class="box-body">
+                <div class="form-group">
+                    <label>选择周期：</label>
+                    <select name="cycle" class="form-control select2 select2-hidden-accessible"
+                            style="width: 100%;" tabindex="-1" aria-hidden="true">
+                        <volist name="date" id="vo">
+                            <option value="{$key}" <eq name="info.cycle" value="$key">selected</eq> >{$vo}</option>
+                        </volist>
+                    </select>
+                </div>
+                <br>
+            </div>
+            <div class="box-footer">
+                <input type="hidden" name="id" value="{$info.id}" />
+                <button type="button" class="btn btn-primary" data-form="form" onclick="save()">提交</button>
+            </div>
+        </div>
+    </form>
+</block>
+<block name="script">
+    <script>
+        function save(){
+            loaded();
+            $.ajax({
+                url: '',
+                data: { cycle: $('select[name=cycle]').val() },
+                type: 'post',
+                dataType: 'json',
+                success:function(data){
+                    if(data.status == '1'){
+                        $('#type-{:I("get.id")} .cycle',parent.document).html($('select[name=cycle] option:selected').html())
+                        var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                        parent.layer.close(index); //再执行关闭
+                    }else{
+                        layer.alert('提交失败');
+                    }
+                },
+                complete:loaded
+            })
+        }
+    </script>
+</block>

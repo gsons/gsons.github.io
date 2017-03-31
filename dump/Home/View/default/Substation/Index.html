@@ -1,0 +1,26 @@
+<extend name="Tpl/Base" />
+<block name="body">
+    <div class="container">
+        <div class="wrapper">
+            <include file="Breadcrumb" />
+            <div class="APList-banner">
+                <a ><img src="__PUBLIC__/Home/img/AP_banner.jpg" /></a>
+            </div>
+            <div class="info-content APApply">
+                <div class="APApply-department">
+                        <div class="APdepartment-list">
+                            <div class="title">
+                                郁南县子网站
+                            </div>
+                            <div class="all">
+                                <volist name="list1" id="item">
+                                    <a target="_blank" href="/special.php/Substation/Index/id/{$item.id}.html">{$item.title}</a>
+                                </volist>
+                                <div class="clear"></div>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</block>

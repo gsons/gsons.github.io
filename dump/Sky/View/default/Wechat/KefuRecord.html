@@ -1,0 +1,81 @@
+<extend name="Tpl:Base" />
+<block name="body">
+    <!-- Main content -->
+    <section class="content">
+
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title iframe-title">客服聊天记录</h3>
+                <div class="search">
+                    <form class="form-inline" method="post" id="search">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-addon"><i class="ion-clock"></i></div>
+                                <input type="text" class="form-control date" name="starttime" readonly placeholder="开始时间">
+                            </div>
+                            <div class="input-group">
+                                <div class="input-group-addon"><i class="ion-clock"></i></div>
+                                <input type="text" class="form-control date" name="endtime" readonly placeholder="结束时间">
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="SyncRecord()">同步云记录</button>
+                    </form>
+                </div>
+                <div class="clear"></div>
+            </div><!-- /.box-header -->
+            <div class="box-body no-padding">
+                <table class="table table-striped">
+                    <tbody>
+                    <tr>
+                        <!--<th><input type="checkbox" id="check-all"/></th>-->
+                        <th>编号</th>
+                        <th>客服</th>
+                        <th>用户</th>
+                        <th>内容</th>
+                        <th>创建日期</th>
+                    </tr>
+                    <PHP>$list = array_reverse($list)</PHP>
+                    <volist name="list" id="vo">
+                        <tr>
+                            <!--<td><input type="checkbox" name="ids[]" value="{$vo.id}"/></td>-->
+                            <td>{$vo.id}</td>
+                            <td>{$vo.kf_nick}</td>
+                            <td>{$vo.openid|getWxNick}</td>
+                            <td>{$vo.text}</td>
+                            <td>{$vo.create_date|FormatDate="Y-m-d H:i"}</td>
+                        </tr>
+                    </volist>
+                    </tbody></table>
+            </div><!-- /.box-body -->
+            <div class="box-footer">
+                <!--<ul class="pagination">
+                    <li class="paginate_button previous disabled"><a href="#" >上一页</a> </li>
+                    <li class="paginate_button active"><a href="#">1</a></li>
+                    <li class="paginate_button "><a href="#">2</a></li>
+                    <li class="paginate_button next"><a href="#">下一页</a></li>
+                </ul>-->
+                {$page}
+            </div>
+        </div>
+
+    </section><!-- /.content -->
+</block>
+<block name="script">
+    <link rel="stylesheet" type="text/css" href="__PLUS__/datetimepicker/jquery.datetimepicker.css"/>
+    <script src="__PLUS__/datetimepicker/jquery.datetimepicker.js"></script>
+    <script>
+        $('.date').datetimepicker({
+            lang:'ch',
+            timepicker:false,
+            format:'Y-m-d',
+            formatDate:'Y-m-d',
+            minDate:'-1970-01-30',
+            maxDate:'+1970-01-01'
+        });
+
+        function SyncRecord(){
+            var data = $("#search").serialize();
+            OpenFrame('{:U("Wechat/KefuRecordSync")}?'+data,'同步云记录');
+        }
+    </script>
+</block>

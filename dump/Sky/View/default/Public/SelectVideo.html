@@ -1,0 +1,46 @@
+<extend name="Tpl:Basic" />
+<block name="body">
+    <div class="box box-success">
+        <div class="box-body">
+            <div class="container-fluid">
+                <div class="row">
+                    <volist name="list" id="vo">
+                        <div class="box col-xs-3" style="cursor:pointer;" ondblclick="ChooseVideo(this)" data-id="{$vo.id}" data-src="{$vo.src}" data-title="{$vo.title}">
+                            <div class="box-header">
+                                <h3 class="box-title">{$vo.title}</h3>
+                                <div class="box-tools pull-right">
+                                    <button data-widget="remove" class="btn btn-box-tool"><i class="fa fa-times"></i></button>
+                                </div><!-- /.box-tools -->
+                            </div>
+                            <div class="box-body">
+                                <video src="__UPLOAD__/{$vo.src}" controls="controls" height="100px" width="200px"></video>
+                            </div>
+                        </div>
+                    </volist>
+                  </div>
+            </div>
+        </div>
+        <div class="box-footer">
+            {$page}
+        </div>
+
+    </div>
+</block>
+<block name="script">
+    <!--layer-->
+    <link rel="stylesheet" href="__PLUS__/layer/skin/layer.css"/>
+    <script src="__PLUS__/layer/layer.js"></script>
+    <script>
+        function ChooseVideo(obj){
+            var id = $(obj).attr('data-id')
+            var title = $(obj).attr('data-title')
+            var src = $(obj).attr('data-src')
+            var box = ' <div class="box"> <div class="box-header"><h3 class="box-title">'+title+'</h3> <div class="box-tools pull-right"> <button data-widget="remove" class="btn btn-box-tool"><i class="fa fa-times"></i></button> </div> <!-- /.box-tools --> </div> <div class="box-body"> <video src="__UPLOAD__/'+src+'" controls="controls"></video> <input type="hidden" name="video" value="'+id+'"/> </div> </div>';
+            $('#tab_1-4 .right-bar',parent.document).html('');
+            $('#tab_1-4 .right-bar',parent.document).html(box);
+            $('#sub_type_id',parent.document).val(4);
+            var index = parent.layer.getFrameIndex('layui-layer-iframe1');
+            parent.layer.close(index)
+        }
+    </script>
+</block>

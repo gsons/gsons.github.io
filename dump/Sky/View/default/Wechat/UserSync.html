@@ -1,0 +1,57 @@
+<extend name="Tpl:Basic" />
+<block name="body">
+    <div class="box box-success">
+        <div class="box-body">
+            <table class="table table-striped">
+                <tr>
+                    <td>获取用户分组</td><td class="status danger red">未开始</td><td class="count">0%</td>
+                </tr>
+                <tr>
+                    <td>同步关注用户</td><td class="status danger red">未开始</td><td class="count">0%</td>
+                </tr>
+                <tr>
+                    <td>获取关注用户信息</td><td class="status danger red">未开始</td><td class="count">0%</td>
+                </tr>
+            </table>
+        </div>
+        <div class="box-footer">
+            <button type="button" class="btn btn-success" onclick="Sync(0);">开始同步</button>
+        </div>
+    </div>
+</block>
+<block name="script">
+    <!--layer-->
+    <link rel="stylesheet" href="__PLUS__/layer/skin/layer.css"/>
+    <script src="__PLUS__/layer/layer.js"></script>
+    <script>
+        function Sync(step){
+            $('.table tr').eq(step).find('.status').html('正在同步');
+            $.ajax({
+                url:'',
+                data: {'step':step},
+                dataType:'json',
+                beforeSend:'',
+                success:function(data){
+                    $('.table tr').eq(step).find('.count').html(data.percent);
+                    if(data.status == '1'){
+                        $('.table tr').eq(step).find('.status').html('同步完成').removeClass('danger red').addClass('success green');
+                        layer.msg(data.info,{icon:1,time:3000},function(){
+                            parent.window.location.reload();
+                        })
+                        return false;
+                    }else if(data.status == '2'){
+                        //进行下一步
+                        $('.table tr').eq(step).find('.status').html('同步完成').removeClass('danger red').addClass('success green');
+                    }else if(data.status == '3'){
+                        //进行中
+                        $('.table tr').eq(step).find('.status').html('同步中');
+                    }else{
+                        layer.msg(data.info,{icon:0});
+                        return false;
+                    }
+                    Sync(data.step);
+                }
+            })
+        }
+    </script>
+</block>

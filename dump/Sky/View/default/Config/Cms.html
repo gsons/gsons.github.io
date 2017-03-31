@@ -1,0 +1,119 @@
+<extend name="Tpl:Base" />
+<block name="body">
+    <!-- Main content -->
+    <section class="content">
+
+        <div class="nav-tabs-custom">
+
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="false">基本设置</a></li>
+                <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">短信设置</a></li>
+                <li class=""><a href="#tab_3" data-toggle="tab" aria-expanded="true">邮件设置</a></li>
+            </ul>
+
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab_1">
+                    <form action="{:U('EditConfig',array('file'=>'cms'))}" id="Base">
+                        <div class="box box-success">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">基本设置</h3>
+                            </div>
+                            <div class="box-body">
+                                <div class="form-group">
+                                    <label>后台名称</label>
+                                    <input type="text" class="form-control" placeholder="后台名称" name="CMS_TITLE" value="{:C('CMS_TITLE')}">
+                                </div>
+                                <br>
+                            </div><!-- /.box-body -->
+                            <div class="box-footer">
+                                <button type="button" class="btn btn-primary ajax-submit ajax-post" data-form="Base">提交</button>
+                            </div>
+                        </div>
+                    </form>
+                </div><!-- /.tab-pane -->
+
+                <div class="tab-pane" id="tab_2">
+                    <div class="box box-success">
+                        <form action="{:U('EditConfig',array('file'=>'sms'))}" id="Sms">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">短信设置</h3>
+                            </div>
+                            <div class="box-body">
+                                <div class="form-group">
+                                    <label>互亿帐号</label>
+                                    <input type="text" class="form-control" placeholder="请输入在互亿注册的帐号" name="SMS_ACCOUNT" value="{:C('SMS_ACCOUNT')}">
+                                </div>
+                                <br>
+                                <div class="form-group">
+                                    <label>帐号密码</label>
+                                    <input type="password" class="form-control" placeholder="请输入对应的密码" name="SMS_PASSWORD" value="{:C('SMS_PASSWORD')}">
+                                </div>
+                                <br>
+                                <div class="form-group">
+                                    <label>次数限制</label>
+                                    <input type="text" class="form-control" placeholder="每天每个手机号能发送多少次短信（不填或者填0则会不限制）" name="SMS_SINGLELIMIT" value="{:C('SMS_SINGLELIMIT')}">
+                                </div>
+                                <br>
+                            </div><!-- /.box-body -->
+                            <div class="box-footer">
+                                <button type="button" class="btn btn-primary ajax-submit ajax-post" data-form="Sms">提交</button>
+                            </div>
+                        </form>
+                    </div>
+                </div><!-- /.tab-pane -->
+
+                <div class="tab-pane" id="tab_3">
+                    <div class="box box-success">
+                        <form action="{:U('EditConfig',array('file'=>'email'))}" id="Email">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">邮件设置</h3>
+                            </div>
+                            <div class="box-body">
+                                <div class="form-group">
+                                    <label>SMTP服务器地址</label>
+                                    <input type="text" class="form-control" placeholder="SMTP服务器地址" name="MAIL_HOST" value="{:C('MAIL_HOST')}">
+                                </div>
+                                <br>
+                                <div class="form-group">
+                                    <label>启用SMTP认证</label>&nbsp;
+                                    <PHP>
+                                        $MAIL_SMTPAUTH = C('MAIL_SMTPAUTH');
+                                    </PHP>
+                                    <input type="radio" name="MAIL_SMTPAUTH" value="true" <eq name="MAIL_SMTPAUTH" value="true">checked</eq> /> 是&nbsp;<input type="radio" name="MAIL_SMTPAUTH" <eq name="MAIL_SMTPAUTH" value="false">checked</eq> value="false"/> 否
+                                </div>
+                                <br>
+                                <div class="form-group">
+                                    <label>邮箱帐号</label>
+                                    <input type="text" class="form-control" placeholder="请输入邮箱帐号" name="MAIL_USERNAME" value="{:C('MAIL_USERNAME')}">
+                                </div>
+                                <br>
+                                <div class="form-group">
+                                    <label>发件人地址</label>
+                                    <input type="text" class="form-control" placeholder="请输入发件人地址" name="MAIL_FROM" value="{:C('MAIL_FROM')}">
+                                </div>
+                                <br>
+                                <div class="form-group">
+                                    <label>发件人姓名</label>
+                                    <input type="text" class="form-control" placeholder="请输入发件人姓名" name="MAIL_FROMNAME" value="{:C('MAIL_FROMNAME')}">
+                                </div>
+                                <br>
+                                <div class="form-group">
+                                    <label>邮箱密码</label>
+                                    <input type="password" class="form-control" placeholder="请输入邮箱密码或者设定过的独立密码" name="MAIL_PASSWORD" value="{:C('MAIL_PASSWORD')}">
+                                </div>
+                                <br>
+                            </div><!-- /.box-body -->
+                            <div class="box-footer">
+                                <button type="button" class="btn btn-primary ajax-submit ajax-post" data-form="Email">提交</button>
+                            </div>
+                        </form>
+                    </div>
+                </div><!-- /.tab-pane -->
+
+            </div><!-- /.tab-content -->
+            </form>
+        </div>
+
+    </section><!-- /.content -->
+
+</block>

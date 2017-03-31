@@ -1,0 +1,45 @@
+<extend name="Tpl/Base" />
+<block name="body">
+
+    <div class="container">
+        <div class="wrapper">
+            <div class="catalogue">
+			<span>当前位置：<a href="">网站首页</a> &gt;<a href="">政民互动</a>
+            </span>
+            </div>
+            <div class="info-content news-list AP-list">
+                <div class="news-list-left">
+                    {:W('Interact/nav')}
+                </div>
+                <div class="news-list-right">
+                    <div class="right-title">
+                        网上调查
+                    </div>
+                    <div class="right-content survey-list-content">
+
+                    <volist name="list" id="vo">
+                        <div class="right-content-list">
+                            <a href="{:U('Details',array('id'=>$vo['id']))}" class="text">
+                                {$vo.title}
+                            </a>
+                        <span class="date">
+                            <span class="glay-color">{$vo.create_date|date="Y-m-d",###}</span>
+                            <?php if($vo['start_time'] > NOW_TIME):?>
+                            <span class="orange-color">未开始</span>
+                            <?php elseif($vo['start_time'] < NOW_TIME && $vo['end_time'] > NOW_TIME):?>
+                            <span class="orange-color">进行中</span>
+                            <?php else:?>
+                            <span class="orange-color">已结束</span>
+                            <?php endif;?>
+                            <a href="{:U('Details',array('id'=>$vo['id']))}" class="look-result">查看结果</a>
+                        </span>
+                            <div class="clear"></div>
+                        </div>
+                        </volist>
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+    </div>
+</block>

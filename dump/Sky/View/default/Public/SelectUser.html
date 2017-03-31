@@ -1,0 +1,103 @@
+<extend name="Tpl:Basic" />
+<block name="body">
+    <div class="box box-success">
+        <div class="box-body">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <div class="box box-solid">
+                            <div class="box-header with-border">
+                                <h3 class="box-title"><a href="{:U('Wechat/Group')}">分组</a></h3>
+                            </div>
+                            <div class="box-body no-padding">
+                                <ul class="nav nav-pills nav-stacked">
+                                    <li <empty name="group_id">class="active"</empty> ><a href="{:U('')}"><i class="fa fa-inbox"></i> 全部<span class="label label-primary pull-right">{$count}</span></a></li>
+                                    <volist name="group" id="vo">
+                                        <li <eq name="group_id" value="$vo.id">class="active"</eq> >
+                                        <a href="{:U('',array('group_id'=>$vo['id']))}">
+                                            <i class="fa fa-inbox"></i>
+                                            {$vo.name}
+                                            <span class="label label-primary pull-right">{$vo.count}</span>
+                                        </a>
+                                        </li>
+                                    </volist>
+                                </ul>
+                            </div><!-- /.box-body -->
+                        </div>
+                    </div>
+                    <div class="col-xs-9">
+                        <form method="post" id="ids">
+                            <table class="table table-striped">
+                                <tbody>
+                                <tr>
+                                    <th><input type="checkbox" class="check-all" data-name="ids[]"/></th>
+                                    <th>编号</th>
+                                    <th>OpenID</th>
+                                    <th>昵称</th>
+                                    <th>最后关注日期</th>
+                                    <th>状态</th>
+                                    <th>操作</th>
+                                </tr>
+                                <volist name="list" id="vo">
+                                    <tr>
+                                        <td><input type="checkbox" name="ids[]" value="{$vo.id}"/></td>
+                                        <td>{$vo.id}</td>
+                                        <td>{$vo.openid}</td>
+                                        <td>{$vo.nickname}</td>
+                                        <td>{$vo.sub_date|FormatDate="Y-m-d H:i"}</td>
+                                        <td>
+                                            <eq name="vo.is_sub" value="1">
+                                                <span class="green">关注</span>
+                                                <else />
+                                                <span class="red">取消关注</span>
+                                            </eq>
+                                        </td>
+                                        <td>
+                                            <a href="javascript:" onclick="GroupUser('ids[]={$vo.id}')">分组</a>
+                                            <!--<a href="{:U('Wechat/ReplyEdit',array('id'=>$vo['id']))}">模板消息</a>-->
+                                        </td>
+                                    </tr>
+                                </volist>
+                                </tbody></table>
+                        </form>
+                    </div>
+                    <div class="col-xs-12">
+                        <a href="javascript:" class="btn btn-success" onclick="SelectUser();">选择</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="box-footer">
+            {$page}
+        </div>
+    </div>
+</block>
+<block name="script">
+    <!--layer-->
+    <link rel="stylesheet" href="__PLUS__/layer/skin/layer.css"/>
+    <script src="__PLUS__/layer/layer.js"></script>
+    <script>
+        function SelectUser(){
+            if ($('input[name="ids[]"]:checked').val() == undefined || $('input[name="ids[]"]:checked').val() == '') {
+                layer.msg('请至少选择一个用户', {icon: 0})
+                return false;
+            }
+            $.each($('input[name="ids[]"]:checked'),function(){
+                var id = $(this).val();
+                var name = $(this).parent().parent().next().next().next().html();
+                var exist = 0;
+                $.each($('#user-list label',parent.document),function(){
+                    var _id = $(this).attr('data-id');
+                    if(_id == id){
+                        exist = 1;
+                    }
+                })
+                if(!exist){
+                    $('#user-list',parent.document).append('<label style="cursor:pointer;" class="label label-default" data-id="'+id+'"><input type="hidden" name="ids[]" value="'+id+'"/>'+name+'</label>')
+                }
+            })
+            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+            parent.layer.close(index); //再执行关闭
+        }
+    </script>
+</block>

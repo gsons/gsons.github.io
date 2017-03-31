@@ -1,0 +1,99 @@
+<extend name="Tpl:Base" />
+<block name="body">
+    <!-- Main content -->
+    <section class="content">
+
+        <div class="box we-media">
+            <div class="box-header with-border">
+                <h3 class="box-title iframe-title">图片素材管理</h3>
+                <neq name="static" value="1">
+                    <div class="btn-toolbar">
+                        <a href="javascript:" class="btn btn-success" id="avatar" >上传素材</a>
+                        <span class="ext">允许上传的格式：{$uf.ext}，大小：{$uf.max|format_bytes}</span>
+                        <input id="file_upload" name="file_upload" type="file" multiple="true">
+                    </div>
+                </neq>
+            </div><!-- /.box-header -->
+            <div class="box-body we-image">
+                <div class="container-fluid">
+                    <div class="row" id="we-image-list">
+                        <volist name="list" id="vo">
+                            <div class="box" data-id="{$vo.id}">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">{$vo.title}</h3>
+                                    <div class="box-tools pull-right">
+                                        <button class="btn btn-box-tool" onclick="DeleteMedia(this);"><i class="fa fa-times"></i></button>
+                                    </div><!-- /.box-tools -->
+                                </div>
+                                <div class="box-body" title="{$vo.description}">
+                                    <img src="__UPLOAD__/{$vo.src}" alt=""/>
+                                </div>
+                            </div>
+                        </volist>
+                    </div>
+                </div>
+
+            </div><!-- /.box-body -->
+            <div class="box-footer">
+                <!--<ul class="pagination">
+                    <li class="paginate_button previous disabled"><a href="#" >上一页</a> </li>
+                    <li class="paginate_button active"><a href="#">1</a></li>
+                    <li class="paginate_button "><a href="#">2</a></li>
+                    <li class="paginate_button next"><a href="#">下一页</a></li>
+                </ul>-->
+                {$page}
+            </div>
+        </div>
+
+    </section><!-- /.content -->
+</block>
+<block name="script">
+    <script src="__PLUS__/uploadifive/jquery.uploadifive.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="__PLUS__/uploadifive/uploadifive.css">
+    <script type="text/javascript">
+        var $file = $('#file_upload');
+        $('#file_upload').uploadifive({
+            'auto'             : true,
+            'removeCompleted' : true,
+            'buttonClass'  : 'hide',
+            'buttonText'   : '选择图片',
+            'height':34,
+            'uploadScript'     :'{:U("Public/UploadFile",array("type"=>"image"))}',
+            'onUploadComplete' : function(file, data) {
+                loading();
+                var data = JSON.parse(data);
+                if( data.status == '1' ) {
+                    $.ajax({
+                        url: '{:U("")}',
+                        data: data.info,
+                        type: 'post',
+                        dataType: 'json',
+                        success: function (data) {
+                            if (data.status == '1') {
+                                var box = '<div class="box"><div class="box-header with-border"><h3 class="box-title">' + data.media.title + '</h3><div class="box-tools pull-right"><button data-widget="remove" class="btn btn-box-tool"><i class="fa fa-times"></i></button> </div></div><div class="box-body"><img src="__UPLOAD__/' + data.media.src + '" alt=""/></div></div>';
+                                $('#we-image-list').prepend(box);
+                            } else if (data.status == '0') {
+                                layer.msg(data.info)
+                            } else {
+                                layer.msg(data)
+                            }
+                            loaded();
+                        },
+                        error: function () {
+                            layer.msg('系统错误，请稍后再试');
+                            loaded();
+                        }
+                    })
+                }else{
+                    layer.msg(data.info)
+                    loaded();
+                }
+            }
+        });
+        $('#uploadifive-file_upload').css({'line-height':'20px','margin-bottom':'10px','margin-top':'10px','margin-left':'5px'})
+        $('#avatar').click(function(){
+            $file.next().trigger('click');
+            $file = $file.next()
+        })
+    </script>
+</block>

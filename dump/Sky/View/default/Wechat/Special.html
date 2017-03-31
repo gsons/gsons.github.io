@@ -1,0 +1,71 @@
+<extend name="Tpl:Base"/>
+<block name="body">
+    <!-- Main content -->
+    <section class="content">
+        <a href="#" class="ion-reply history-back" onclick="history.back(1)">&nbsp;返回</a>
+        <div class="nav-tabs-custom">
+            <form action="{:U('',array('isSub'=>'1'))}" id="Sub">
+                <div class="box box-success">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">关注回复管理</h3>
+                    </div>
+                    <div class="box-body">
+                        <div>
+                            <include file="Public/InputReply" />
+                        </div>
+                    </div><!-- /.box-body -->
+                    <div class="box-footer">
+                        <input type="hidden" name="type_id" id="sub_type_id" value="{$sub.type_id}"/>
+                        <button type="submit" class="btn btn-success ajax-submit ajax-post" data-form="Sub">提交</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+    <!-- /.content -->
+</block>
+<block name="script">
+    <script>
+        $('#text').focus(function(){
+            $('#sub_type_id').val(1);
+        })
+
+        function SelectMediaImage(){
+            layer.open({
+                type: 2,
+                skin:'layui-layer-molv',
+                title: '选择图片',
+                shadeClose: true,
+                shade: 0.1,
+                area: ['90%', '500px'],
+                content: '{:U("Wechat/SelectImage")}' //iframe的url
+            });
+        }
+
+        function SelectMediaVoice(){
+            layer.open({
+                type: 2,
+                skin:'layui-layer-molv',
+                title: '选择音频',
+                shadeClose: true,
+                shade: 0.1,
+                area: ['90%', '500px'],
+                content: '{:U("Wechat/SelectVoice")}' //iframe的url
+            });
+        }
+
+        function SelectMediaVideo(){
+            layer.open({
+                type: 2,
+                skin:'layui-layer-molv',
+                title: '选择视频',
+                shadeClose: true,
+                shade: 0.1,
+                area: ['90%', '500px'],
+                content: '{:U("Wechat/SelectVideo")}' //iframe的url
+            });
+        }
+    </script>
+    <script>
+    </script>
+</block>

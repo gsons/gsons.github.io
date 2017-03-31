@@ -1,0 +1,43 @@
+<div class="news-detail-left">
+    <div class="news-detail-info-title">
+        {$arc.title}
+    </div>
+    <div class="news-detail-info-describe">
+        <span class="desc-span" title="{$arc.writer}">作者：{$arc.writer}</span>
+        <span class="desc-span">来源：{$arc.source|msubstr=0,10}</span>
+        <span class="desc-span">发布时间：{$arc.create_date|date='Y年m月d日',###}</span>
+        <span class="desc-span">点击数： {$arc.click} 次</span>
+    </div>
+    <div class="news-detail-info-setting">
+        <a href="javascript:void(0);" title="打印页面" class="print-a" >打印页面</a>
+        <!--<div class="fontsize">
+            <span>字号：</span>
+            <a href="javascript:void(0);" class="t1"></a>
+            <a href="javascript:void(0);" class="t2"></a>
+            <a href="javascript:void(0);" class="t3"></a>
+            <span class="clear_f"></span>
+        </div>-->
+        <div class="bgcolor" style="margin-left: 100px;">
+            <span>视力保护：</span>
+            <a href="javascript:void(0);" class="c1"></a>
+            <a href="javascript:void(0);" class="c2"></a>
+            <a href="javascript:void(0);" class="c3"></a>
+            <a href="javascript:void(0);" class="c4"></a>
+            <a href="javascript:void(0);" class="c5"></a>
+            <span class="clear_f"></span>
+        </div>
+        <div class="qrcode" style="margin-left:150px;">
+            <span>手机阅读：</span>
+            <a href="javascript:void(0);"><p class="qrcodeoutput" style="display: none;"><canvas style="background-image: url({$qrcode_url}) ;" width="150" height="150"></canvas></p></a>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="news-detail-info-content">
+        <div id="video"></div>
+        {$arc.content|htmlspecialchars_decode|makeImgSrc}
+    </div>
+    <div class="footer-code" style="text-align:center;">
+        <img width="150" src="{$qrcode_url}" style="display:inline-block;" />
+        <p>扫码在手机中阅读</p>
+    </div>
+</div>

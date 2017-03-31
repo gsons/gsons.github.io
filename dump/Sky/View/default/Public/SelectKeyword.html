@@ -1,0 +1,96 @@
+<extend name="Tpl:Basic" />
+<block name="body">
+    <div class="box box-success">
+        <div class="box-body">
+            <div class="form-group">
+                <label>输入关键词：</label>
+                <input type="text" class="form-control" name="keyword" />
+            </div>
+            <div class="form-group">
+                <label></label>
+                <button type="button" onclick="ChooseKeyword()" class="btn btn-success" >添加</button>
+            </div>
+        </div>
+    </div>
+    <div class="box box-success">
+        <div class="box-header">
+            历史记录
+        </div>
+        <div class="box-body keyword-list">
+            <ul>
+                <volist name="keyword" id="vo">
+                    <li><a href="javascript:" onclick="SetKeyword(this)" data-id="{$vo.id}">{$vo.keyword}</a></li>
+                </volist>
+                <div class="clear"></div>
+            </ul>
+        </div>
+    </div>
+</block>
+<block name="script">
+    <!--layer-->
+    <link rel="stylesheet" href="__PLUS__/layer/skin/layer.css"/>
+    <script src="__PLUS__/layer/layer.js"></script>
+    <script>
+        function ChooseKeyword(){
+            var keyword = $('input[name=keyword]').val();
+            $.ajax({
+                url:'{:U("Wechat/Keyword")}',
+                data:{'keyword':keyword},
+                dataType:'JSON',
+                type:'post',
+                beforeSend:function(){
+                    loading();
+                },
+                success:function(data){
+                    if(data.status == 1){
+                        var id = data.id;
+                        var exist = 0;
+                        $.each($('#keyword-list label',parent.document),function(){
+                            var eid = $(this).children().eq(0).val()
+                            if(id == eid){
+                                exist = 1;
+                            }
+                        })
+                        if(exist){
+                            layer.msg('该关键词已存在!')
+                        }else{
+                            var $label = '<label class="label label-default" ondblclick="Remove(this);"><input type="hidden" name="keyword[]" value="'+id+'" />'+keyword+'</label>';
+                            $('#keyword-list',parent.document).append($label);
+                            layer.msg(data.info)
+                        }
+                    }else if(data.statsu == 0){
+                        layer.msg(data.info)
+                    }else{
+                        layer.msg(data);
+                    }
+                    loaded();
+                },
+                error:function(){
+                    layer.msg('系统错误，请稍后再试')
+                    loaded();
+                }
+            })
+        }
+
+        function SetKeyword(obj){
+            var id = $(obj).attr('data-id')
+            var word = $(obj).html();
+            var exist = 0;
+            $.each($('#keyword-list label',parent.document),function(){
+                var eid = $(this).children().eq(0).val()
+                console.log(eid);
+                if(id == eid){
+                    exist = 1;
+                }
+            })
+            if(exist){
+                layer.msg('该关键词已存在')
+            }else{
+                var $label = '<label class="label label-default" ondblclick="Remove(this);"><input type="hidden" name="keyword[]" value="'+id+'" />'+word+'</label>';
+                $('#keyword-list',parent.document).append($label);
+                layer.msg('添加成功')
+                return
+            }
+        }
+    </script>
+</block>

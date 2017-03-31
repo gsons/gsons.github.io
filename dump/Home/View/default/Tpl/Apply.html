@@ -1,0 +1,56 @@
+<extend name="Tpl/Base" />
+<block name="body">
+    <div class="container">
+        <div class="wrapper">
+            <div class="catalogue">
+                <span>当前位置：<a href="">网站首页</a> > <a href="">政务公开</a> > <a href="">依申请公开</a> > <a href="">依申请公开系统</a></span>
+            </div>
+            <div class="APList-banner">
+                <img src="__PUBLIC__/Home/img/APApply-banner.jpg" />
+            </div>
+            <div class="info-content APApply APApplySearch-content">
+                <div class="APApply-search" style="border: 0;padding: 0;">
+                    <form action="" method="post">
+                        <table>
+                            <tbody><tr>
+                                <td class="title">状态查询 ：</td>
+                                <td>
+                                    <span>公民/法人身份证号码 ：</span>
+                                    <input type="text">
+                                </td>
+                                <td>
+                                    <span>申请编号 ：</span>
+                                    <input type="text">
+                                </td>
+                                <td><button type="submit" class="but-search">查询</button></td>
+                                <td><a href="" class="but-konw">了解相关规定</a></td>
+                            </tr>
+                            </tbody></table>
+                    </form>
+                </div>
+                <div class=" APApplySystem APApplySystemType">
+                    <div class="interact-apply">
+                        <table>
+                            <tbody>
+                            <tr>
+                                <td class="title" colspan="8" style="border-bottom: 1px solid #ddd;">选择申请人类型</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div class="APSuggestion">
+                            <a href="{:U('Rules',array('type'=>1,'id'=>I('get.id')))}#content" class="APApplySystemType-a">公民</a>
+                            <a href="{:U('Rules',array('type'=>2,'id'=>I('get.id')))}#content" class="APApplySystemType-b">机构</a>
+                            <a href="{:U('Rules',array('type'=>3,'id'=>I('get.id')))}#content" class="APApplySystemType-c">企业法人</a>
+                            <a href="{:U('Rules',array('type'=>4,'id'=>I('get.id')))}#content" class="APApplySystemType-d">社团组织</a>
+                            <a href="{:U('Rules',array('type'=>5,'id'=>I('get.id')))}#content" class="APApplySystemType-e">其他</a>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="interact-apply-btn" style="margin-top: 40px;">
+                            <button onclick="window.location.href='{:U('Agree')}'" data-form="apply" type="submit">返回</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</block>

@@ -1,0 +1,61 @@
+<extend name="Tpl:Base" />
+<block name="header"></block>
+<block name="menu"></block>
+<block name="ControlSidebar"></block>
+<block name="body">
+    <div class="login-box">
+        <div class="login-logo">
+            <a href="javascript:;"><b>{:C('CMS_TITLE')}</b></a>
+        </div>
+        <!-- /.login-logo -->
+        <div class="login-box-body">
+            <p class="login-box-msg">登录到系统</p>
+
+            <form action="" method="post">
+                <div class="form-group has-feedback">
+                    <input type="text" class="form-control" placeholder="用户名" name="username">
+                    <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                </div>
+                <div class="form-group has-feedback">
+                    <input type="password" class="form-control" placeholder="密码" name="pass">
+                    <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                </div>
+                <div class="row">
+                    <div class="col-xs-8">
+                        <div class="checkbox icheck">
+                            <label>
+                                <input type="checkbox" name="auto" value="1"> <em>自动登录（3天）</em>
+                            </label>
+                        </div>
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-xs-4">
+                        <button type="submit" class="btn btn-primary btn-block btn-flat">登录</button>
+                    </div>
+                    <!-- /.col -->
+
+                </div>
+            </form>
+        <p class="login-box-msg"><a href="/Chrome.zip">请点击下载此浏览器(Google浏览器)登录后台</a></p>
+        </div>
+        <!-- /.login-box-body -->
+    </div>
+    <!-- /.login-box -->
+</block>
+<block name="script">
+    <link rel="stylesheet" href="__PLUS__/iCheck/all.css"/>
+    <script src="__PLUS__/iCheck/icheck.min.js"></script>
+    <script>
+        $('body').css('background','#f1f1f1')
+        $('.wrapper').css('background','none')
+
+        $('input').iCheck({
+            checkboxClass: 'icheckbox_square-blue',
+            radioClass: 'iradio_square-blue',
+            increaseArea: '20%' // optional
+        });
+    </script>
+    <style>
+        .icheck em { float:right;margin:3px 0 0 3px; }
+    </style>
+</block>

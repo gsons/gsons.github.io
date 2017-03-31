@@ -1,0 +1,27 @@
+<div class="news-list-left">
+    <div class="column-navigation">
+        <div class="navigation-title">
+            领导班子
+        </div>
+        <div class="navigation-list leader">
+            <ul class="fathermenu">
+                <volist name="leader" id="item">
+                    <li class="nav father <eq name='cur' value='$item["id"]'>down</eq>">
+                        <a href="{:U('Lists',array('id'=>$item['id'],'cur'=>$item['id']))}" class="nav-a">{$item.name}</a>
+                        <ul class="childmenu1 <neq name='cur' value='$item["id"]'>hide</neq>">
+                            <volist name="item.child" id="vo">
+                                <li <eq name="aid" value="$vo['id']">class="current"</eq> >
+                                    <a href="{:U('Details',array('id'=>$vo['id'],'aid'=>$vo['id']))}" title="{$vo.name}" class="childmenu1-a">{$vo.title}</a>
+                                </li>
+                        </volist>
+                        </ul>
+                    </li>
+                </volist>
+            </ul>
+        </div>
+    </div>
+</div>
+<style>
+    .AP-list .news-list-left .column-navigation .navigation-list.leader .fathermenu li ul.childmenu1 li { line-height:32px;font-size:14px;margin-top:5px;text-align:center; }
+    .AP-list .news-list-left .column-navigation .navigation-list.leader .fathermenu li ul.childmenu1 li a { margin-left:0; }
+</style>

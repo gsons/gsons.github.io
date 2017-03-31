@@ -1,0 +1,20 @@
+
+<div class="container">
+    <div class="wrapper relevant-departments">
+        <div class="departments-name">
+            <volist name="friend_link" id="vo">
+                <a href="javascript:void(0);" class="{: $i > 1 ? '' : 'on' }" data-num="{: $i -1 }">{$vo.name}</a>
+            </volist>
+        </div>
+        <div class="departments-content">
+            <volist name="friend_link " id="vo" >
+               <div class="departments-list {: $i > 1 ? 'hide' : '' }" >
+                <volist name="vo.FriendLink" id="f">
+                    <a target="_blank" href="{$f.url}" title="{$f.title}">{$f.title}</a>
+                </volist>
+                <div class="clear"></div>
+            </div>
+            </volist>
+        </div>
+    </div>
+</div>

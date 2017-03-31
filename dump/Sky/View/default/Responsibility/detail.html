@@ -1,0 +1,44 @@
+<extend name="Tpl:Base" />
+<block name="body">
+    <!-- Main content -->
+    <section class="content">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title iframe-title">{$group.title} —— 权责审计详情</h3>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+                <div class="row">
+                    <volist name="list" id="vo">
+                        <notempty name="vo.type">
+                        <div class="col-xs-4 col-md-4">
+                            <!-- Widget: user widget style 1 -->
+                            <div class="box box-widget widget-user-2">
+                                <!-- Add the bg color to the header using any of the bg-* classes -->
+                                <div class="widget-user-header bg-blue">
+                                    <h4 class="widget-user-username" style="margin-left:10px;">{$vo.name}</h4>
+                                </div>
+                                <div class="box-footer no-padding">
+                                    <ul class="nav nav-stacked">
+                                        <volist name="vo.type" id="item">
+                                            <li><a href="javascript:;">
+                                                {$item.name}
+                                                <gt name="item.exist" value="0">
+                                                    <span class="pull-right badge bg-blue">{$item.exist}</span>
+                                                    <else />
+                                                    <span class="pull-right badge bg-red">尚未发布</span>
+                                                </gt>
+                                            </a></li>
+                                        </volist>
+                                    </ul>
+                                </div>
+                            </div><!-- /.widget-user -->
+                        </div>
+                        </notempty>
+                    </volist>
+                </div>
+            </div>
+        </div>
+    </section><!-- /.content -->
+</block>
+<block name="script">
+</block>

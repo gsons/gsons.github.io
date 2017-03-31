@@ -1,0 +1,58 @@
+<extend name="Tpl/Base" />
+<block name="body">
+    <div class="container">
+        <div class="wrapper">
+            <div class="catalogue">
+			<span>当前位置：<a href="__MODULE__">网站首页</a> > <a href="__CONTROLLER__">政民互动</a>
+            </div>
+            <div class="info-content news-list AP-list">
+                <div class="news-list-left">
+                        {:W('Interact/nav')}
+                        {:W('Interact/comment')}
+                </div>
+                <div class="news-list-right">
+                    <div class="right-title">
+                        在线访谈<span class="four-lable"><img src="__PUBLIC__/Home/img/four-lable.png"></span>
+                    </div>
+                    <div class="interact-search">
+
+                        <div class="tab-content">
+                            <table>
+                                <tr>
+                                    <th>主题</th>
+                                    <th width="100px;" style="text-align:center">嘉宾</th>
+                                    <th width="100px;" style="text-align:center">摘要</th>
+                                    <th width="100px;" style="text-align:center">时间</th>
+                                </tr>
+                            <volist name="list" id="vo">
+                                <tr>
+                                    <td><a href="{:U('Interact/InterviewDetails',array('id'=>$vo['id']))}" title="{$vo.title}">{$vo.title|msubstr=0,35}</a></td>
+                                    <td style="text-align:center" title="{$vo.interview_guest}">{$vo.interview_guest|msubstr=0,6}</td>
+                                    <td style="text-align:center" title="{$vo.interview_description}">{$vo.interview_description|msubstr=0,6}</td>
+                                    <td style="text-align:center">{$vo.interview_time|msubstr=0,7}</td>
+                                </tr>
+                            </volist>
+                            </table>
+
+                        </div>
+                            <div class="pagination">
+                            {$page}
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+    </div>
+</block>
+<block name="friend"></block>
+<block name="script">
+    <script>
+        $('.reply-order .tab a').mouseover(function(){
+            var eq = $(this).attr('data-eq');
+            $('.reply-order .tab a').eq(eq).addClass('on').siblings().removeClass('on')
+            $('.reply-order .tab-content table').eq(eq).show().siblings().hide();
+        })
+    </script>
+</block>

@@ -1,0 +1,60 @@
+<extend name="Tpl:Basic" />
+<block name="body">
+    <div class="box box-success">
+        <div class="box-body">
+            <table class="table table-striped">
+                <tr>
+                    <th>日期</th><th>状态</th><th>同步数</th>
+                </tr>
+                <volist name="list" id="vo">
+                    <tr class="day">
+                        <td>{$vo[0]|strtotime|FormatDate='Y-m-d'}</td>
+                        <td class="status red">等待同步</td>
+                        <td class="count">未同步</td>
+                    </tr>
+                </volist>
+            </table>
+        </div>
+        <div class="box-footer">
+            <button type="button" class="btn btn-success" onclick="Sync(0,1,0);">开始同步</button>
+        </div>
+    </div>
+</block>
+<block name="script">
+    <!--layer-->
+    <link rel="stylesheet" href="__PLUS__/layer/skin/layer.css"/>
+    <script src="__PLUS__/layer/layer.js"></script>
+    <script>
+        function Sync(d,p,count){
+            $('.day').eq(d).find('.status').html('正在同步');
+            var now = $('.day').eq(d).find('.count').html();
+            if( !isNaN(now) ){
+                count = parseInt(count) + parseInt(now);
+            }
+            $('.day').eq(d).find('.count').html(count);
+            $.ajax({
+                url:'',
+                data:'d='+d+'&p='+p,
+                dataType:'json',
+                beforeSend:'',
+                success:function(data){
+                    if(data.status == '1'){
+                        layer.msg(data.info,{icon:1,time:3000},function(){
+                            parent.window.location.reload();
+                        })
+                        return false;
+                    }else if(data.status == '2'){
+                        //天数递增
+                        $('.day').eq(d).find('.status').html('同步完成').removeClass('red').addClass('green');
+                    }else if(data.status == '3'){
+                        //页数递增
+                    }else{
+                        layer.msg(data.info,{icon:0});
+                        return false;
+                    }
+                    Sync(data.d,data.p,data.count);
+                }
+            })
+        }
+    </script>
+</block>

@@ -1,0 +1,128 @@
+<extend name="Tpl:Base" />
+<block name="body">
+    <!-- Main content -->
+    <section class="content">
+
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title iframe-title">图文消息管理</h3>
+                <neq name="static" value="1">
+                    <div class="btn-toolbar">
+                        <a class="btn btn-success" href="{:U('Wechat/NewsEdit')}">新增消息</a>
+                        <a class="btn btn-success" href="javascript:" onclick="OpenFrame('{:U("Wechat/NewsSync")}','同步图文消息')">同步图文消息</a>
+                    </div>
+                </neq>
+            </div><!-- /.box-header -->
+            <div class="box-body no-padding news" style="position: relative;">
+                <volist name="list" id="vo">
+                    <div class="box" data-id="{$vo.id}">
+                        <div class="box-header with-border">
+                            <button class="btn btn-info" onclick="Preview('{$vo.id}')">预览</button>
+                            <a href="{:U('Wechat/NewsEdit',array('id'=>$vo['id']))}" class="btn btn-default">编辑</a>
+                            <div class="box-tools pull-right">
+                                <button class="btn btn-box-tool" onclick="DeleteNews(this);"><i class="fa fa-times"></i></button>
+                            </div><!-- /.box-tools -->
+                        </div>
+                        <div class="box-body" title="{$vo.description}">
+                            <volist name="vo.articles" id="item" offset="0" length="1">
+                                    <div class="top">
+                                        <img src="{$item.thumb_src}" alt=""/>
+                                        <span>{$item.title}</span>
+                                    </div>
+                            </volist>
+                            <ul class="others">
+                                <volist name="vo.articles" id="item" offset="1">
+                                <li>
+                                    <span>{$item.title}</span>
+                                    <img src="{$item.thumb_src}" alt=""/>
+                                    <div class="clear"></div>
+                                </li>
+                                </volist>
+                            </ul>
+                        </div>
+                    </div>
+                </volist>
+            </div><!-- /.box-body -->
+            <div class="box-footer">
+                <!--<ul class="pagination">
+                    <li class="paginate_button previous disabled"><a href="#" >上一页</a> </li>
+                    <li class="paginate_button active"><a href="#">1</a></li>
+                    <li class="paginate_button "><a href="#">2</a></li>
+                    <li class="paginate_button next"><a href="#">下一页</a></li>
+                </ul>-->
+                {$page}
+            </div>
+        </div>
+    </section><!-- /.content -->
+
+    <div id="preview" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">请填写预览者OpenId或昵称<br />[必须为已关注本公众号用户]<br />[多个预览者请用“,”分开]</h4>
+                </div>
+                <div class="modal-body">
+                    <form action="{:U('Wechat/NewsPreview')}" id="preview-form">
+                        <div class="form-group">
+                            <input type="hidden" name="id" />
+                            <input type="text" name="previewer" class="form-control" />
+                        </div>
+                        <button type="submit" class="btn btn-success ajax-submit ajax-post" data-form="preview-form" >确定</button>
+                    </form>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</block>
+<block name="script">
+    <style>
+        #waterfall-message { display:none; }
+    </style>
+    <script src="__PLUS__/waterfall/src/waterfall.js"></script>
+    <script>
+        $('.news').waterfall({
+            itemCls: 'box',
+            colWidth: 280,
+            gutterWidth: 15,
+            gutterHeight: 15,
+            checkImagesLoaded: false,
+            path: function(page) {
+                return '';
+            }
+        });
+        function Preview(id){
+            $('input[name=id]').val(id);
+            $('input[name=previewer]').val('');
+            $('#preview').modal('show')
+        }
+
+        function DeleteNews(obj){
+            loading()
+            var id = $(obj).parent().parent().parent().attr('data-id');
+            $.get('',{id:id},function(data){
+                if(data.status == 1 ){
+                    layer.msg(data.info, {
+                        icon: 1,
+                        time : 2000
+                    }, function(){
+                        if(data.url){
+                            window.location.href = data.url;
+                        }else {
+                            window.location.reload();
+                        }
+                    });
+                }else if ( data.status == 0) {
+                    layer.msg(data.info, {icon: 0});
+                }else{
+                    if(data.info){
+                        layer.msg(data.info, {icon: 7});
+                    }else{
+                        layer.msg('系统出错！请稍后再试', {icon: 7});
+                    }
+                }
+                loaded();
+            })
+        }
+    </script>
+</block>

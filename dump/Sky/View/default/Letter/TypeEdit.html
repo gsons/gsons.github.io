@@ -1,0 +1,71 @@
+<extend name="Tpl:Base"/>
+<block name="body">
+    <!-- Main content -->
+    <section class="content">
+        <a href="#" class="ion-reply history-back" onclick="history.back(1)">&nbsp;返回</a>
+        <div class="nav-tabs-custom">
+            <form action="" id="form">
+                <div class="box box-success">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">分类增加/修改</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label>上级分类：</label>
+                            <select name="pid" class="form-control select2 select2-hidden-accessible"
+                                    style="width: 100%;" tabindex="-1" aria-hidden="true">
+                                <option value="0">顶级分类</option>
+                                <volist name="type" id="vo">
+                                    <option value="{$vo.id}"
+                                    <eq name="info.pid" value="$vo.id">selected</eq>
+                                    >{$vo.name}</option>
+                                </volist>
+                            </select>
+                        </div>
+                        <br />
+                         <div class="form-group">
+                            <label>分类名字：</label>
+                            <input type="text" class="form-control" placeholder="类名" name="name" value="{$info.name}">
+                        </div>
+                         <br />
+                         <div class="form-group">
+                            <label>分类简介：</label>
+                            <input type="text" class="form-control" placeholder="分类简单描述" name="description" value="{$info.description}">
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        <input type="hidden" name="id" value="{:I('get.id')}" />
+                        <button type="button" class="btn btn-primary ajax-submit ajax-post" data-form="form">提交</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+
+    </section>
+    <!-- /.content -->
+
+</block>
+<block name="script">
+    <script src="__PLUS__/ueditor/ueditor.config.js"></script>
+    <script src="__PLUS__/ueditor/ueditor.all.min.js"></script>
+    <script src="__PLUS__/ueditor/ueditor.parse.min.js"></script>
+    <script>
+        var ue = UE.getEditor('details', {
+            toolbars: [[
+                'undo', 'redo', '|',
+                'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch', 'autotypeset', 'blockquote', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'selectall', 'cleardoc', '|',
+                'rowspacingtop', 'rowspacingbottom', 'lineheight', '|',
+                'fontfamily', 'fontsize', '|',
+                'directionalityltr', 'directionalityrtl', 'indent', '|',
+                'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|', 'touppercase', 'tolowercase', '|',
+                'link', 'unlink', 'anchor', '|', 'imagenone', 'imageleft', 'imageright', 'imagecenter', '|',
+                'simpleupload', 'insertimage', 'map', 'gmap', '|',
+                'horizontal', 'date', 'time', 'spechars', 'snapscreen', 'wordimage', '|',
+                'inserttable', 'deletetable', 'insertparagraphbeforetable', 'insertrow', 'deleterow', 'insertcol', 'deletecol', 'mergecells', 'mergeright', 'mergedown', 'splittocells', 'splittorows', 'splittocols', 'charts', '|',
+                'drafts'
+            ]]
+        });
+    </script>
+</block>

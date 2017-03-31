@@ -1,0 +1,80 @@
+<extend name="Tpl:Base" />
+<block name="body">
+    <!-- Main content -->
+    <section class="content">
+
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title iframe-title">菜单管理</h3>
+                <div class="clear"></div>
+                <div class="btn-toolbar">
+                    <a class="btn btn-success" href="{:U('Addons/SkymenuEdit')}">新增</a>
+                    <!--<a class="btn btn-danger">删除</a>-->
+                </div>
+                <form action="" method="post" id="search_form">
+                    <div class="search">
+                        <select name="type" class="form-control select2 select2-hidden-accessible"
+                                style="width: 100%;" tabindex="-1" aria-hidden="true" onchange="window.location.href = '?module='+this.value" >
+                            <option value=" ">全部</option>
+                            <option value="Sky">Sky</option>
+                            <option value="Open">Open</option>
+                        </select>
+                    </div>
+                </form>
+                <div class="clear"></div>
+            </div><!-- /.box-header -->
+            <div class="box-body no-padding">
+                <table class="table table-striped">
+                    <tbody>
+                    <tr>
+                        <!--<th><input type="checkbox" id="check-all"/></th>--><th>编号</th><th>名称</th><th>链接</th><th>排序</th><th>显示</th><th>操作</th>
+                    </tr>
+                    <volist name="list" id="vo">
+                        <tr>
+                            <!--<td><input type="checkbox" name="ids[]" value="{$vo.id}"/></td>-->
+                            <td>{$vo.id}</td>
+                            <td>{$vo.name}</td>
+                            <td>{$vo.src}</td>
+                            <td>{$vo.sort}</td>
+                            <td>
+                                <eq name="vo.usage" value="1">
+                                    正常
+                                    <else />
+                                    隐藏
+                                </eq>
+                            </td>
+                            <td>
+                                <a href="{:U('Addons/SkymenuEdit',array('id'=>$vo['id']))}">编辑</a>
+                                <a class="ajax-submit ajax-get ajax-del" data-href="{:U('Addons/SkymenuEdit',array('id'=>$vo['id']))}">删除</a>
+                            </td>
+                        </tr>
+                        <notempty name="vo.child">
+                            <volist name="vo.child" id="item">
+                                <tr>
+                                    <td>{$item.id}</td>
+                                    <td>&nbsp;&nbsp;&nbsp;<span class="ion-arrow-graph-down-right"></span> {$item.name}</td>
+                                    <td>{$item.src}</td>
+                                    <td>{$item.sort}</td>
+                                    <td>
+                                        <eq name="item.usage" value="1">
+                                            正常
+                                            <else />
+                                            隐藏
+                                        </eq>
+                                    </td>
+                                    <td>
+                                        <a href="{:U('Addons/SkymenuEdit',array('id'=>$item['id']))}">编辑</a>
+                                        <a class="ajax-submit ajax-get ajax-del" data-href="{:U('Addons/SkymenuEdit',array('id'=>$item['id']))}">删除</a>
+                                    </td>
+                                </tr>
+                            </volist>
+                        </notempty>
+                    </volist>
+                    </tbody></table>
+
+            </div><!-- /.box-body -->
+        </div>
+
+    </section><!-- /.content -->
+
+</block>

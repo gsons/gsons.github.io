@@ -1,0 +1,94 @@
+<extend name="Tpl:Base"/>
+<block name="body">
+    <!-- Main content -->
+    <section class="content">
+        <a href="#" class="ion-reply history-back" onclick="history.back(1)">&nbsp;返回</a>
+        <div class="nav-tabs-custom">
+            <form action="" id="form">
+                <div class="box box-success">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">前台用户增加/修改</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label>用户类型：</label>
+                            <select name="type" class="form-control select2 select2-hidden-accessible" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                                <option value="">请选择用户类型</option>
+                                <volist name="type" id="vo">
+                                    <option value="{$i-1}" <eq name="info.type" value="$i-1" > selected </eq> >{$vo}</option>
+                                </volist>
+                            </select>
+                        </div>
+                        <br>
+
+                        <div class="form-group">
+                            <label>特权用户：</label>
+                            <input type="radio" class="form-control" name="isSpecial" value="1" <notempty name="info.isSpecial"><eq name="info.isSpecial" value="1">checked</eq> <else/> checked </notempty> /> 是 &nbsp;
+                            <input type="radio" class="form-control" name="isSpecial" value="0" <eq name="info.isSpecial" value="0">checked</eq> /> 否
+                            <label class="label label-danger">（无需进行邮箱验证，身份验证即可发布数据。且数据将无需审核直接呈现于网站中，请谨慎选择）</label>
+                        </div>
+                        <br>
+
+                        <div class="form-group">
+                            <label>用户名：</label>
+                            <input type="text" class="form-control" placeholder="用户名" name="username"
+                                   value="{$info.username}">
+                        </div>
+                        <br>
+
+                        <div class="form-group">
+                            <label>密码：</label>
+                            <input type="password" class="form-control" placeholder="密码与确认密码为空则不作修改" name="password"
+                                   value="">
+                        </div>
+                        <br>
+
+                        <div class="form-group">
+                            <label>确认密码：</label>
+                            <input type="password" class="form-control" placeholder="密码与确认密码为空则不作修改" name="repassword"
+                                   value="">
+                        </div>
+                        <br>
+
+                        <div class="form-group">
+                            <label>组织机构简称：</label>
+                            <input type="text" class="form-control" placeholder="政府单位请填写该栏目" name="org_short_name"
+                                   value="{$info.org_short_name}">
+                        </div>
+                        <br>
+
+                        <div class="form-group">
+                            <label>用户编码：</label>
+                            <input type="text" class="form-control" placeholder="链接" name="code"
+                                   value="{$info.code}">
+                        </div>
+                        <br>
+
+                        <div class="form-group">
+                            <label>审核：</label>
+                            <input type="radio" class="form-control" name="status" value="1" <notempty name="info.status"><eq name="info.status" value="1">checked</eq> <else/> checked </notempty> /> 通过 &nbsp;
+                            <input type="radio" class="form-control" name="status" value="0" <eq name="info.status" value="0">checked</eq> /> 未通过
+                        </div>
+                        <br>
+
+                        <div class="form-group">
+                            <label>锁定：</label>
+                            <input type="radio" class="form-control" name="locked" value="0" <notempty name="info.locked"><eq name="info.locked" value="0">checked</eq> <else/> checked </notempty> /> 正常 &nbsp;
+                            <input type="radio" class="form-control" name="locked" value="1" <eq name="info.locked" value="1">checked</eq> /> 锁定
+                        </div>
+                        <br>
+
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        <input type="hidden" name="id" value="{:I('get.id')}" />
+                        <button type="button" class="btn btn-primary ajax-submit ajax-post" data-form="form">提交</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+
+    </section>
+    <!-- /.content -->
+</block>

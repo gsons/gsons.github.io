@@ -1,0 +1,112 @@
+<extend name="Tpl:Base"/>
+<block name="body">
+<style>
+    .delete a{
+        position: absolute;
+        right: 30px;
+    }
+</style>
+    <!-- Main content -->
+    <section class="content">
+        <a href="#" class="ion-reply history-back" onclick="history.back(1)">&nbsp;返回</a>
+        <div class="nav-tabs-custom">
+            <form action="" id="form">
+                <div class="box box-success">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">专题增加/修改</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label><span class="text-red">*</span> 标题： </label>
+                            <input type="text" class="form-control" placeholder="标题" name="title" value="{$info.title}">
+                        </div>
+                        <br>
+
+                        <div class="form-group">
+                            <label><span class="text-red">*</span> 头部横幅： (1180px * 200px)</label>
+                            <input type="file" name="pic" id="pic_upload"/>
+                            <div id="queue">
+                                <notempty name="info.picture">
+                                    <volist name=":json_decode($info['picture'],true)" id="src">
+                                    <div class="delete"><a href="javasctipt:;"  onclick="delete_picture(this)">X</a><img style="max-width:100%;" src="__UPLOAD__/{$src}" alt=""/> <input type="hidden" name="picture[]" value="{$src}"/>
+                                    </div>
+                                    </volist>
+                                </notempty>
+                            </div>
+                        </div>
+                        <br>
+
+                        <div class="form-group">
+                            <label><span class="text-red">*</span> 专题开始日期 </label>
+                            <input type="text" class="form-control date" name="start_time" value="{: empty($info['start_time'])?'':date('Y-m-d',$info['start_time'])}">
+                        </div>
+                        <br>
+
+                        <div class="form-group">
+                            <label><span class="text-red">*</span> 专题结束日期 </label>
+                            <input type="text" class="form-control date" name="end_time" value="{: empty($info['end_time'])?'':date('Y-m-d',$info['end_time'])}">
+                        </div>
+                        <br>
+
+                        <div class="form-group">
+                            <label><span class="text-red">*</span> 请选择专题模版： </label>
+                            <select name="theme" class="form-control select2 select2-hidden-accessible"
+                                    style="width: 100%;" tabindex="-1" aria-hidden="true">
+                                <volist name="file_list" id="vo">
+                                    <option value="{$vo}">{$vo}</option>
+                                </volist>
+                            </select>
+                        </div>
+                        <br>
+
+
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        <input type="hidden" name="id" value="{:I('get.id')}" />
+                        <button type="button" class="btn btn-primary ajax-submit ajax-post" data-form="form">提交</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+
+    </section>
+    <!-- /.content -->
+
+</block>
+<block name="script">
+<script src="__PLUS__/uploadify/jquery.uploadify.min.js"></script>
+<link rel="stylesheet" href="__PLUS__/uploadify/uploadify.css"/>
+<script>
+
+    function delete_picture(a){
+        $(a).parent().remove();
+    }
+
+    var auid = '{:is_admin()}';
+    $('#pic_upload').uploadify({
+        'multi': true,
+        'fileTypeExts': '*.gif; *.jpg; *.png',
+        'formData': {'auid': auid},
+        'buttonText': '上传',
+        'swf': '__PLUS__/uploadify/uploadify.swf',
+        'uploader': '{:U("Public/UploadFile",array("type"=>"image"))}',
+        'height': 35,
+        'width': 70,
+        'onUploadSuccess': function (file, data, response) {
+            var data = JSON.parse(data);
+            if (data.status == '1') {
+                var picker = '<div class="delete"><a href="javasctipt:;" onclick="delete_picture(this)">X</a><img style="max-width:100%;" src="__UPLOAD__/' + data.info.Filedata.savepath + '' + data.info.Filedata.savename + '" alt=""/> <input type="hidden" name="picture[]" value="' + data.info.Filedata.savepath + '' + data.info.Filedata.savename + '" /></div>';
+                $('#queue').append(picker);
+            } else if (data.status == '0') {
+                layer.msg(data.info)
+            } else {
+                layer.msg(data)
+            }
+        }
+    });
+
+</script>
+
+</block>

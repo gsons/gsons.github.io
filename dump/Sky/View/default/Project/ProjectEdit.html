@@ -1,0 +1,125 @@
+<extend name="Tpl:Base"/>
+<block name="body">
+    <!-- Main content -->
+    <section class="content">
+        <a href="#" class="ion-reply history-back" onclick="history.back(1)">&nbsp;返回</a>
+        <div class="nav-tabs-custom">
+            <form action="" id="form">
+                <div class="box box-success">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">新闻增加/修改</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label>标题：</label>
+                            <input type="text" class="form-control" placeholder="标题" name="title"
+                                   value="{$info.title}">
+                        </div>
+                        <br>
+
+                        <div class="form-group">
+                            <label>案例分类：</label>
+                            <select name="category_id" class="form-control select2 select2-hidden-accessible"
+                                    style="width: 100%;" tabindex="-1" aria-hidden="true">
+                                <option value="">请选择案例分类</option>
+                                <volist name="type" id="vo">
+                                    <option value="{$vo.id}"
+                                    <eq name="info.category_id" value="$vo['id']"> selected</eq>
+                                    >{$vo.name}</option>
+                                </volist>
+                            </select>
+                        </div>
+                        <br>
+
+                        <div class="form-group">
+                            <label>属性：</label>
+                            <input type="text" class="form-control" placeholder="属性" name="attribution"
+                                   value="{$info.attribution}">
+                        </div>
+                        <br>
+
+                        <div class="form-group">
+                            <label>周期：</label>
+                            <input type="text" class="form-control" placeholder="周期" name="time"
+                                   value="{$info.time}">
+                        </div>
+                        <br>
+
+                        <div class="form-group">
+                            <label>图片(大小510px * 325px)：</label>
+                            <input type="file" name="pic" id="pic_upload"/>
+                            <div id="queue">
+                                <notempty name="info.src">
+                                    <img style="max-width:100%;" src="__UPLOAD__/{$info.src}" alt=""/> <input type="hidden" name="src" value="{$info.src}"/>
+                                </notempty>
+                            </div>
+                        </div>
+                        <br>
+
+                        <div class="form-group">
+                            <label>地址：</label>
+                            <input type="text" class="form-control" placeholder="http://www.simplexun.com" name="link"
+                                   value="{$info.link}">
+                        </div>
+                        <br>
+
+                        <div class="form-group">
+                            <label>描述：</label>
+                            <textarea name="description" class="form-control">{$info.description}</textarea>
+                        </div>
+                        <br>
+
+                        <div class="form-group">
+                            <label>状态：</label>
+                            <label class="checkbox-inline">
+                                <input type="radio" name="status" value="1" <notempty name="info.status"><eq name="info.status" value="1">checked</eq> <else/> checked </notempty> /> 启用 &nbsp;
+                            </label>
+                            <label class="checkbox-inline">
+                                <input type="radio" name="status" value="0" <eq name="info.status" value="0">checked</eq> /> 禁用
+                            </label>
+                        </div>
+                        <br>
+
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        <input type="hidden" name="id" value="{:I('get.id')}" />
+                        <button type="button" class="btn btn-primary ajax-submit ajax-post" data-form="form">提交</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+
+    </section>
+    <!-- /.content -->
+
+</block>
+<block name="script">
+    <script src="__PLUS__/uploadify/jquery.uploadify.min.js"></script>
+    <link rel="stylesheet" href="__PLUS__/uploadify/uploadify.css"/>
+    <script>
+        var auid = '{:is_admin()}';
+        $('#pic_upload').uploadify({
+            'multi': true,
+            'fileTypeExts': '*.gif; *.jpg; *.png',
+            'formData': {'auid': auid},
+            'buttonText': '上传',
+            'swf': '__PLUS__/uploadify/uploadify.swf',
+            'uploader': '{:U("Public/UploadFile",array("type"=>"image"))}',
+            'height': 35,
+            'width': 70,
+            'onUploadSuccess': function (file, data, response) {
+                var data = JSON.parse(data);
+                if (data.status == '1') {
+                    var picker = '<img style="max-width:100%;" src="__UPLOAD__/' + data.info.Filedata.savepath + '' + data.info.Filedata.savename + '" alt=""/> <input type="hidden" name="src" value="' + data.info.Filedata.savepath + '' + data.info.Filedata.savename + '" /> ';
+                    $('#queue').html(picker);
+                } else if (data.status == '0') {
+                    layer.msg(data.info)
+                } else {
+                    layer.msg(data)
+                }
+            }
+        });
+    </script>
+</block>

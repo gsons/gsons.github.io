@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{:C('CMS_TITLE')} {$SITE_TITLE}</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.5 -->
+    <link rel="stylesheet" href="__PLUS__/bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="__PUBLIC__/AdminLTE/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="__PUBLIC__/AdminLTE/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="__PUBLIC__/AdminLTE/css/AdminLTE.css">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="__PUBLIC__/AdminLTE/css/skins/_all-skins.min.css">
+    <!-- iCheck -->
+    <link rel="stylesheet" href="__PLUS__/iCheck/flat/blue.css">
+
+    <!-- bootstrap wysihtml5 - text editor -->
+    <link rel="stylesheet" href="__PLUS__/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
+
+    <!-- Extend -->
+    <link rel="stylesheet" href="__PUBLIC__/AdminLTE/css/extend.css">
+</head>
+<body>
+<section class="content">
+    <block name="body"></block>
+</section><!-- /.content -->
+<!-- jQuery 2.1.4 -->
+<script src="__COMMON__/js/jquery214.js"></script>
+<script src="__COMMON__/js/common.js"></script>
+<!-- Bootstrap 3.3.5 -->
+<script src="__PLUS__/bootstrap/js/bootstrap.min.js"></script>
+
+
+<!-- iCheck 复选框美化 -->
+<link rel="stylesheet" href="__PLUS__/iCheck/all.css"/>
+<script src="__PLUS__/iCheck/icheck.min.js"></script>
+<script>
+    $('body').css('background','#f1f1f1')
+    $('.wrapper').css('background','none')
+
+    $('input').on('ifChecked', function(event){
+        var name = $(this).attr('data-name');
+        if ( $(this).attr('data-check') == 'check-all' ){
+            $('input[name="'+name+'"]').iCheck('check')
+        } else if (  $(this).attr('data-check') == 'check-opposite' ){
+            $('input[name="'+name+'"]').iCheck('toggle');
+        }
+    })
+    $('input').on('ifUnchecked', function(event){
+        var name = $(this).attr('data-name');
+        if ( $(this).attr('data-check') == 'check-all' ){
+            $('input[name="'+name+'"]').iCheck('uncheck')
+        } else if (  $(this).attr('data-check') == 'check-opposite' ){
+            $('input[name="'+name+'"]').iCheck('toggle');
+        }
+    })
+
+    $('input').iCheck({
+        checkboxClass: 'icheckbox_square-blue',
+        radioClass: 'iradio_square-blue',
+        increaseArea: '20%' // optional
+    });
+</script>
+
+<!-- 日期选择 -->
+<link rel="stylesheet" href="__PLUS__/datetimepicker/jquery.datetimepicker.css"/>
+<script src="__PLUS__/datetimepicker/jquery.datetimepicker.js"></script>
+<script>
+    $('.date').datetimepicker({
+        timepicker:false,
+        format: 'Y-m-d'
+    })
+    $('.time').datetimepicker({
+        datepicker:false,
+        format: 'H:i'
+    })
+    $('.clock').datetimepicker({
+        format: 'Y-m-d H:i'
+    })
+</script>
+
+<!-- Select 下拉列表美化 -->
+<link rel="stylesheet" href="__PLUS__/select2/select2.min.css">
+<script src="__PLUS__/select2/select2.full.min.js"></script>
+<script>
+    $(".select2").select2();
+</script>
+
+<!--layer-->
+<link rel="stylesheet" href="__PLUS__/layer/skin/layer.css"/>
+<script src="__PLUS__/layer/layer.js"></script>
+
+<script>
+    $(document).keydown(function(e){
+        var code = e.keyCode;
+        if( code == 27  ){
+            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+            parent.layer.close(index); //再执行关闭
+        }
+    })
+</script>
+<block name="script"></block>
+</body>
+</html>

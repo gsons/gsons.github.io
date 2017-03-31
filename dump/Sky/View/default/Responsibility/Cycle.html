@@ -1,0 +1,22 @@
+<li id="type-{$vo.id}">
+    <div class="slider fa fa-fw fa-minus-square-o fa-plus-square-o"></div>
+    <div class="sort">
+        <input type="text" class="form-control" name="sort" value="{$vo.sort}" id="{$vo.id}" />
+    </div>
+    <div class="status">
+        <eq name="vo.status" value="1">正常</eq>
+        <eq name="vo.status" value="0">禁用</eq>
+    </div>
+    <div class="name">
+        <em style="margin-left:{$level*20}px;"></em>
+        <span>{$vo.name}</span>
+    </div>
+    <div class="action">
+        <a class="navigation" href="javascript:" data-href="{:U('Date',array('id'=>$vo['id']))}"  onclick="OpenFrame(this.getAttribute('data-href'),'选择周期','50%','400px')" >更新周期</a>
+        <a class="navigation ajax-submit ajax-get ajax-del" data-href="{:U('Type/TypeEdit',array('id'=>$vo['id']))}">删除</a>
+    </div>
+    <div class="cycle">
+        {$vo.cycle|getConfigName='CYCLE_DATE',''}
+    </div>
+    <div class="clear"></div>
+</li>

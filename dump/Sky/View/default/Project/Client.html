@@ -1,0 +1,44 @@
+<extend name="Tpl:Base" />
+<block name="body">
+    <!-- Main content -->
+    <section class="content">
+
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title iframe-title">服务客户管理</h3>
+                <neq name="static" value="1">
+                    <div class="btn-toolbar">
+                        <a class="btn btn-success" href="{:U('Project/ClientEdit')}">新增</a>
+                        <a class="btn btn-danger">锁定</a>
+                    </div>
+                </neq>
+            </div><!-- /.box-header -->
+            <div class="box-body no-padding">
+                <table class="table table-striped">
+                    <tbody>
+                    <tr>
+                        <!--<th><input type="checkbox" id="check-all"/></th>--><th>编号</th><th>名称</th><th>状态</th><th>操作</th>
+                    </tr>
+                    <volist name="list" id="vo">
+                        <tr>
+                            <!--<td><input type="checkbox" name="ids[]" value="{$vo.id}"/></td>-->
+                            <td>{$vo.id}</td>
+                            <td>{$vo.name}</td>
+                            <td><eq name="vo.status" value="1"><span class="green">正常</span> <else /> <span class="green">禁用</span></eq></td>
+                            <td>
+                                <!--<a href="{:U('Project/ClientDetail',array('id'=>$vo['id']))}">查看</a>-->
+                                <a href="{:U('Project/ClientEdit',array('id'=>$vo['id']))}">编辑</a>
+                                <neq name="static" value="1"><a class="ajax-submit ajax-get ajax-del" data-href="{:U('Project/ClientEdit',array('id'=>$vo['id']))}">删除</a></neq>
+                            </td>
+                        </tr>
+                    </volist>
+                    </tbody></table>
+            </div><!-- /.box-body -->
+            <div class="box-footer">
+                {$page}
+            </div>
+        </div>
+
+    </section><!-- /.content -->
+
+</block>

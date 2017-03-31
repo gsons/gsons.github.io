@@ -1,0 +1,52 @@
+<extend name="Tpl:Base" />
+<block name="body">
+    <!-- Main content -->
+    <section class="content">
+
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title iframe-title">权责统计</h3>
+                <form action="" method="get" id="search_form">
+                    <div class="search">
+                        <input type="text" name="keyword" class="form-control" placeholder="搜索部门" value="{:I('get.keyword')}">
+                        <input type="submit" value="搜索" class="btn btn-info">
+                    </div>
+                </form>
+            </div><!-- /.box-header -->
+            <div class="box-body no-padding">
+                <table class="table table-striped table-bordered table-hover">
+                    <tbody>
+                    <tr>
+                        <th rowspan="2"  style="vertical-align:middle">角色/组</th>
+                        <volist name="CYCLE_DATE" id="vo">
+                            <th colspan="2" style="text-align:center;">{$key|getConfigName='CYCLE_DATE'}</th>
+                        </volist>
+                        <th rowspan="2"  style="vertical-align:middle">操作</th>
+                    </tr>
+                    <tr>
+                        <volist name="CYCLE_DATE" id="vo">
+                            <th style="text-align:center;width:5%;">未发</th>
+                            <th style="text-align:center;width:5%;">需发</th>
+                        </volist>
+                    </tr>
+                    <volist name="list" id="vo">
+                        <tr>
+                            <td>{$vo.title}</td>
+                            <volist name="vo.data" id="item">
+                                <td <gt name="item.need" value="0">class="text-danger"</gt> >
+                                    {$item.need}
+                                </td>
+                                <td>{$item.max}</td>
+                            </volist>
+                            <td>
+                                <a href="{:U('detail',array('id'=>$vo['id']))}" >详细权责统计</a>
+                            </td>
+                        </tr>
+                    </volist>
+                    </tbody></table>
+            </div><!-- /.box-body -->
+        </div>
+
+    </section><!-- /.content -->
+
+</block>

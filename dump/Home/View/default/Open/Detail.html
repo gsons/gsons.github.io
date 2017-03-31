@@ -1,0 +1,63 @@
+<extend name="Tpl/Base" />
+<block name="body">
+    <div class="container">
+        <div class="wrapper">
+            <include file="Breadcrumb" />
+            <div class="APList-banner">
+                <img src="__PUBLIC__/Home/img/AP-banner.jpg" />
+            </div>
+            <div class="info-content news-list APDetail">
+                <div class="masthead">
+                    <table>
+                        <tr>
+                            <td class="title">名称</td>
+                            <td colspan="3">{$info.title}</td>
+                        </tr>
+                        <tr>
+                            <td class="title">内容概述</td>
+                            <td colspan="3">{$info.description}</td>
+                        </tr>
+                        <tr>
+                            <td class="title">公开日期</td>
+                            <td>{$info.public_date|FormatDate='Y-m-d'}</td>
+                            <td class="title">公告责任部门</td>
+                            <td>{$info.department_name}</td>
+                        </tr>
+                        <tr>
+                            <td class="title">公开目录</td>
+                            <td>{$info.catalog_id|getCatalogName}</td>
+                            <td class="title">关键字</td>
+                            <td>{$info.keyword}</td>
+                        </tr>
+                        <tr>
+                            <td class="title">信息有效性</td>
+                            <td>有效</td>
+                            <td class="title">文号</td>
+                            <td>{$info.document_number}</td>
+                        </tr>
+                        <tr>
+                            <td class="title">索引号</td>
+                            <td>{$info.index_number}</td>
+                            <td class="title">公开形式</td>
+                            <td><eq name="info.public_type" value="1">主动公开<else />依申请公开</eq></td>
+                        </tr>
+                    </table>
+                    <span class="APDetail-lable"></span>
+                </div>
+                <div class="APDetail-content">
+                    <p class="title">{$info.title}</p>
+                    <div class="text">
+                        {$info.content|htmlspecialchars_decode|makeImgSrc}
+                    </div>
+                    <PHP>
+                        $attach = json_decode(htmlspecialchars_decode($info['attach']),true);
+                    </PHP>
+                    <br/>
+                    <notempty name="attach">
+                        <!--<div style="font-size:16px;font-weight:normal;"><label>附件：</label><a href="__UPLOAD__/{$attach.src}" target="_blank">{$attach.name}</a></div>-->
+                    </notempty>
+                </div>
+            </div>
+        </div>
+    </div>
+</block>

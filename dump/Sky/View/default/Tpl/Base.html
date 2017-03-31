@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{:C('CMS_TITLE')} {$SITE_TITLE}</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.5 -->
+    <link rel="stylesheet" href="__PLUS__/bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="__PUBLIC__/AdminLTE/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="__PUBLIC__/AdminLTE/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="__PUBLIC__/AdminLTE/css/AdminLTE.css">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="__PUBLIC__/AdminLTE/css/skins/_all-skins.min.css">
+    <!-- iCheck -->
+    <link rel="stylesheet" href="__PLUS__/iCheck/flat/blue.css">
+
+    <!-- bootstrap wysihtml5 - text editor -->
+    <link rel="stylesheet" href="__PLUS__/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
+
+    <!-- Extend -->
+    <link rel="stylesheet" href="__PUBLIC__/AdminLTE/css/extend.css">
+</head>
+<body class="hold-transition skin-green sidebar-mini">
+<div class="box">
+    <div class="box-header with-border iframe-header">
+        <h3 class="box-title iframe-title">
+            {$SITE_TITLE}
+        </h3>
+    </div><!-- /.box-header -->
+    <div class="box-body" style="padding:0;">
+        <block name="body"></block>
+    </div><!-- /.box-body -->
+</div>
+<!-- ./wrapper -->
+</body>
+</html>
+
+<!-- jQuery 2.1.4 -->
+<script src="__COMMON__/js/jquery214.js"></script>
+<script src="__COMMON__/js/common.js"></script>
+<script src="__PUBLIC__/AdminLTE/js/app.js"></script>
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="__PUBLIC__/AdminLTE/js/html5shiv.min.js"></script>
+<script src="__PUBLIC__/AdminLTE/js/respond.min.js"></script>
+<![endif]-->
+
+<!--layer-->
+<link rel="stylesheet" href="__PLUS__/layer/skin/layer.css"/>
+<script src="__PLUS__/layer/layer.js"></script>
+
+<!-- jQuery UI 1.11.4 -->
+<script src="__PLUS__/jQueryUI/jquery-ui.min.js"></script>
+<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+<script>
+    $.widget.bridge('uibutton', $.ui.button);
+</script>
+<!-- Bootstrap 3.3.5 -->
+<script src="__PLUS__/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- AdminLTE App -->
+<!--<script src="__PUBLIC__/AdminLTE/js/app.js"></script>-->
+
+<!-- iCheck 复选框美化 -->
+<link rel="stylesheet" href="__PLUS__/iCheck/all.css"/>
+<script src="__PLUS__/iCheck/icheck.min.js"></script>
+<script>
+    $('body').css('background','#f1f1f1')
+    $('.wrapper').css('background','none')
+
+    $('input').on('ifChecked', function(event){
+        var name = $(this).attr('data-name');
+        if ( $(this).attr('data-check') == 'check-all' ){
+            $('input[name="'+name+'"]').iCheck('check')
+        } else if (  $(this).attr('data-check') == 'check-opposite' ){
+            $('input[name="'+name+'"]').iCheck('toggle');
+        }
+    })
+    $('input').on('ifUnchecked', function(event){
+        var name = $(this).attr('data-name');
+        if ( $(this).attr('data-check') == 'check-all' ){
+            $('input[name="'+name+'"]').iCheck('uncheck')
+        } else if (  $(this).attr('data-check') == 'check-opposite' ){
+            $('input[name="'+name+'"]').iCheck('toggle');
+        }
+    })
+
+    $('input').iCheck({
+        checkboxClass: 'icheckbox_square-blue',
+        radioClass: 'iradio_square-blue',
+        increaseArea: '20%' // optional
+    });
+
+    function SelectIcon(){
+        layer.open({
+            type: 2,
+            skin:'layui-layer-molv',
+            title: '选择图标',
+            shadeClose: true,
+            shade: 0.8,
+            area: ['780px', '680px'],
+            content: '{:U("Public/SelectIcon")}' //iframe的url
+        });
+    }
+
+    function SelectKeyword(){
+        layer.open({
+            type: 2,
+            skin:'layui-layer-molv',
+            title: '选择关键词',
+            offset: '350px',
+            shadeClose: true,
+            shade: 0.1,
+            area: ['780px', '380px'],
+            content: '{:U("Wechat/SelectKeyword")}' //iframe的url
+        });
+    }
+
+    $('#text').focus(function(){
+        $('#sub_type_id').val(1);
+    })
+    function SelectMediaImage(){
+        layer.open({
+            type: 2,
+            skin:'layui-layer-molv',
+            title: '选择图片',
+            shadeClose: true,
+            shade: 0.1,
+            area: ['90%', '500px'],
+            content: '{:U("Wechat/SelectImage")}' //iframe的url
+        });
+    }
+    function SelectMediaVoice(){
+        layer.open({
+            type: 2,
+            skin:'layui-layer-molv',
+            title: '选择音频',
+            shadeClose: true,
+            shade: 0.1,
+            area: ['90%', '500px'],
+            content: '{:U("Wechat/SelectVoice")}' //iframe的url
+        });
+    }
+    function SelectMediaVideo(){
+        layer.open({
+            type: 2,
+            skin:'layui-layer-molv',
+            title: '选择视频',
+            shadeClose: true,
+            shade: 0.1,
+            area: ['90%', '500px'],
+            content: '{:U("Wechat/SelectVideo")}' //iframe的url
+        });
+    }
+
+    function Remove(obj){
+        $(obj).remove();
+    }
+
+    function DeleteMedia(obj){
+        var box = $(obj).parent().parent().parent();
+        var id = box.attr('data-id');
+        $.ajax({
+            url:"{:U('Wechat/DeleteMedia')}",
+            data:{ id:id } ,
+            beforeSend:loading(),
+            success:function(data){
+                if(data.status == '1'){
+                    layer.msg(data.info,{icon:1},function(){
+                        window.location.reload();
+                    })
+                }else{
+                    layer.msg('删除失败',{icon:0})
+                }
+                loaded()
+            },
+            error:function(){
+                layer.msg('系统异常，请稍后再试')
+                loaded();
+            }
+        })
+    }
+</script>
+<style>
+    .icheckbox_square-blue { margin-top:-5px;}
+</style>
+<!-- END -->
+
+
+<!-- Select 下拉列表美化 -->
+<link rel="stylesheet" href="__PLUS__/select2/select2.min.css">
+<script src="__PLUS__/select2/select2.full.min.js"></script>
+<script>
+    $(".select2").select2();
+</script>
+
+<!-- END -->
+<script>
+    iframe_loaded();
+</script>
+
+
+<!-- 日期选择 -->
+<link rel="stylesheet" href="__PLUS__/datetimepicker/jquery.datetimepicker.css"/>
+<script src="__PLUS__/datetimepicker/jquery.datetimepicker.js"></script>
+<script>
+    $('.date').datetimepicker({
+        lang:'ch',
+        format: 'Y-m-d',
+        timepicker:false
+    })
+    $('.time').datetimepicker({
+        lang:'ch',
+        format: 'H:i',
+        datepicker:false
+    })
+    $('.clock').datetimepicker({
+        lang:'ch'
+    })
+    $('.datetime').datetimepicker({
+        lang:'ch',
+        format: 'Y-m-d H:i:s'
+    })
+</script>
+
+<script>
+    $(document).keydown(function(e){
+        var code = e.keyCode;
+        if( code == 116  ){
+            e.preventDefault();
+            window.location.reload();
+        }
+        if( code == 27  ){
+            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+            parent.layer.close(index); //再执行关闭
+        }
+    })
+</script>
+
+<block name="script"></block>
+

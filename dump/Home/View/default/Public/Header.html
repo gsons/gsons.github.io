@@ -1,0 +1,360 @@
+
+<div class="container">
+    <div class="wrapper">
+        <div class="index-toolbar">
+            <div class="window">
+                <?php /*  ?><a href="" >无障碍通道</a>
+                <span class="vertical"> | </span>
+                <?php */  ?>
+                <a target="_blank" href="__ROOT__/mobile.php" >手机版</a>
+                <span class="vertical"> | </span>
+                <a target="_blank" href="http://oa.gdyunan.gov.cn/" >办公OA</a>
+                <span class="vertical"> | </span>
+                <a target="_blank" href="http://oa.gdyunan.gov.cn:8090/web/honest/index_city.ptl" >廉政直通车</a>
+            </div>
+        </div>
+        <div class="index-logo-box">
+            <a href="__MODULE__" class="logo"></a>
+            <div class="index-search">
+                <form action="{:U('Search/lists')}">
+                <input type="text" name="search" placeholder="请输入关键字搜索信息与服务" />
+                <button type="submit"></button>
+                </form>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="index-header">
+            <a  target="_blank" href="{:'__MODULE__'}" class="hover-disabled {: strtolower(CONTROLLER_NAME) == 'index' ? 'on' : ''}" >网站首页</a>
+            <a  target="_blank" href="{:U('About/Index')}" class=" {: strtolower(CONTROLLER_NAME) == 'about' ? 'on' : ''}" data-num="0">走进郁南</a>
+            <a  target="_blank" href="{:U('News/Index')}" class=" {: strtolower(CONTROLLER_NAME) == 'news' ? 'on' : ''}" data-num="1">新闻中心</a>
+            <a  target="_blank" href="{:U('Open/Index')}" class=" {: strtolower(CONTROLLER_NAME) == 'open' ? 'on' : ''}" data-num="2">政务公开</a>
+            <a  target="_blank" href="{:U('Hall/Index')}" class=" {: strtolower(CONTROLLER_NAME) == 'hall' ? 'on' : ''}">办事服务</a>
+            <a  target="_blank" href="{:U('Interact/Index')}" class=" {: strtolower(CONTROLLER_NAME) == 'interact' ? 'on' : ''}" data-num="4">政民互动</a>
+            <a  target="_blank" href="{:U('Economy/Index')}" class=" {: strtolower(CONTROLLER_NAME) == 'economy' ? 'on' : ''}" data-num="5">招商引资</a>
+        </div>
+        <div class="sNav-panel-box" >
+            <div class="sNav-panel walk-into-yunan" style="display:none;">
+                <div class="panel-yunan-map">
+                    <img src="__PUBLIC__/Home/img/map.png" />
+                </div>
+                <div class="panel-yunan-info">
+                    <div class="info-head">
+                        <a  target="_blank" href="{:U('About/Lists',array('id'=>1372))}" class="info-title green-color">
+                            郁南概况
+                        </a>
+                    </div>
+                    <div class="info-text">
+                        <p>{$description1}<a href="{:U('About/Lists',array('id'=>1372))}" class="green-color">【查看详情】</a></p>
+                    </div>
+                    <div class="info-box">
+                        <a target="_blank" href="{:U('About/Lists',array('id'=>1148))}">都城</a>
+                        <a target="_blank" href="{:U('About/Lists',array('id'=>1159))}">东坝</a>
+                        <a target="_blank" href="{:U('About/Lists',array('id'=>1158))}">宋桂</a>
+                        <a target="_blank" href="{:U('About/Lists',array('id'=>1160))}">连滩</a>
+                        <a target="_blank" href="{:U('About/Lists',array('id'=>1157))}">河口</a>
+                        <a target="_blank" href="{:U('About/Lists',array('id'=>1156))}">大湾</a>
+                        <a target="_blank" href="{:U('About/Lists',array('id'=>1152))}">建城</a>
+                        <a target="_blank" href="{:U('About/Lists',array('id'=>1155))}">千官</a>
+                        <a target="_blank" href="{:U('About/Lists',array('id'=>1151))}">通门</a>
+                        <a target="_blank" href="{:U('About/Lists',array('id'=>1150))}">桂圩</a>
+                        <a target="_blank" href="{:U('About/Lists',array('id'=>1149))}">平台</a>
+                        <a target="_blank" href="{:U('About/Lists',array('id'=>1153))}">宝珠</a>
+                        <a target="_blank" href="{:U('About/Lists',array('id'=>1161))}">历洞</a>
+                        <a target="_blank" href="{:U('About/Lists',array('id'=>1154))}">大方</a>
+                        <a target="_blank" href="{:U('About/Lists',array('id'=>1162))}">南江口</a>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+                <div class="panel-yunan-other">
+                    <a target="_blank" href="{:U('About/Lists',array('id'=>1373))}" class="sNav-history">历史文化</a>
+                    <a target="_blank" href="{:U('About/Lists',array('id'=>1375))}" class="sNav-green">绿色崛起</a>
+                    <a target="_blank" href="{:U('About/Lists',array('id'=>1538))}" class="sNav-zoology">生态文明</a>
+                    <a target="_blank" href="{:U('About/Lists',array('id'=>2067))}" class="sNav-culture">图说郁南</a>
+                    <a target="_blank" href="{:U('About/Lists',array('id'=>1374))}" class="sNav-impress">郁南印象</a>
+                </div>
+            </div>
+            <div class="sNav-panel news-center" style="display:none ;">
+                <div class="news-center-tap">
+                    <div class="news-head">
+                        <a href="javascript:;" class="on" data-num="0">最新动态</a>
+                        <a href="javascript:;" data-num="1">最新推荐</a>
+                        <a target="_blank" href="{:U('About/Lists',array('id'=>19))}" data-num="2">综合新闻</a>
+                        <?php /* ?><a href="javascript:;" data-num="3">郁南动态</a><?php */ ?>
+                        <a target="_blank" href="{:U('About/Lists',array('id'=>2072))}" data-num="3">公示公告</a>
+                        <a href="javascript:;" data-num="4">政声传递</a>
+                    </div>
+                    <div class="news-content-box">
+                    <volist name="public_list" id="vo" key="key">
+                        <div class="news-content {: $key > 1 ? 'hide' : '' }" >
+                            <div class="one-new">
+                                <a target="_blank" href="{:U('News/Details',array('id'=>$vo['arc']['id']))}" class="title green-color">{$vo.arc.title}</a>
+                                <p class="text">{$vo.arc.description|htmlspecialchars_decode|strip_tags|msubstr=0,65} <a href="{:U('News/Details',array('id'=>$vo['arc']['id']))}" class="green-color">[ 详细内容 ]</a></p>
+                            </div>
+                            <div class="news-list-box ">
+                                <volist name="vo.list" id="l">
+                                    <div  class="news-list">
+                                        <span class="dot">·</span>
+                                        <a target="_blank" href="{:U('News/Details',array('id'=>$l['id']))}" class="text">{$l.title}</a>
+                                        <span class="data">{$l.create_date|date='Y-m-d',###}</span>
+                                        <div class="clear"></div>
+                                    </div>
+                                </volist>
+                                </div>
+                                </div>
+                    </volist>
+
+                    <div class="news-content hide" >
+                            <div class="news-list-box" style="padding-top: 10px;" id="transmit">
+                            </div>
+                    </div>
+                    <script type="text/javascript">
+                    $(function(){
+                        $.ajax({
+                            url : 'http://app.gd.gov.cn/xxts/pushinfo_json.php',
+                            dataType : "jsonp",
+                            jsonp : "pushInfoJsonpCallBack",
+                            jsonpCallback:"pushInfoJsonpCallBack",
+                            success : function(data) {
+                            $.each(data,function(i,json){
+                                var title=json.title.substring(0,42);
+                                var html = '<div class="news-list"><span class="dot">·</span><a target="_blank" href="'+json.link+'" title="'+json.title+'" class="text">'+title+'</a><span class="data">'+json.pubDate+'</span><div class="clear"></div></div>';
+
+                                $("#transmit").append(html);
+                            })
+                            },
+                            error:function(){
+                                console.log('fail');
+                            }
+                        });
+                    });
+                    </script>
+                    </div>
+                </div>
+                <div class="news-center-video">
+                    <a target="_blank" href="{:U('News/lists',array('id'=>1379))}" class="video-title">
+                        视频新闻
+                    </a>
+                    <div class="video-box">
+                        <volist name="video" id="vo">
+                        <a target="_blank" href="{:U('News/Details',array('id'=>$vo['id']))}" class="video-list" style="background-image: url('__UPLOAD__/{$vo.src|default='NoImages.jpg'}');">
+                            <div class="list-title">
+                                {$vo.title}
+                            </div>
+                        </a>
+                        </volist>
+                        <div class="clear">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="sNav-panel news-center affairs-public" style="display: none;">
+                <div class="public-box">
+                    <div class="public-box-content">
+                        <div class="title">
+                            政府信息公开大厅
+                        </div>
+                        <div class="catalogue">
+                            <div class="list">
+                                <a target="_blank" href="{:U('Open/Article')}" class="a">信息公开制度</a>
+                                <a target="_blank" href="{:U('Open/Guide')}" class="b">信息公开指南</a>
+                            </div>
+                            <div class="list">
+                                <a target="_blank" href="{:U('Open/Department')}" class="c">信息公开目录</a>
+                                <a target="_blank" href="{:U('Apply/Department')}" class="d">依申请公开</a>
+                            </div>
+                            <div class="list" style="background: transparent;">
+                                <a target="_blank" href="{:U('Apply/Search')}" class="e">申请进度查询</a>
+                                <a target="_blank" href="{:U('Open/lists',array('id'=>1690))}" class="f">重点领域公开</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="news-center-tap">
+                    <div class="news-head">
+                        <a class="on">工作动态</a>
+                    </div>
+                    <div class="news-content-box">
+                        <div class="news-content">
+                            <volist name="work_activity" id="vo" offset="0" length="1" >
+                                <div class="one-new" style="height:100px;">
+                                    <a target="_blank" href="{:U('Open/Detail',array('id'=>$vo['id']))}" class="title green-color" title="{$vo.title}">{$vo.title|msubstr=0,15}</a>
+                                    <p class="text">{$vo.content|htmlspecialchars_decode|strip_tags|msubstr=0,65}<a target="_blank" href="{:U('Open/Details',array('id'=>$vo['id']))}" class="green-color">[ 详细内容 ]</a></p>
+                                </div>
+                            </volist>
+                            <div class="news-list-box">
+                                <volist name="work_activity" id="vo" offset="1" >
+                                    <div class="news-list">
+                                        <span class="dot">·</span>
+                                        <a target="_blank" href="{:U('Open/Detail',array('id'=>$vo['id']))}" class="text" title="{$vo.title}">{$vo.title|msubstr=0,15}</a>
+                                        <span class="data">{$vo.public_date|FormatDate='Y-m-d'}</span>
+                                        <div class="clear"></div>
+                                    </div>
+                                </volist>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="news-center-tap">
+                    <div class="news-head">
+                        <a class="on">相关法规</a>
+                    </div>
+                    <div class="news-content-box">
+                        <div class="news-content">
+                            <volist name="relation_law" id="vo" offset="0" length="1" >
+                                <div class="one-new" style="height:100px;">
+                                    <a target="_blank" href="{:U('Open/Detail',array('id'=>$vo['id']))}" class="title green-color"  title="{$vo.title}">{$vo.title|msubstr=0,15}</a>
+                                    <p class="text">{$vo.content|htmlspecialchars_decode|strip_tags|msubstr=0,65}<a target="_blank" href="{:U('Open/Details',array('id'=>$vo['id']))}" class="green-color">[ 详细内容 ]</a></p>
+                                </div>
+                            </volist>
+                            <div class="news-list-box">
+                                <volist name="relation_law" id="vo" offset="1" >
+                                    <div class="news-list">
+                                        <span class="dot">·</span>
+                                        <a target="_blank" href="{:U('Open/Detail',array('id'=>$vo['id']))}" class="text" title="{$vo.title}">{$vo.title|msubstr=0,15}</a>
+                                        <span class="data">{$vo.public_date|FormatDate='Y-m-d'}</span>
+                                        <div class="clear"></div>
+                                    </div>
+                                </volist>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="sNav-panel" style="display: none;">
+                办事服务
+            </div>
+            <div class="sNav-panel masatami-interact" style="display: none;">
+                <div class="online-interview">
+                    <div class="inter-head">
+                        <a target="_blank" href="{:U('Interact/Interview')}" class="inter-title green-color">
+                            在线访谈
+                        </a>
+                    </div>
+                    <div class="inter-content">
+                        <a target="_blank" href="{:U('Interact/InterviewDetails',array('id'=>$Interview['id']))}">
+                            <notempty name="Interview">
+                                <img class="inter-img" src="__UPLOAD__/{$Interview.picture|get_first_picture}" />
+                            </notempty>
+                        </a>
+                        <div class="text">
+                            <div class="text-list">
+                                <span>主题 : </span>
+                                <span class="tw">{$Interview.title}</span>
+                            </div>
+                            <div class="text-list">
+                                <span>嘉宾 : </span>
+                                <span class="tw">{$Interview.interview_guest}</span>
+                            </div>
+                            <div class="text-list">
+                                <span>时间 : </span>
+                                <span class="tw">{$Interview.interview_time}</span>
+                            </div>
+                            <div class="text-list">
+                                <span>摘要 : </span>
+                                <span class="tw">{$Interview.interview_description}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <a target="_blank" href="" class="green-color">【 进入会场 】</a>
+                </div>
+                <div class="lead-mailbox">
+                    <div class="mailbox-head">
+                        <a target="_blank" href="" class="mailbox-title">
+                            领导信箱
+                        </a>
+                    </div>
+                    <table>
+                        <tr class="table-head">
+                            <td class="text-left">主题</td>
+                            <td>发信人</td>
+                            <td>办理情况</td>
+                            <td>办理单位</td>
+                            <td>提交时间</td>
+                        </tr>
+                        <volist name="Interact" id="vo" offset="1" length="6">
+                            <tr>
+                                <td><a target="_blank" href="{:U('Interact/detail',array('id'=>$vo['id']))}" title="{$vo.title}">{$vo.title|msubstr=0,15}</a></td>
+                                <td style="text-align:center" title="{$vo.name}">{$vo.name|msubstr=0,6}</td>
+                                <td style="text-align:center" title="{$Interactstatus[$vo[status]]}">{$Interactstatus[$vo[status]] |msubstr=0,6}</td>
+                                <td style="text-align:center" title="{$vo.department}">{$vo.department|msubstr=0,6}</td>
+                                <td style="text-align:center">{$vo.datetime|date="Y-m-d",###}</td>
+                            </tr>
+                        </volist>
+
+                    </table>
+                </div>
+                <div class="interact-other">
+                    <a target="_blank" href="http://www.gdyunan.gov.cn/User/Login.aspx?ReturnUrl=%2fUser%2fGovernment%2fProposal.aspx" target="_blank" class="affairs">政务督察</a>
+                    <a target="_blank" href="{:U('Repository/Index')}" class="repository">互动知识库</a>
+                    <a target="_blank" href="{:U('Interact/Index')}" class="search">我要查询</a>
+                    <a target="_blank" href="{:U('Interact/Apply')}" class="consult">我要咨询</a>
+                    <!--<a target="_blank" href="" class=" hot-line">行风热线</a>-->
+                </div>
+            </div>
+            <div class="sNav-panel news-center attract-investment" style="display: none;">
+                <div class="news-center-tap">
+                    <div class="news-head">
+                        <a target="_blank" href="{:U('Economy/Lists',array('id'=>2070))}" class="on" data-num="0">招商动态</a>
+                        <a target="_blank" href="{:U('Economy/Lists',array('id'=>2069))}"  data-num="1">项目建设</a>
+                        <a target="_blank" href="{:U('Economy/Lists',array('id'=>2071))}"  data-num="2">投资政策</a>
+                    </div>
+                    <div class="news-content-box">
+                        <volist name="public_list2" id="vo">
+                        <div class="news-content {: $key > 0 ? 'hide' : '' }" >
+                            <div class="one-new">
+                                <a target="_blank" href="{:U('Economy/Details',array('id'=>$vo['arc']['id']))}" class="title green-color">{$vo.arc.title}</a>
+                                <p class="text">{$vo.arc.description|htmlspecialchars_decode|strip_tags|msubstr=0,65} <a target="_blank" href="{:U('Economy/Details',array('id'=>$vo['arc']['id']))}" class="green-color">[ 详细内容 ]</a></p>
+                            </div>
+                            <div class="news-list-box">
+                                <volist name="vo.list" id="l">
+                                    <div  class="news-list">
+                                        <span class="dot">·</span>
+                                        <a target="_blank" href="{:U('Economy/Details',array('id'=>$l['id']))}" class="text">{$l.title}</a>
+                                        <span class="data">{$l.create_date|date='Y-m-d',###}</span>
+                                        <div class="clear"></div>
+                                    </div>
+                                </volist>
+                                </div>
+                                </div>
+                    </volist>
+                    </div>
+                </div>
+                <div class="investment-right">
+                    <div class="investment-guide">
+                        <div class="right-head">
+                            <a target="_blank" href="{:U('Economy/Lists',array('id'=>2068))}" class="right-title">
+                                投资指南
+                            </a>
+                        </div>
+                        <div class="guide-box">
+                            <a target="_blank" href="{:U('Economy/Details',array('id'=>76158))}">投资文档介绍</a>
+                            <a target="_blank" href="{:U('Economy/Details',array('id'=>76159))}">资料文档下载</a>
+                            <a target="_blank" href="{:U('Economy/Details',array('id'=>76160))}">办事大厅指引</a>
+                            <a target="_blank" href="{:U('Economy/Details',array('id'=>76161))}">线下咨询联系</a>
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                    <div class="investment-climate">
+                        <div class="right-head">
+                            <a target="_blank" href="{:U('Economy/Lists',array('id'=>2074))}" class="right-title green-color">
+                                投资环境
+                            </a>
+                        </div>
+                        <div class="climate-box">
+                            <a target="_blank" href="{:U('Economy/Lists',array('id'=>2075))}">地理区位</a>
+                            <a target="_blank" href="{:U('Economy/Lists',array('id'=>2076))}">战略定位</a>
+                            <a target="_blank" href="{:U('Economy/Lists',array('id'=>2077))}">产业结构</a>
+                            <a target="_blank" href="{:U('Economy/Lists',array('id'=>2078))}">功能规划</a>
+                            <a target="_blank" href="{:U('Economy/Lists',array('id'=>2079))}">交通网络</a>
+                            <a target="_blank" href="{:U('Economy/Lists',array('id'=>2080))}">城市配套</a>
+                            <a target="_blank" href="{:U('Economy/Lists',array('id'=>2081))}">生态环境</a>
+                            <a target="_blank" href="{:U('Economy/Lists',array('id'=>2082))}">投资便利</a>
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

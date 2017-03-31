@@ -1,0 +1,29 @@
+<extend name="Tpl/Base" />
+<block name="body">
+    <div class="container">
+        <div class="wrapper">
+            <include file="Breadcrumb" />
+            <div class="APList-banner">
+               <div class="catalogue">
+            <span>当前位置：<a href="{:U('Index/Index')}">网站首页</a>&gt;<a href="">网站地图</a>         </span></div>
+            </div>
+            <div class="info-content APApply APApplySearch-content">
+                <div class="APApply-department">
+                    <volist name="category" id="vo">
+                        <div class="APdepartment-list">
+                            <div class="title">
+                                 <a href="{$vo.link}">{$vo.name}</a>
+                            </div>
+                            <div class="all">
+                                <volist name="vo.child" id="item">
+                                   <a href="{$item.link}">{$item.name}</a>
+                                </volist>
+                                <div class="clear"></div>
+                            </div>
+                        </div>
+                    </volist>
+                </div>
+            </div>
+        </div>
+    </div>
+</block>
