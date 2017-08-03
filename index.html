@@ -27,7 +27,7 @@
       background: linear-gradient(200deg,#a0cfe4,#e8c37e);
     }
   </style>
-  
+  <script src="https://cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
 
   
 
@@ -527,4 +527,13 @@
 </div>
   </div>
 </body>
+<script>
+  	  $.ajax({
+  	  	url:"http://119.29.133.157/ajax.php",
+  	  	dateType:"json",
+  	  	success:function(data){
+  	  		console.log(data);
+  	  	}
+  	  });
+  </script>
 </html>
