@@ -1,4 +1,4 @@
-app.controller('homeCtrl', function($ionicListDelegate ,$state,$ionicViewSwitcher,$localStorage, $sessionStorage, $scope, $stateParams, Api, $ionicScrollDelegate, $rootScope, $location) {
+app.controller('homeCtrl', function(Toast,$ionicListDelegate ,$state,$ionicViewSwitcher,$localStorage, $sessionStorage, $scope, $stateParams, Api, $ionicScrollDelegate, $rootScope, $location) {
         function init() {
             $scope.page = 0;
             $scope.has_more = true;
@@ -55,7 +55,10 @@ app.controller('homeCtrl', function($ionicListDelegate ,$state,$ionicViewSwitche
                     flag=true;break;
                 }
             }
-            if(!flag) list.push(vo);
+            if(!flag) list.unshift(vo);
+            else{
+            Toast.show("您已经收藏了该电影");
+           }
             $localStorage.saveList=list;
             $ionicListDelegate.closeOptionButtons();
         }

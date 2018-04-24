@@ -12,10 +12,11 @@
             <p>
                 <button ng-click="$event.stopPropagation()" class="button-assertive button button-small button-outline btn-keyword" ui-sref="app.list({key:vo.keyword})">{{vo.keyword}}</button>
             </p>
-             <ion-option-button class="button-calm" ng-click="delete(vo)">
+             <ion-option-button class="button-assertive" ng-click="delete(vo)">
                 删除
             </ion-option-button>
         </ion-item>
     </ion-list>
 </ion-content>
+ <div class="button-top" scroll-top><i class="icon ion-arrow-up-a"></i></div>
 </ion-view>

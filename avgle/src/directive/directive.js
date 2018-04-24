@@ -53,6 +53,28 @@ app.directive('rjHoldActive',function($timeout) {
                 });
             }
         };
-})
+});
 
+app.directive('scrollTop',function($timeout,$ionicScrollDelegate,$timeout) {
+        return {
+            restrict: 'AE',
+            replace: false,
+            link: function(scope, element, iAttrs, controller) {
+                scope.$on('lazyScrollEvent', function (){
+                   var pos=$ionicScrollDelegate._instances[0].getScrollPosition();
+                   if(pos.top>500){
+                      $timeout(function(){ element.css("display","block");},600);
+                   }else{
+                     $timeout(function(){ element.css("display","none");},600);
+                   }
+                   
+                });
+                element.bind("click",function(event){
+                    element.addClass("activated");
+                    $timeout(function(){ element.removeClass("activated");},600);
+                    $ionicScrollDelegate.scrollTop(true);
+                });
+            }
+        };
+})
 

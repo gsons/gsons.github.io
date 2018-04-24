@@ -1,4 +1,4 @@
-app.controller('viewCtrl', function($state,$localStorage,$sessionStorage,$scope, $stateParams, Api, $ionicScrollDelegate, $rootScope, $location, $sce) {
+app.controller('viewCtrl', function(Toast,$state,$localStorage,$sessionStorage,$scope, $stateParams, Api, $ionicScrollDelegate, $rootScope, $location, $sce) {
         $scope.$on('$ionicView.enter', function(e) {
             init();
             console.log("view","$ionicView.enter");
@@ -50,7 +50,10 @@ app.controller('viewCtrl', function($state,$localStorage,$sessionStorage,$scope,
                     flag=true;break;
                 }
             }
-            if(!flag) list.push(vo);
+            if(!flag) list.unshift(vo);
+             else{
+            Toast.show("您已经收藏了该电影");
+           }
             $localStorage.saveList=list;
             $ionicListDelegate.closeOptionButtons();
         }

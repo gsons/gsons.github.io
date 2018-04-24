@@ -2,7 +2,7 @@
     <h1 class="title">Avgle-分类</h1>
     <button class="button button-assertive icon ion-android-refresh" ng-click="$refresh()"></button>
 </ion-header-bar>
-<ion-content scroll="false" class="has-tabs page-list" padding="true" class="has-tabs" delegate-handle="contentScroll" overflow-scroll="true" id="content">
+<ion-content scroll="false" class="has-tabs page-list" padding="true" class="has-tabs" delegate-handle="listScroll" overflow-scroll="true" id="content">
     <form id="list-form1" class="list" ng-submit="submit($event,searchKey)">
         <label class="item item-input" id="list-search1">
             <i class="icon ion-search placeholder-icon"></i>
@@ -37,5 +37,5 @@
         </ion-infinite-scroll>
     </ion-scroll>
 </ion-content>
-
+ <div class="button-top" scroll-top><i class="icon ion-arrow-up-a"></i></div>
 

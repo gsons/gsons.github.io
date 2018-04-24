@@ -14,7 +14,7 @@ angular.module('ionicLazyLoad')
     function($rootScope) {
         return {
             restrict: 'A',
-            link: function ($scope, $element) {
+            link: function ($scope) {
                 var origEvent = $scope.$onScroll;
                 $scope.$onScroll = function () {
                     $rootScope.$broadcast('lazyScrollEvent');

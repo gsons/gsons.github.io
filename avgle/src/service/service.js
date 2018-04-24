@@ -179,4 +179,24 @@
             }  
         };  
   
-    }]) 
+    }]);
+   app.factory("Toast",function($timeout,$ionicLoading){
+      return {
+         show:function(content,_status){
+             var status=_status||'info';
+             if(status=='error'){
+                var _class="icon ion-android-alert assertive";
+             }
+             else if(status=="success"){
+                var _class="icon ion-android-alert positive";
+             }
+             else if(status=="info"){
+                var _class="icon ion-android-alert calm";
+             }
+             $ionicLoading.show({  
+                 template: '<i class="'+_class+'">'+content+'</i>'
+             });
+             $timeout(function(){$ionicLoading.hide()},1500);
+         }
+      }
+   });

@@ -1,6 +1,10 @@
-app.controller("personCtrl",function($scope,$localStorage){
+app.controller("personCtrl",function($state,$scope,$localStorage,$ionicViewSwitcher){
     $scope.$on('$ionicView.loaded', function() {
             console.log("person","$ionicView.loaded")
             // init();
         });
+    $scope.goStar=function(){
+    	$state.go("star");
+    	$ionicViewSwitcher.nextDirection("forward");
+    }
 });
