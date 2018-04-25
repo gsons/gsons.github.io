@@ -3,6 +3,15 @@ var app = angular.module('app', ['ionic', 'ngStorage','ionicLazyLoad']);
 app.config(['$ionicConfigProvider', '$sceDelegateProvider', function($ionicConfigProvider, $sceDelegateProvider) {
     //$sceDelegateProvider.resourceUrlWhitelist([ 'self','*://www.youtube.com/**', '*://player.vimeo.com/video/**']);
     $ionicConfigProvider.scrolling.jsScrolling(false);
+    $ionicConfigProvider.platform.ios.tabs.style('standard');
+    $ionicConfigProvider.platform.ios.tabs.position('bottom');
+    $ionicConfigProvider.platform.android.tabs.style('standard');
+    $ionicConfigProvider.platform.android.spinner.icon("ios");
+    $ionicConfigProvider.platform.android.tabs.position('standard');
+    $ionicConfigProvider.platform.ios.navBar.alignTitle('center');
+    $ionicConfigProvider.platform.android.navBar.alignTitle('bottom');
+    $ionicConfigProvider.platform.ios.views.transition('ios');
+    $ionicConfigProvider.platform.android.views.transition('android');
 }])
 
 app.config(['$httpProvider', function($httpProvider) {
@@ -27,13 +36,17 @@ app.run(['$ionicViewSwitcher', '$window', '$rootScope', '$state', '$stateParams'
     $rootScope.$refresh = function() {
         $window.location.reload();
     }
+    $rootScope.$search = function() {
+        $state.go("search");
+        $ionicViewSwitcher.nextDirection("forward");   
+    }
     $rootScope.$on('$stateChangeSuccess', function(event, to, toParams, from, fromParams, toState) {
         $rootScope.previousState = from;
         $rootScope.previousStateParams = fromParams;
     });
 
     $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams) {
-        ionic.Platform.setPlatform('ios');
+        // ionic.Platform.setPlatform('ios');
     })
 }])
 app.constant('WAP_CONFIG', {
@@ -63,7 +76,7 @@ app.constant('WAP_CONFIG', {
          })
 
          .state('app.list', {
-             url: '/list?key',
+             url: '/list',
              views: {
                  'tab-list': {
                      templateUrl: 'tpl/list.html?v=' + $tplVersion,
@@ -98,91 +111,168 @@ app.constant('WAP_CONFIG', {
              cache:true
          })
 
+          .state('demo', {
+             url: '/demo',
+             templateUrl: 'tpl/demo.html?v=' + $tplVersion,
+             controller: 'demoCtrl',
+             cache:true
+         })
+         .state('search', {
+             url: '/search?key',
+             templateUrl: 'tpl/search.html?v=' + $tplVersion,
+             controller: 'searchCtrl',
+             cache:true
+         })
+
 
 
      $urlRouterProvider.otherwise('/app/home');
  }]);
 app.directive('ionImg', function() {
     return {
-      scope: {
-        ngsrc: '@',
-        ngopt: '@',
-      },
-      link: function($scope, $dom) {
-        var src = $scope.ngsrc;
-        var ngopt = $scope.ngopt;
-        var dom_image = angular.element($dom)[0];
-        var img_src_default ="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACcAAAAnCAIAAAADwcZiAAAAW0lEQVRYCe3SMQ7AMAzDwLb//6k/UWTnyGQJPWqQgIPfmXmO33d8cQ22ups94YQ9gb7Js+SmhNnFSxP2LLkpYXbx0oQ9S25KmF28NGHPkpsSZhcvTdiz5KabhH9OFAMPqToRyQAAAABJRU5ErkJggg==";
-        dom_image.src = img_src_default;
-        if (ngopt) {
-          var ngopt = ngopt.split(',');
-          var offset = ngopt[0];
-          var scale = ngopt[1];
-          dom_image.width = screen.width + parseInt(offset);
-          dom_image.height = dom_image.width * scale;
-        }
-        var image = new Image();
-        image.src = src;
-        image.onload = function() {
-          dom_image.src = src;
-        }
-      },
-    };
-  })
-
-/**
-*rjHoldActive指令
-*产生一种数据动态涟漪效果
-*/
-app.directive('rjHoldActive',['$timeout', function($timeout) {
-        return {
-            restrict: 'AE',
-            replace: false,
-            link: function(scope, element, iAttrs, controller) {
-                element.bind("click",function(event){
-                    var ele=document.getElementById("ripple");
-                    if(ele.classList) ele.classList.add("animate");else ele.className +=" animate";
-                    ele.style.left= (event.pageX-20)+"px";
-                    ele.style.top= (event.pageY-20)+"px";
-                    $timeout(function(){
-                        ele.style.left="-40px";
-                        ele.style.top="-40px";
-                        if(ele.classList){
-                             ele.classList.remove("animate");
-                        }
-                        else {
-                            ele.className=ele.className.replace('animate','');
-                        }
-                    },200);
-                });
+        scope: {
+            ngsrc: '@',
+            ngopt: '@',
+        },
+        link: function($scope, $dom) {
+            var src = $scope.ngsrc;
+            var ngopt = $scope.ngopt;
+            var dom_image = angular.element($dom)[0];
+            var img_src_default = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACcAAAAnCAIAAAADwcZiAAAAW0lEQVRYCe3SMQ7AMAzDwLb//6k/UWTnyGQJPWqQgIPfmXmO33d8cQ22ups94YQ9gb7Js+SmhNnFSxP2LLkpYXbx0oQ9S25KmF28NGHPkpsSZhcvTdiz5KabhH9OFAMPqToRyQAAAABJRU5ErkJggg==";
+            dom_image.src = img_src_default;
+            if (ngopt) {
+                var ngopt = ngopt.split(',');
+                var offset = ngopt[0];
+                var scale = ngopt[1];
+                dom_image.width = screen.width + parseInt(offset);
+                dom_image.height = dom_image.width * scale;
             }
-        };
+            var image = new Image();
+            image.src = src;
+            image.onload = function() {
+                dom_image.src = src;
+            }
+        },
+    };
+});
+app.directive('ionInput', ['$compile', function($compile) {
+    // Runs during compile
+    return {
+        restrict: 'AE',
+        replace: false,
+        scope: {
+            model: '=',
+        },
+        link: function(scope, element, attrs, controller) {
+            scope.data = 1;
+            scope.show = function() {
+                scope.data++;
+            };
+            var template = "<input type='number' ng-model='data'> <button ng-click='show()'>show</button>";
+            var html = $compile(template)(scope);
+            element.append(html);
+        }
+    };
+}])
+/**
+ *rjHoldActive指令
+ *产生一种数据动态涟漪效果
+ */
+app.directive('rjHoldActive', ['$timeout', function($timeout) {
+    return {
+        restrict: 'AE',
+        replace: false,
+        link: function(scope, element, iAttrs, controller) {
+            element.bind("click", function(event) {
+                var ele = document.getElementById("ripple");
+                if (ele.classList) ele.classList.add("animate");
+                else ele.className += " animate";
+                ele.style.left = (event.pageX - 20) + "px";
+                ele.style.top = (event.pageY - 20) + "px";
+                $timeout(function() {
+                    ele.style.left = "-40px";
+                    ele.style.top = "-40px";
+                    if (ele.classList) ele.classList.remove("animate");
+                    else ele.className = ele.className.replace('animate', '');
+
+                }, 200);
+            });
+        }
+    };
 }]);
 
-app.directive('scrollTop',['$timeout', '$ionicScrollDelegate', '$timeout', function($timeout,$ionicScrollDelegate,$timeout) {
-        return {
-            restrict: 'AE',
-            replace: false,
-            link: function(scope, element, iAttrs, controller) {
-                scope.$on('lazyScrollEvent', function (){
-                   var pos=$ionicScrollDelegate._instances[0].getScrollPosition();
-                   if(pos.top>500){
-                      $timeout(function(){ element.css("display","block");},600);
-                   }else{
-                     $timeout(function(){ element.css("display","none");},600);
-                   }
-                   
-                });
-                element.bind("click",function(event){
-                    element.addClass("activated");
-                    $timeout(function(){ element.removeClass("activated");},600);
-                    $ionicScrollDelegate.scrollTop(true);
-                });
+app.directive('ionMovie', ['$confirm', '$state', '$localStorage', 'Toast', '$ionicViewSwitcher', '$ionicListDelegate', '$rootScope', function($confirm, $state, $localStorage, Toast, $ionicViewSwitcher, $ionicListDelegate, $rootScope) {
+    return {
+        restrict: 'AE',
+        replace: false,
+        scope: false,
+        priority: 1001,
+        templateUrl: "tpl/component.html",
+        // template:'<ion-item  class="item-thumbnail-left" ng-click="view(vo)"><img image-lazy-src="{{vo.preview_url}}" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACcAAAAnCAIAAAADwcZiAAAAW0lEQVRYCe3SMQ7AMAzDwLb//6k/UWTnyGQJPWqQgIPfmXmO33d8cQ22ups94YQ9gb7Js+SmhNnFSxP2LLkpYXbx0oQ9S25KmF28NGHPkpsSZhcvTdiz5KabhH9OFAMPqToRyQAAAABJRU5ErkJggg=="><h3 style="white-space: initial;max-height: 62px;line-height:20px;">{{vo.title}}</h3><p><button class="button-assertive button button-small btn-keyword" ng-click="$event.stopPropagation()" ui-sref="search({key:vo.keyword})">{{vo.keyword}}</button></p><ion-option-button class="button-calm" ng-click="save(vo)">收藏</ion-option-button></ion-item>',
+        link: function(scope, element, attrs, controller) {
+            scope.btnOption=scope.btnOption||1;
+            scope.viewOption=scope.viewOption||1;
+            scope.view=function(video){
+               if(scope.viewOption==1){
+                   scope.view1(video);
+               }
+               else if(scope.viewOption==2){
+                   scope.view2(video);
+               }
             }
-        };
+            scope.view1 = function(video) {
+                $localStorage.video = video;
+                $state.go("view");
+                $ionicViewSwitcher.nextDirection("forward");
+            }
+
+            scope.save = function(vo) {
+                var list = $localStorage.saveList || [];
+                var flag = false;
+                for (var i in list) {
+                    if (list[i].vid == vo.vid) {
+                        flag = true;
+                        break;
+                    }
+                }
+                if (!flag) list.unshift(vo);
+                else {
+                    Toast.show("您已经收藏了该电影");
+                }
+                $localStorage.saveList = list;
+                $ionicListDelegate.closeOptionButtons();
+            }
+
+            scope.view2 = function(video) {
+                $localStorage.video = video;
+                $state.go("view", {}, { reload: true })
+            }
+
+            scope.delete = function(index) {
+                $confirm.show({ title: "确定要删除吗" }, function() {
+                    $scope.videos.splice(index, 1);
+                    $localStorage.saveList = $scope.videos;
+                    $ionicListDelegate.closeOptionButtons();
+                }, function() { $ionicListDelegate.closeOptionButtons(); });
+            }
+        }
+    };
+}]);
+
+app.directive('labelKeyword', ['$compile', function($compile) {
+    return {
+        restrict: 'AE',
+        replace: false,
+        priority: 1001,
+        scope: {
+            keywords: '@',
+        },
+        template: '<button ng-repeat="vo in keywordArr" class="button-assertive button button-small btn-keyword" ng-click="$event.stopPropagation()" ui-sref="search({key:vo})">{{vo}}</button>',
+        link: function(scope, element, attrs, controller) {
+            scope.keywordArr = scope.keywords.split(' ');
+        }
+    };
 }])
-
-
 /**
  * Created by PAVEI on 30/09/2014.
  * Updated by Ross Martin on 12/05/2014
@@ -628,13 +718,45 @@ angular.module('ionicLazyLoad')
                 var _class="icon ion-android-alert calm";
              }
              $ionicLoading.show({  
-                 template: '<i class="'+_class+'">'+content+'</i>'
+                 template: '<i class="'+_class+'">  '+content+'</i>'
              });
              $timeout(function(){$ionicLoading.hide()},1500);
          }
       }
    }]);
-app.controller('homeCtrl', ['Toast', '$ionicListDelegate', '$state', '$ionicViewSwitcher', '$localStorage', '$sessionStorage', '$scope', '$stateParams', 'Api', '$ionicScrollDelegate', '$rootScope', '$location', function(Toast,$ionicListDelegate ,$state,$ionicViewSwitcher,$localStorage, $sessionStorage, $scope, $stateParams, Api, $ionicScrollDelegate, $rootScope, $location) {
+app.filter('keyWord', function() {
+     return function(keyWord){
+         var arr1=keyWord.split(" ");
+         var arr2=keyWord.split(",");
+         return arr1[0]||arr2[0]||' ';
+     }
+});
+app.controller("demoCtrl", ['Api', '$rootScope', '$location', '$ionicScrollDelegate', '$loading', '$scope', '$http', '$sessionStorage', '$localStorage', function(Api,$rootScope, $location, $ionicScrollDelegate, $loading, $scope, $http, $sessionStorage, $localStorage) {
+    function init() {
+        $scope.showItem = 0;
+        // $scope.categories = [{ name: "tab0" }, { name: "tab1" }, { name: "tab2" }, { name: "tab3" }, { name: "tab4" }, { name: "tab5" }, { name: "tab6" }, { name: "tab7" }];
+        initCategories();
+    }
+    $scope.toggleShow = function(index) {
+        if(index>=$scope.categories.length) return;
+        $scope.showItem = index;
+        var dom=document.getElementById("tab-cate-"+index);
+        var left=dom.offsetLeft+dom.offsetWidth;
+        var offset=left-document.body.clientWidth/2;
+        $ionicScrollDelegate.$getByHandle('slideScroll').scrollTo(offset,0,true);
+    }
+
+     function initCategories() {
+         Api.get('categories').then(function(data) {
+             if (data.success) {
+                 $scope.categories = data.response.categories;
+                 $scope.categoryId = "1";
+             }
+         });
+     }
+    init();
+}]);
+app.controller('homeCtrl', ['$timeout', '$scope', 'Api', '$ionicScrollDelegate', function( $timeout, $scope, Api, $ionicScrollDelegate) {
         function init() {
             $scope.page = 0;
             $scope.has_more = true;
@@ -660,7 +782,7 @@ app.controller('homeCtrl', ['Toast', '$ionicListDelegate', '$state', '$ionicView
                 $scope.searchKey = '';
                 $scope.page = 1;
                 $scope.videos = [];
-                $ionicScrollDelegate.$getByHandle('listScroll').scrollTop(true);
+                $ionicScrollDelegate.$getByHandle('homeScroll').scrollTop(true);
             }
             var limit = _limit || 10;
             Api.get('videos/' + page + '?o=' + order + '&limit=' + limit).then(function(data) {
@@ -676,51 +798,50 @@ app.controller('homeCtrl', ['Toast', '$ionicListDelegate', '$state', '$ionicView
             $scope.page++;
             $scope.allVideo('mv', $scope.page);
         }
-        $scope.view = function(video) {
-            $localStorage.video = video;
-            // $ionicViewSwitcher.nextDirection("back");
-              $state.go("view");
-            $ionicViewSwitcher.nextDirection("forward");   
-        }
-
-          $scope.save=function(vo){
-            var list=$localStorage.saveList||[];
-            var flag=false;
-            for(var i in list){
-                if(list[i].vid==vo.vid){
-                    flag=true;break;
-                }
-            }
-            if(!flag) list.unshift(vo);
-            else{
-            Toast.show("您已经收藏了该电影");
-           }
-            $localStorage.saveList=list;
-            $ionicListDelegate.closeOptionButtons();
-        }
+        
 
         $scope.$on('$ionicView.loaded', function() {
             console.log("home","$ionicView.loaded")
             init();
         });
 
+        $scope.$on('$ionicView.beforeEnter', function(e) {
+           $scope.isBtnTop = false;
+            console.log("star","$ionicView.beforeEnter");
+        });
+
         $scope.scroll=function(){
-             var content=$ionicScrollDelegate.$getByHandle('listScroll');
+             var content=$ionicScrollDelegate.$getByHandle('homeScroll');
              var pos=content.getScrollPosition();
-             $rootScope.homePosition=pos;
+             if(pos.top>600){
+                  $timeout(function(){$scope.isBtnTop=true},300);
+               }else{
+                  $timeout(function(){$scope.isBtnTop=false},300);
+             }
+        }
+        $scope.scrollTop=function($event){
+            var ele=$event.target;
+            if(ele.classList) ele.classList.add("activated");
+            else ele.className +=" activated";
+            $timeout(function(){
+                if(ele.classList) ele.classList.remove("activated"); 
+                else ele.className=ele.className.replace('activated','');
+            },300);
+            $ionicScrollDelegate.$getByHandle('homeScroll').scrollTop(true);
         }
     }])
 
 
- app.controller('listCtrl', ['Toast', '$ionicListDelegate', '$state', '$ionicViewSwitcher', '$timeout', '$localStorage', '$sessionStorage', '$scope', '$stateParams', 'Api', '$ionicScrollDelegate', '$rootScope', '$location', function(Toast,$ionicListDelegate, $state, $ionicViewSwitcher, $timeout, $localStorage, $sessionStorage, $scope, $stateParams, Api, $ionicScrollDelegate, $rootScope, $location) {
+
+
+ app.controller('listCtrl', ['$timeout', '$scope', 'Api', '$ionicScrollDelegate', function( $timeout, $scope, Api, $ionicScrollDelegate) {
 
      function init() {
          $scope.categoryId = "1";
-         $scope.searchKey = $location.search().key || '';
-         $scope.page = 0;
          $scope.videos = [];
          $scope.has_more = true;
          initCategories();
+         $scope.isBtnTop = false;
      }
 
      function initCategories() {
@@ -732,30 +853,13 @@ app.controller('homeCtrl', ['Toast', '$ionicListDelegate', '$state', '$ionicView
          });
      }
 
-
-     $scope.focus = function() {
-         $timeout(function() { $ionicScrollDelegate.$getByHandle('contentScroll').resize(); }, 500)
-     }
-
-     $scope.changeSearchKey = function(searchKey) {
-         if (!searchKey) {
-             $scope.clearKey();
-         }
-     }
-     $scope.clearKey = function() {
-         $timeout(function() { setInputblur(); }, 500);
-         $scope.getVideoByCHID($scope.categoryId);
-     }
      $scope.getVideoByCHID = function(chid, _page, _limit) {
          $scope.categoryId = chid;
          $scope.has_more = true;
          var page = _page || 1;
          if (page == 1) {
-             $scope.searchKey = '';
              $scope.page = 1;
              $scope.videos = [];
-
-
          }
          var limit = _limit || 10;
          Api.get('videos/' + page + '?c=' + chid + '&limit=' + limit).then(function(data) {
@@ -763,107 +867,45 @@ app.controller('homeCtrl', ['Toast', '$ionicListDelegate', '$state', '$ionicView
                  $scope.$broadcast('scroll.infiniteScrollComplete');
                  $scope.has_more = data.response.has_more;
                  $scope.videos = $scope.videos.concat(data.response.videos);
-
-
              }
          });
      }
 
-     $scope.searchVideo = function(_keyword, _page, _limit) {
-         var page = _page || 1;
-         if (page == 1) {
-             $scope.page = 1;
-             $scope.videos = [];
-         }
-         var keyword = _keyword || '';
-         var limit = _limit || 15;
-         var path = ($location.search().key == $scope.searchKey) ? 'jav' : 'search';
-         Api.get(path + '/' + encodeURIComponent(keyword) + '/' + page + '?limit=' + limit).then(function(data) {
-             if (data.success) {
-                 $scope.has_more = data.response.has_more;
-                 $scope.videos = $scope.videos.concat(data.response.videos);
-                 $scope.$broadcast('scroll.infiniteScrollComplete');
-
-
-             }
-         });
-     }
 
      $scope.loadNextPage = function() {
          $scope.page++;
-         if ($scope.searchKey) {
-             $scope.searchVideo($scope.searchKey, $scope.page);
-         } else {
-             $scope.getVideoByCHID($scope.categoryId, $scope.page);
-         }
-     }
-     $scope.view = function(video) {
-         $localStorage.video = video;
-         // $ionicViewSwitcher.nextDirection("back");
-         $state.go("view");
-         $ionicViewSwitcher.nextDirection("forward");
-
+         $scope.getVideoByCHID($scope.categoryId, $scope.page);
      }
 
-     $scope.save = function(vo) {
-         var list = $localStorage.saveList || [];
-         var flag = false;
-         for (var i in list) {
-             if (list[i].vid == vo.vid) {
-                 flag = true;
-                 break;
-             }
-         }
-         if (!flag) list.unshift(vo);
-         else{
-            Toast.show("您已经收藏了该电影");
-           }
-         $localStorage.saveList = list;
-         $ionicListDelegate.closeOptionButtons();
-     }
-
-     function setInputblur() {
-         // var body=document.getElementsByTagName("body")[0];
-         // body.focus();
-         document.getElementById("input_key").blur();
-         document.getElementById("select_cate").blur();
-     }
-     $scope.submit = function($event, searchKey) {
-         $scope.searchVideo(searchKey);
-         setInputblur();
-     }
-     $scope.change = function($event, categoryId) {
+     $scope.change = function(categoryId) {
          $scope.getVideoByCHID(categoryId);
-         setInputblur();
      }
      $scope.$on('$ionicView.loaded', function() {
          console.log("list", "$ionicView.loaded")
          init();
      });
+
+     $scope.scroll = function() {
+         var content = $ionicScrollDelegate.$getByHandle('listScroll');
+         var pos = content.getScrollPosition();
+         if (pos.top > 600) {
+             $timeout(function() { $scope.isBtnTop = true }, 300);
+         } else {
+             $timeout(function() { $scope.isBtnTop = false }, 300);
+         }
+     }
+     $scope.scrollTop = function($event) {
+         var ele = $event.target;
+         if (ele.classList) ele.classList.add("activated");
+         else ele.className += " activated";
+         $timeout(function() {
+             if (ele.classList) ele.classList.remove("activated");
+             else ele.className = ele.className.replace('activated', '');
+         }, 300);
+         $ionicScrollDelegate.$getByHandle('listScroll').scrollTop(true);
+     }
  }]);
-app.controller("starCtrl", ['$confirm', '$ionicViewSwitcher', '$state', '$ionicListDelegate', '$rootScope', '$location', '$ionicScrollDelegate', '$loading', '$scope', '$http', '$sessionStorage', '$localStorage', function($confirm,$ionicViewSwitcher,$state,$ionicListDelegate,$rootScope,$location,$ionicScrollDelegate,$loading, $scope, $http,$sessionStorage,$localStorage) {
-    function init() {
-    	$scope.videos=$localStorage.saveList;
-    }
-    $scope.$on('$ionicView.enter', function(e) {
-            init();
-            console.log("star","$ionicView.enter");
-      });
-    $scope.delete=function(index){
-        $confirm.show({title:"确定要删除吗"},function(){
-            $scope.videos.splice(index,1);
-            $localStorage.saveList=$scope.videos;
-            $ionicListDelegate.closeOptionButtons();
-        });
-    }
-    $scope.view = function(video) {
-            $localStorage.video = video;
-             $state.go("view");
-            $ionicViewSwitcher.nextDirection("forward");
-           
-        }
-}]);
-app.controller("personCtrl",['$state', '$scope', '$localStorage', '$ionicViewSwitcher', function($state,$scope,$localStorage,$ionicViewSwitcher){
+app.controller("personCtrl",['$state', '$scope', '$ionicViewSwitcher', function($state,$scope,$ionicViewSwitcher){
     $scope.$on('$ionicView.loaded', function() {
             console.log("person","$ionicView.loaded")
             // init();
@@ -873,68 +915,164 @@ app.controller("personCtrl",['$state', '$scope', '$localStorage', '$ionicViewSwi
     	$ionicViewSwitcher.nextDirection("forward");
     }
 }]);
-app.controller('viewCtrl', ['Toast', '$state', '$localStorage', '$sessionStorage', '$scope', '$stateParams', 'Api', '$ionicScrollDelegate', '$rootScope', '$location', '$sce', function(Toast,$state,$localStorage,$sessionStorage,$scope, $stateParams, Api, $ionicScrollDelegate, $rootScope, $location, $sce) {
-        $scope.$on('$ionicView.enter', function(e) {
-            init();
-            console.log("view","$ionicView.enter");
-        });
-
-         $scope.$on('$ionicView.beforeLeave', function(e) {
-            $scope.video_src=undefined;
-            console.log("view","$ionicView.beforeLeave");
-        });
-
-
-        function init() {
-            $scope.page = 0;
-            $scope.has_more = true;
+app.controller("searchCtrl", ['$timeout', 'Api', '$location', '$ionicScrollDelegate', '$scope', function($timeout,Api, $location, $ionicScrollDelegate, $scope) {
+    $scope.searchVideo = function(_keyword, _page, _limit) {
+        var page = _page || 1;
+        if (page == 1) {
+            $scope.page = 1;
             $scope.videos = [];
-            $scope.video=$localStorage.video;
-            $scope.allVideo($scope.page);
-            $scope.video_src = $sce.trustAsResourceUrl($scope.video.embedded_url);
+            $ionicScrollDelegate.$getByHandle('searchScroll').scrollTop(true);
         }
-        $scope.allVideo = function(_order, _page, _limit) {
-            var order = _order || 'mv';
-            var page = _page || 1;
-            if (page == 1) {
-                $scope.searchKey = '';
-                $scope.page = 1;
-                $scope.videos = [];
-                $ionicScrollDelegate.$getByHandle('listScroll').scrollTop(true);
+        var keyword = _keyword || '';
+        if(!keyword) return;
+        var limit = _limit || 15;
+        var path = ($location.search().key == $scope.searchKey) ? 'jav' : 'search';
+        Api.get(path + '/' + encodeURIComponent(keyword) + '/' + page + '?limit=' + limit).then(function(data) {
+            if (data.success) {
+                $scope.has_more = data.response.has_more;
+                $scope.videos = $scope.videos.concat(data.response.videos);
+                $scope.$broadcast('scroll.infiniteScrollComplete');
             }
-            var limit = _limit || 15;
-            Api.get('videos/' + page + '?o=' + order + '&limit=' + limit).then(function(data) {
-                if (data.success) {
-                    $scope.has_more = data.response.has_more;
-                    $scope.videos = $scope.videos.concat(data.response.videos);
-                     $scope.$broadcast('scroll.infiniteScrollComplete');
-                }
-            });
-        }
+        });
+    }
 
-        $scope.loadNextPage = function() {
-            $scope.page++;
-            $scope.allVideo('', $scope.page);
-        }
+    $scope.submit = function(searchKey) {
+        $ionicScrollDelegate.$getByHandle('searchScroll').scrollTop(true);
+        $scope.searchVideo(searchKey);
+    }
 
-         $scope.save=function(vo){
-            var list=$localStorage.saveList||[];
-            var flag=false;
-            for(var i in list){
-                if(list[i].vid==vo.vid){
-                    flag=true;break;
-                }
+    $scope.loadNextPage = function(searchKey) {
+        $scope.page++;
+        $scope.searchVideo(searchKey, $scope.page);
+    }
+
+    $scope.$on('$ionicView.enter', function(e) {
+        init();
+        console.log("search", "$ionicView.enter");
+    });
+
+    function init() {
+        $scope.searchKey=$location.search().key;
+        if($scope.searchKey)$scope.has_more=true;
+        document.getElementById("input_key").focus();
+    }
+    $scope.scroll = function() {
+        var content = $ionicScrollDelegate.$getByHandle('searchScroll');
+        var pos = content.getScrollPosition();
+        if (pos.top > 600) {
+            $timeout(function() { $scope.isBtnTop = true },300);
+        } else {
+            $timeout(function() { $scope.isBtnTop = false },300);
+        }
+    }
+    $scope.scrollTop = function($event) {
+        var ele = $event.target;
+        if (ele.classList) ele.classList.add("activated");
+        else ele.className += " activated";
+        $timeout(function() {
+            if (ele.classList) ele.classList.remove("activated");
+            else ele.className = ele.className.replace('activated', '');
+        },300);
+        $ionicScrollDelegate.$getByHandle('searchScroll').scrollTop(true);
+    }
+    
+    $scope.search=function(keyword){
+        $scope.searchKey=keyword;
+        $scope.searchVideo(keyword);
+    }
+}]);
+app.controller("starCtrl", ['$timeout', '$ionicScrollDelegate', '$scope', '$localStorage', function($timeout,$ionicScrollDelegate, $scope,$localStorage) {
+    function init() {
+    	$scope.videos=$localStorage.saveList;
+       
+    }
+    $scope.$on('$ionicView.enter', function(e) {
+            init();
+            console.log("star","$ionicView.enter");
+      });
+   $scope.scroll=function(){
+         var content=$ionicScrollDelegate.$getByHandle('starScroll');
+         var pos=content.getScrollPosition();
+         if(pos.top>500){
+              $timeout(function(){$scope.isBtnTop=true},600);
+           }else{
+              $timeout(function(){$scope.isBtnTop=false},600);
+         }
+    }
+    $scope.scrollTop=function($event){
+        var ele=$event.target;
+        if(ele.classList) ele.classList.add("activated");
+        else ele.className +=" activated";
+        $timeout(function(){
+            if(ele.classList) ele.classList.remove("activated"); 
+            else ele.className=ele.className.replace('activated','');
+        },600);
+        $ionicScrollDelegate.$getByHandle('starScroll').scrollTop(true);
+    }
+}]);
+app.controller('viewCtrl', ['$timeout', 'Toast', '$state', '$localStorage', '$scope', 'Api', '$ionicScrollDelegate', '$sce', function($timeout,Toast, $state, $localStorage, $scope, Api, $ionicScrollDelegate, $sce) {
+    $scope.$on('$ionicView.enter', function(e) {
+        init();
+        console.log("view", "$ionicView.enter");
+    });
+
+    $scope.$on('$ionicView.beforeLeave', function(e) {
+        $scope.video_src = undefined;
+        console.log("view", "$ionicView.beforeLeave");
+    });
+
+
+    function init() {
+        $scope.page = 0;
+        $scope.isBtnTop = false;
+        $scope.has_more = true;
+        $scope.videos = [];
+        $scope.video = $localStorage.video;
+        $scope.allVideo($scope.page);
+        $scope.video_src = $sce.trustAsResourceUrl($scope.video.embedded_url);
+    }
+    $scope.allVideo = function(_order, _page, _limit) {
+        var order = _order || 'mv';
+        var page = _page || 1;
+        if (page == 1) {
+            $scope.searchKey = '';
+            $scope.page = 1;
+            $scope.videos = [];
+            $ionicScrollDelegate.$getByHandle('listScroll').scrollTop(true);
+        }
+        var limit = _limit || 15;
+        Api.get('videos/' + page + '?o=' + order + '&limit=' + limit).then(function(data) {
+            if (data.success) {
+                $scope.has_more = data.response.has_more;
+                $scope.videos = $scope.videos.concat(data.response.videos);
+                $scope.$broadcast('scroll.infiniteScrollComplete');
             }
-            if(!flag) list.unshift(vo);
-             else{
-            Toast.show("您已经收藏了该电影");
-           }
-            $localStorage.saveList=list;
-            $ionicListDelegate.closeOptionButtons();
+        });
+    }
+
+    $scope.loadNextPage = function() {
+        $scope.page++;
+        $scope.allVideo('', $scope.page);
+    }
+
+    $scope.scroll = function() {
+        var content = $ionicScrollDelegate.$getByHandle('viewScroll');
+        var pos = content.getScrollPosition();
+        if (pos.top > 1000) {
+            $timeout(function() { $scope.isBtnTop = true }, 600);
+        } else {
+            $timeout(function() { $scope.isBtnTop = false }, 600);
         }
-        
-        $scope.view = function(video) {
-            $localStorage.video = video;
-            $state.go("view",{},{reload:true})
-        }
-    }])
+        $scope.isBtnTop = true 
+    }
+    $scope.scrollTop = function($event) {
+        var ele = $event.target;
+        if (ele.classList) ele.classList.add("activated");
+        else ele.className += " activated";
+        $timeout(function() {
+            if (ele.classList) ele.classList.remove("activated");
+            else ele.className = ele.className.replace('activated', '');
+        }, 600);
+        $ionicScrollDelegate.$getByHandle('viewScroll').scrollTop(true);
+    }
+}])

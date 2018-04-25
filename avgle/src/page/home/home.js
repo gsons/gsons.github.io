@@ -1,4 +1,4 @@
-app.controller('homeCtrl', function(Toast,$ionicListDelegate ,$state,$ionicViewSwitcher,$localStorage, $sessionStorage, $scope, $stateParams, Api, $ionicScrollDelegate, $rootScope, $location) {
+app.controller('homeCtrl', function( $timeout, $scope, Api, $ionicScrollDelegate) {
         function init() {
             $scope.page = 0;
             $scope.has_more = true;
@@ -24,7 +24,7 @@ app.controller('homeCtrl', function(Toast,$ionicListDelegate ,$state,$ionicViewS
                 $scope.searchKey = '';
                 $scope.page = 1;
                 $scope.videos = [];
-                $ionicScrollDelegate.$getByHandle('listScroll').scrollTop(true);
+                $ionicScrollDelegate.$getByHandle('homeScroll').scrollTop(true);
             }
             var limit = _limit || 10;
             Api.get('videos/' + page + '?o=' + order + '&limit=' + limit).then(function(data) {
@@ -40,38 +40,38 @@ app.controller('homeCtrl', function(Toast,$ionicListDelegate ,$state,$ionicViewS
             $scope.page++;
             $scope.allVideo('mv', $scope.page);
         }
-        $scope.view = function(video) {
-            $localStorage.video = video;
-            // $ionicViewSwitcher.nextDirection("back");
-              $state.go("view");
-            $ionicViewSwitcher.nextDirection("forward");   
-        }
-
-          $scope.save=function(vo){
-            var list=$localStorage.saveList||[];
-            var flag=false;
-            for(var i in list){
-                if(list[i].vid==vo.vid){
-                    flag=true;break;
-                }
-            }
-            if(!flag) list.unshift(vo);
-            else{
-            Toast.show("您已经收藏了该电影");
-           }
-            $localStorage.saveList=list;
-            $ionicListDelegate.closeOptionButtons();
-        }
+        
 
         $scope.$on('$ionicView.loaded', function() {
             console.log("home","$ionicView.loaded")
             init();
         });
 
+        $scope.$on('$ionicView.beforeEnter', function(e) {
+           $scope.isBtnTop = false;
+            console.log("star","$ionicView.beforeEnter");
+        });
+
         $scope.scroll=function(){
-             var content=$ionicScrollDelegate.$getByHandle('listScroll');
+             var content=$ionicScrollDelegate.$getByHandle('homeScroll');
              var pos=content.getScrollPosition();
-             $rootScope.homePosition=pos;
+             if(pos.top>600){
+                  $timeout(function(){$scope.isBtnTop=true},300);
+               }else{
+                  $timeout(function(){$scope.isBtnTop=false},300);
+             }
+        }
+        $scope.scrollTop=function($event){
+            var ele=$event.target;
+            if(ele.classList) ele.classList.add("activated");
+            else ele.className +=" activated";
+            $timeout(function(){
+                if(ele.classList) ele.classList.remove("activated"); 
+                else ele.className=ele.className.replace('activated','');
+            },300);
+            $ionicScrollDelegate.$getByHandle('homeScroll').scrollTop(true);
         }
     })
+
+
 

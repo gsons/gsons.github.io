@@ -194,9 +194,16 @@
                 var _class="icon ion-android-alert calm";
              }
              $ionicLoading.show({  
-                 template: '<i class="'+_class+'">'+content+'</i>'
+                 template: '<i class="'+_class+'">  '+content+'</i>'
              });
              $timeout(function(){$ionicLoading.hide()},1500);
          }
       }
    });
+app.filter('keyWord', function() {
+     return function(keyWord){
+         var arr1=keyWord.split(" ");
+         var arr2=keyWord.split(",");
+         return arr1[0]||arr2[0]||' ';
+     }
+});

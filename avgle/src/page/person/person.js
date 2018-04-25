@@ -1,4 +1,4 @@
-app.controller("personCtrl",function($state,$scope,$localStorage,$ionicViewSwitcher){
+app.controller("personCtrl",function($state,$scope,$ionicViewSwitcher){
     $scope.$on('$ionicView.loaded', function() {
             console.log("person","$ionicView.loaded")
             // init();

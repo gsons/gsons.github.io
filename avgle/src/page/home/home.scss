@@ -1,5 +1,5 @@
 .page-home {
-    .slide-titie{
+    .slide-titie {
         position: absolute;
         top: 0;
         left: 0;
@@ -10,12 +10,6 @@
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
-        
     }
-    .btn-keyword {padding:0 2px;
-        max-width: 150px;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        display: inline-block;
-    }
+
 }

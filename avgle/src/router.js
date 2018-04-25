@@ -19,7 +19,7 @@
          })
 
          .state('app.list', {
-             url: '/list?key',
+             url: '/list',
              views: {
                  'tab-list': {
                      templateUrl: 'tpl/list.html?v=' + $tplVersion,
@@ -51,6 +51,19 @@
              url: '/star',
              templateUrl: 'tpl/star.html?v=' + $tplVersion,
              controller: 'starCtrl',
+             cache:true
+         })
+
+          .state('demo', {
+             url: '/demo',
+             templateUrl: 'tpl/demo.html?v=' + $tplVersion,
+             controller: 'demoCtrl',
+             cache:true
+         })
+         .state('search', {
+             url: '/search?key',
+             templateUrl: 'tpl/search.html?v=' + $tplVersion,
+             controller: 'searchCtrl',
              cache:true
          })
 

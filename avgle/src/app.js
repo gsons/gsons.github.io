@@ -3,6 +3,15 @@ var app = angular.module('app', ['ionic', 'ngStorage','ionicLazyLoad']);
 app.config(function($ionicConfigProvider, $sceDelegateProvider) {
     //$sceDelegateProvider.resourceUrlWhitelist([ 'self','*://www.youtube.com/**', '*://player.vimeo.com/video/**']);
     $ionicConfigProvider.scrolling.jsScrolling(false);
+    $ionicConfigProvider.platform.ios.tabs.style('standard');
+    $ionicConfigProvider.platform.ios.tabs.position('bottom');
+    $ionicConfigProvider.platform.android.tabs.style('standard');
+    $ionicConfigProvider.platform.android.spinner.icon("ios");
+    $ionicConfigProvider.platform.android.tabs.position('standard');
+    $ionicConfigProvider.platform.ios.navBar.alignTitle('center');
+    $ionicConfigProvider.platform.android.navBar.alignTitle('bottom');
+    $ionicConfigProvider.platform.ios.views.transition('ios');
+    $ionicConfigProvider.platform.android.views.transition('android');
 })
 
 app.config(function($httpProvider) {
@@ -27,12 +36,16 @@ app.run(function($ionicViewSwitcher,$window, $rootScope, $state, $stateParams, $
     $rootScope.$refresh = function() {
         $window.location.reload();
     }
+    $rootScope.$search = function() {
+        $state.go("search");
+        $ionicViewSwitcher.nextDirection("forward");   
+    }
     $rootScope.$on('$stateChangeSuccess', function(event, to, toParams, from, fromParams, toState) {
         $rootScope.previousState = from;
         $rootScope.previousStateParams = fromParams;
     });
 
     $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams) {
-        ionic.Platform.setPlatform('ios');
+        // ionic.Platform.setPlatform('ios');
     })
 })
