@@ -35,6 +35,7 @@ app.run(['$ionicViewSwitcher', '$window', '$rootScope', '$state', '$stateParams'
     }
     $rootScope.$refresh = function() {
         $window.location.reload();
+        // $state.reload();
     }
     $rootScope.$search = function() {
         $state.go("search");
@@ -121,7 +122,7 @@ app.constant('WAP_CONFIG', {
              url: '/search?key',
              templateUrl: 'tpl/search.html?v=' + $tplVersion,
              controller: 'searchCtrl',
-             cache:true
+             cache:false
          })
 
 
@@ -155,25 +156,7 @@ app.directive('ionImg', function() {
         },
     };
 });
-app.directive('ionInput', ['$compile', function($compile) {
-    // Runs during compile
-    return {
-        restrict: 'AE',
-        replace: false,
-        scope: {
-            model: '=',
-        },
-        link: function(scope, element, attrs, controller) {
-            scope.data = 1;
-            scope.show = function() {
-                scope.data++;
-            };
-            var template = "<input type='number' ng-model='data'> <button ng-click='show()'>show</button>";
-            var html = $compile(template)(scope);
-            element.append(html);
-        }
-    };
-}])
+
 /**
  *rjHoldActive指令
  *产生一种数据动态涟漪效果
@@ -207,7 +190,7 @@ app.directive('ionMovie', ['$confirm', '$state', '$localStorage', 'Toast', '$ion
         replace: false,
         scope: false,
         priority: 1001,
-        templateUrl: "tpl/component.html",
+        templateUrl: "tpl/movie.component.html",
         // template:'<ion-item  class="item-thumbnail-left" ng-click="view(vo)"><img image-lazy-src="{{vo.preview_url}}" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACcAAAAnCAIAAAADwcZiAAAAW0lEQVRYCe3SMQ7AMAzDwLb//6k/UWTnyGQJPWqQgIPfmXmO33d8cQ22ups94YQ9gb7Js+SmhNnFSxP2LLkpYXbx0oQ9S25KmF28NGHPkpsSZhcvTdiz5KabhH9OFAMPqToRyQAAAABJRU5ErkJggg=="><h3 style="white-space: initial;max-height: 62px;line-height:20px;">{{vo.title}}</h3><p><button class="button-assertive button button-small btn-keyword" ng-click="$event.stopPropagation()" ui-sref="search({key:vo.keyword})">{{vo.keyword}}</button></p><ion-option-button class="button-calm" ng-click="save(vo)">收藏</ion-option-button></ion-item>',
         link: function(scope, element, attrs, controller) {
             scope.btnOption=scope.btnOption||1;
@@ -248,12 +231,17 @@ app.directive('ionMovie', ['$confirm', '$state', '$localStorage', 'Toast', '$ion
                 $state.go("view", {}, { reload: true })
             }
 
-            scope.delete = function(index) {
+            scope.delete = function(vo) {
+                var index=scope.videos.indexOf(vo);
                 $confirm.show({ title: "确定要删除吗" }, function() {
-                    $scope.videos.splice(index, 1);
-                    $localStorage.saveList = $scope.videos;
+                    scope.videos.splice(index, 1);
+                    $localStorage.saveList = scope.videos;
                     $ionicListDelegate.closeOptionButtons();
                 }, function() { $ionicListDelegate.closeOptionButtons(); });
+            }
+            scope.preview=function(vo){
+                window.open(vo.preview_video_url);  
+                $ionicListDelegate.closeOptionButtons();           
             }
         }
     };
@@ -269,9 +257,47 @@ app.directive('labelKeyword', ['$compile', function($compile) {
         },
         template: '<button ng-repeat="vo in keywordArr" class="button-assertive button button-small btn-keyword" ng-click="$event.stopPropagation()" ui-sref="search({key:vo})">{{vo}}</button>',
         link: function(scope, element, attrs, controller) {
-            scope.keywordArr = scope.keywords.split(' ');
+            scope.keywordArr=[];
+            var keywordArr = scope.keywords.split(' ');
+            for(var i in keywordArr){
+                 if(scope.keywordArr.indexOf(keywordArr[i])==-1){
+                    scope.keywordArr.push(keywordArr[i]);
+                 }
+            }
         }
     };
+}]);
+
+app.directive('btnScrollTop',['$timeout', '$ionicScrollDelegate', '$timeout', function($timeout,$ionicScrollDelegate,$timeout) {
+        return {
+            restrict: 'AE',
+            replace: false,
+            scope: false,
+            priority: 1001,
+            template:'<div class="button-top ng-hide" ng-show="isBtnTop" ng-click="scrollTop($event)"><i class="icon ion-arrow-up-a"></i></div>',
+            link: function(scope, element, iAttrs, controller) {
+                scope.isBtnTop=false;
+                scope.scroll=function(){
+                     var content=$ionicScrollDelegate.$getByHandle(scope.handle);
+                     var pos=content.getScrollPosition();
+                     if(pos.top>600){
+                          $timeout(function(){scope.isBtnTop=true},300);
+                       }else{
+                          $timeout(function(){scope.isBtnTop=false},300);
+                     }
+                }
+                scope.scrollTop=function($event){
+                    var ele=$event.target;
+                    if(ele.classList) ele.classList.add("activated");
+                    else ele.className +=" activated";
+                    $timeout(function(){
+                        if(ele.classList) ele.classList.remove("activated"); 
+                        else ele.className=ele.className.replace('activated','');
+                    },300);
+                    $ionicScrollDelegate.$getByHandle(scope.handle).scrollTop(true);
+                }
+            }
+        };
 }])
 /**
  * Created by PAVEI on 30/09/2014.
@@ -631,172 +657,281 @@ angular.module('ionicLazyLoad')
 
 
      });
-     app.factory('Api', ["$http", "WAP_CONFIG", "$q", "$log","$ionicLoading","$timeout",function($http, WAP_CONFIG, $q, $log,$ionicLoading,$timeout) {  
-        var _api = WAP_CONFIG;  
-        var endpoint = _api.host + ':' + _api.port+_api.path;  
-  
-        // public api  
-        return {  
-            //发送服务器的域名+端口， 
-            endpoint: endpoint,  
-  
-            //post请求，第一个参数是URL，第二个参数是向服务器发送的参数（JSON对象），  
-            post: function(url, data) {  
-                url = endpoint + url;  
-                var _timeout=5000;
-                var deferred = $q.defer();  
-                var tempPromise;  
-                //显示加载进度  
-                $ionicLoading.show({  
-                    template: '加载中...'  
-                });  
-                //判断用户是否传递了参数，如果有参数需要传递参数  
-                if(data != null && data != undefined && data != ""){  
-                    tempPromise = $http.post(url,data,{timeout:_timeout});  
-                }else{  
-                    tempPromise = $http.post(url,{timeout:_timeout});  
-                }  
-                tempPromise.success(function(data,header,config,status) {  
-                    deferred.resolve(data);  
-                    $ionicLoading.hide();  
-                }).error(function(msg, code) {  
-                    deferred.reject(msg);  
-                    $log.error(msg, code);  
-                    $ionicLoading.hide(); 
-                    $ionicLoading.show({  
-                    template: '出错了...'  
-                    });
-                    $timeout(function(){$ionicLoading.hide()},1000);  
-                });  
-                return deferred.promise;  
-            },  
-  
-            //get请求，第一个参数是URL，第二个参数是向服务器发送的参数（JSON对象），  
-            get: function(url, data) {  
-                url = endpoint + url;  
-                var deferred = $q.defer();  
-                var tempPromise;  
-                var _timeout=5000;
-                //显示加载进度  
-                $ionicLoading.show({  
-                    template: '加载中...'  
-                });  
-                //判断用户是否传递了参数，如果有参数需要传递参数  
-                if(data != null && data != undefined && data != ""){  
-                    tempPromise = $http.get(url,data,{timeout:_timeout});  
-                }else{  
-                    tempPromise = $http.get(url,{timeout:_timeout});  
-                }  
-                tempPromise.success(function(data,header,config,status) {  
-                    deferred.resolve(data);  
-                    $ionicLoading.hide();  
-                }).error(function(msg, code) {  
-                    deferred.reject(msg);  
-                    $ionicLoading.hide();  
-                    $log.error(msg, code);  
-                    $ionicLoading.show({  
-                    template: '<i class="icon ion-android-warning assertive"></i> 出错了'  
-                    });
-                    $timeout(function(){$ionicLoading.hide()},1000);  
-                });  
-                return deferred.promise;  
-            }  
-        };  
-  
-    }]);
-   app.factory("Toast",['$timeout', '$ionicLoading', function($timeout,$ionicLoading){
-      return {
-         show:function(content,_status){
-             var status=_status||'info';
-             if(status=='error'){
-                var _class="icon ion-android-alert assertive";
+     app.factory('Api', ['$http', 'Toast', 'WAP_CONFIG', '$q', '$log', '$ionicLoading', '$timeout', function($http,Toast,WAP_CONFIG, $q, $log, $ionicLoading, $timeout) {
+         var _api = WAP_CONFIG;
+         var endpoint = _api.host + ':' + _api.port + _api.path;
+
+         // public api  
+         return {
+             //发送服务器的域名+端口， 
+             endpoint: endpoint,
+
+             //post请求，第一个参数是URL，第二个参数是向服务器发送的参数（JSON对象），  
+             post: function(url, data) {
+                 url = endpoint + url;
+                 var _timeout = 5000;
+                 var deferred = $q.defer();
+                 var tempPromise;
+                 //显示加载进度  
+                 $ionicLoading.show({
+                     template: '加载中...'
+                 });
+                 //判断用户是否传递了参数，如果有参数需要传递参数  
+                 if (data != null && data != undefined && data != "") {
+                     tempPromise = $http.post(url, data, { timeout: _timeout });
+                 } else {
+                     tempPromise = $http.post(url, { timeout: _timeout });
+                 }
+                 tempPromise.success(function(data, header, config, status) {
+                     deferred.resolve(data);
+                     $ionicLoading.hide();
+                 }).error(function(msg, code) {
+                     deferred.reject(msg);
+                     $log.error(msg, code);
+                     $ionicLoading.hide();
+                     var errorTitle;
+                     if(code=='-1') errorTitle="请求超时,请检查你的网络连接情况";
+                     else if(code=="400") errorTitle="错误的请求";
+                     else if(code=="404") errorTitle="404 Not Found";
+                     else if(code=="500"||code=="502") errorTitle="出错了,请稍后再试";
+                     else if(code=="503") errorTitle="您的操作太频繁了,休息一下再试吧";
+                     else errorTitle="发生了未知错误,请稍后再试";
+                     Toast.show(errorTitle,"error");
+                 });
+                 return deferred.promise;
+             },
+
+             //get请求，第一个参数是URL，第二个参数是向服务器发送的参数（JSON对象），  
+             get: function(url, data) {
+                 url = endpoint + url;
+                 var deferred = $q.defer();
+                 var tempPromise;
+                 var _timeout = 5000;
+                 //显示加载进度  
+                 $ionicLoading.show({
+                     template: '加载中...'
+                 });
+                 //判断用户是否传递了参数如果有参数需要传递参数  
+                 if (data != null && data != undefined && data != "") {
+                     tempPromise = $http.get(url, data, { timeout: _timeout });
+                 } else {
+                     tempPromise = $http.get(url, { timeout: _timeout });
+                 }
+                 tempPromise.success(function(data, header, config, status) {
+                     deferred.resolve(data);
+                     $ionicLoading.hide();
+                 }).error(function(msg, code) {
+                     deferred.reject(msg);
+                     $log.error(msg, code);
+                     $ionicLoading.hide();
+                     var errorTitle;
+                     if(code=='-1') errorTitle="请求超时,请检查你的网络连接情况";
+                     else if(code=="400") errorTitle="错误的请求";
+                     else if(code=="404") errorTitle="404 Not Found";
+                     else if(code=="500"||code=="502") errorTitle="出错了,请稍后再试";
+                     else if(code=="503") errorTitle="您的操作太频繁了,休息一下再试吧";
+                     else errorTitle="发生了未知错误,请稍后再试";
+
+                     Toast.show(errorTitle,"error");
+                 });
+                 return deferred.promise;
              }
-             else if(status=="success"){
-                var _class="icon ion-android-alert positive";
+         };
+
+     }]);
+     
+     app.factory('videoApi', ['Api', '$q', function(Api, $q) {
+         function getQuery(_option, _page) {
+             var option = {
+                 o: _option.o || 'mr',
+                 t: _option.t || 'a',
+                 type: _option.type || '',
+                 c: _option.c || '',
+                 limit: _option.limit || 15
              }
-             else if(status=="info"){
-                var _class="icon ion-android-alert calm";
+             var query = '?';
+             for (var key in option) {
+                 query += (key + '=' + option[key] + '&');
              }
-             $ionicLoading.show({  
-                 template: '<i class="'+_class+'">  '+content+'</i>'
-             });
-             $timeout(function(){$ionicLoading.hide()},1500);
+             return query.substr(0, query.length - 1);
          }
-      }
-   }]);
-app.filter('keyWord', function() {
-     return function(keyWord){
-         var arr1=keyWord.split(" ");
-         var arr2=keyWord.split(",");
-         return arr1[0]||arr2[0]||' ';
-     }
-});
-app.controller("demoCtrl", ['Api', '$rootScope', '$location', '$ionicScrollDelegate', '$loading', '$scope', '$http', '$sessionStorage', '$localStorage', function(Api,$rootScope, $location, $ionicScrollDelegate, $loading, $scope, $http, $sessionStorage, $localStorage) {
+         return {
+             videos: function(_option, _page) {
+                 var deferred = $q.defer();
+                 var query = getQuery(_option, _page);
+                 var page = _page || 0;
+                 Api.get('videos/'+page+query).then(function(data) {
+                     if (data.success) {
+                         deferred.resolve(data);
+                     } else {
+                         deferred.reject(data);
+                     }
+                 }, function(data) {
+                     deferred.reject(data);
+                 });
+                 return deferred.promise;
+             },
+             search: function(_option, _keyword, _page) {
+                 var deferred = $q.defer();
+                 var query = getQuery(_option, _page);
+                 var page = _page || 0;
+                 var keyword = _keyword || '';
+                 keyword = encodeURIComponent(keyword);
+                 Api.get('search/'+keyword+'/'+page+query).then(function(data) {
+                     if (data.success) {
+                         deferred.resolve(data);
+                     } else {
+                         deferred.reject(data);
+                     }
+                 }, function(data) {
+                     deferred.reject(data);
+                 });
+                 return deferred.promise;
+             },
+             jav: function(_option, _keyword, _page) {
+                 var deferred = $q.defer();
+                 var query = getQuery(_option, _page);
+                 var page = _page || 0;
+                 var keyword = _keyword || '';
+                 keyword = encodeURIComponent(keyword);
+                 Api.get('jav/'+keyword+'/'+page+query).then(function(data) {
+                     if (data.success) {
+                         deferred.resolve(data);
+                     } else {
+                         deferred.reject(data);
+                     }
+                 }, function(data) {
+                     deferred.reject(data);
+                 });
+                 return deferred.promise;
+             },
+             categories: function() {
+                 var deferred = $q.defer();
+                 Api.get('categories').then(function(data) {
+                     if (data.success) {
+                         deferred.resolve(data);
+                     } else {
+                         deferred.reject(data);
+                     }
+                 }, function(data) {
+                     deferred.reject(data);
+                 });
+                 return deferred.promise;
+             },
+             video: function(vid) {
+                 if(!vid) return;
+                 var deferred = $q.defer();
+                 Api.get('video/'+vid).then(function(data) {
+                     if (data.success) {
+                         deferred.resolve(data);
+                     } else {
+                         deferred.reject(data);
+                     }
+                 }, function(data) {
+                     deferred.reject(data);
+                 });
+                 return deferred.promise;
+             },
+              collections: function(_page,_limit) {
+                 var page=_page||0;
+                 var limit=_limt||15;
+                 var deferred = $q.defer();
+                 Api.get('collections/'+page+"?limit="+limit).then(function(data) {
+                     if (data.success) {
+                         deferred.resolve(data);
+                     } else {
+                         deferred.reject(data);
+                     }
+                 }, function(data) {
+                     deferred.reject(data);
+                 });
+                 return deferred.promise;
+             }
+
+         }
+     }]);
+
+     app.factory("Toast", ['$timeout', '$ionicLoading', function($timeout, $ionicLoading) {
+         return {
+             show: function(content, _status) {
+                 var status = _status || 'info';
+                 if (status == 'error') {
+                     var _class = "icon ion-android-alert assertive";
+                 } else if (status == "success") {
+                     var _class = "icon ion-android-alert positive";
+                 } else if (status == "info") {
+                     var _class = "icon ion-android-alert calm";
+                 }
+                 $ionicLoading.show({
+                     template: '<i class="' + _class + '">  ' + content + '</i>'
+                 });
+                 $timeout(function() { $ionicLoading.hide() }, 1500);
+             }
+         }
+     }]);
+app.controller("demoCtrl", ['$ionicPopover', 'Api', '$rootScope', '$location', '$ionicScrollDelegate', '$loading', '$scope', '$http', '$sessionStorage', '$localStorage', function($ionicPopover,Api, $rootScope, $location, $ionicScrollDelegate, $loading, $scope, $http, $sessionStorage, $localStorage) {
+    
     function init() {
         $scope.showItem = 0;
-        // $scope.categories = [{ name: "tab0" }, { name: "tab1" }, { name: "tab2" }, { name: "tab3" }, { name: "tab4" }, { name: "tab5" }, { name: "tab6" }, { name: "tab7" }];
-        initCategories();
+        // $scope.form_o='mr';$scope.form_t="a";$scope.form_type="any";
+        // $scope.openPopover();
     }
     $scope.toggleShow = function(index) {
-        if(index>=$scope.categories.length) return;
+        if (index >= $scope.categories.length) return;
         $scope.showItem = index;
-        var dom=document.getElementById("tab-cate-"+index);
-        var left=dom.offsetLeft+dom.offsetWidth;
-        var offset=left-document.body.clientWidth/2;
-        $ionicScrollDelegate.$getByHandle('slideScroll').scrollTo(offset,0,true);
+        var dom = document.getElementById("tab-cate-" + index);
+        var left = dom.offsetLeft + dom.offsetWidth;
+        var offset = left - document.body.clientWidth / 2;
+        $ionicScrollDelegate.$getByHandle('slideScroll').scrollTo(offset, 0, true);
     }
 
-     function initCategories() {
-         Api.get('categories').then(function(data) {
-             if (data.success) {
-                 $scope.categories = data.response.categories;
-                 $scope.categoryId = "1";
-             }
-         });
-     }
     init();
+
+    $ionicPopover.fromTemplateUrl('tpl/filter.popover.html', {
+        scope: $scope
+    }).then(function(popover) {
+    $scope.popover = popover; $scope.popover.show();
+    });
+    $scope.openPopover = function($event) {
+        $scope.popover.show($event);
+    };
+    $scope.closePopover = function() {
+        $scope.popover.hide();
+    };
+    $scope.$on('$destroy', function() {
+        $scope.popover.remove();
+    });
+    $scope.surePopover=function(form_o,form_t,form_type){
+        var query="";
+        if(form_o) query+=('&o='+form_o);
+        if(form_t) query+=('&t='+form_t);
+        if(form_type) query+=('&type='+form_type);
+        $scope.popover.hide();
+    }
+
 }]);
-app.controller('homeCtrl', ['$timeout', '$scope', 'Api', '$ionicScrollDelegate', function( $timeout, $scope, Api, $ionicScrollDelegate) {
+app.controller('homeCtrl', ['$scope', 'videoApi', '$ionicScrollDelegate', function($scope,videoApi, $ionicScrollDelegate) {
         function init() {
-            $scope.page = 0;
+            $scope.page =-1;
             $scope.has_more = true;
+            $scope.isBtnTop = false;
             $scope.videos = [];
-            $scope.position='';
             initSlideVideos();
         }
 
-        function initSlideVideos(_order, _page, _limit) {
-            var order = _order || 'mr';
-            var page = _page || 1;
-            var limit = _limit || 5;
-            Api.get('videos/' + page + '?o=' + order + '&limit=' + limit).then(function(data) {
-                if (data.success) {
-                    $scope.slideVideos = data.response.videos;
-                }
-            });
-        }
-        $scope.allVideo = function(_order, _page, _limit) {
-            var order = _order || 'mv';
-            var page = _page || 1;
-            if (page == 1) {
-                $scope.searchKey = '';
-                $scope.page = 1;
-                $scope.videos = [];
-                $ionicScrollDelegate.$getByHandle('homeScroll').scrollTop(true);
-            }
-            var limit = _limit || 10;
-            Api.get('videos/' + page + '?o=' + order + '&limit=' + limit).then(function(data) {
-                if (data.success) {
-                    $scope.has_more = data.response.has_more;
-                    $scope.videos = $scope.videos.concat(data.response.videos);
-                    $scope.$broadcast('scroll.infiniteScrollComplete');
-                }
+        function initSlideVideos() {
+            videoApi.videos({o:'mr',limit:5},0).then(function(data){
+                 $scope.slideVideos = data.response.videos;
             });
         }
 
         $scope.loadNextPage = function() {
             $scope.page++;
-            $scope.allVideo('mv', $scope.page);
+            videoApi.videos({o:'mv'},$scope.page).then(function(data){
+                $scope.has_more = data.response.has_more;
+                $scope.videos = $scope.videos.concat(data.response.videos);
+                $scope.$broadcast('scroll.infiniteScrollComplete');
+            });
         }
         
 
@@ -805,104 +940,106 @@ app.controller('homeCtrl', ['$timeout', '$scope', 'Api', '$ionicScrollDelegate',
             init();
         });
 
-        $scope.$on('$ionicView.beforeEnter', function(e) {
-           $scope.isBtnTop = false;
-            console.log("star","$ionicView.beforeEnter");
-        });
-
-        $scope.scroll=function(){
-             var content=$ionicScrollDelegate.$getByHandle('homeScroll');
-             var pos=content.getScrollPosition();
-             if(pos.top>600){
-                  $timeout(function(){$scope.isBtnTop=true},300);
-               }else{
-                  $timeout(function(){$scope.isBtnTop=false},300);
-             }
-        }
-        $scope.scrollTop=function($event){
-            var ele=$event.target;
-            if(ele.classList) ele.classList.add("activated");
-            else ele.className +=" activated";
-            $timeout(function(){
-                if(ele.classList) ele.classList.remove("activated"); 
-                else ele.className=ele.className.replace('activated','');
-            },300);
-            $ionicScrollDelegate.$getByHandle('homeScroll').scrollTop(true);
-        }
     }])
 
 
 
 
- app.controller('listCtrl', ['$timeout', '$scope', 'Api', '$ionicScrollDelegate', function( $timeout, $scope, Api, $ionicScrollDelegate) {
-
+ app.controller('listCtrl', ['$ionicPopover', '$scope', 'videoApi', '$ionicScrollDelegate', function($ionicPopover, $scope, videoApi, $ionicScrollDelegate) {
      function init() {
          $scope.categoryId = "1";
+         $scope.option={c:$scope.categoryId};
          $scope.videos = [];
          $scope.has_more = true;
          initCategories();
          $scope.isBtnTop = false;
+         $scope.page=-1;
      }
 
      function initCategories() {
-         Api.get('categories').then(function(data) {
-             if (data.success) {
-                 $scope.categories = data.response.categories;
-                 $scope.categoryId = "1";
-             }
+         videoApi.categories().then(function(data) {
+             $scope.categories = data.response.categories;
+             $scope.categoryId = "1";
+             getCurrentCate();
+
          });
      }
 
-     $scope.getVideoByCHID = function(chid, _page, _limit) {
-         $scope.categoryId = chid;
-         $scope.has_more = true;
-         var page = _page || 1;
-         if (page == 1) {
-             $scope.page = 1;
-             $scope.videos = [];
-         }
-         var limit = _limit || 10;
-         Api.get('videos/' + page + '?c=' + chid + '&limit=' + limit).then(function(data) {
-             if (data.success) {
-                 $scope.$broadcast('scroll.infiniteScrollComplete');
-                 $scope.has_more = data.response.has_more;
-                 $scope.videos = $scope.videos.concat(data.response.videos);
-             }
+     $scope.getVideoByCHID = function(option, page) {
+         videoApi.videos(option, page).then(function(data) {
+             $scope.$broadcast('scroll.infiniteScrollComplete');
+             $scope.has_more = data.response.has_more;
+             $scope.videos = $scope.videos.concat(data.response.videos);
          });
      }
 
 
      $scope.loadNextPage = function() {
          $scope.page++;
-         $scope.getVideoByCHID($scope.categoryId, $scope.page);
+         $scope.getVideoByCHID($scope.option, $scope.page);
      }
 
+     function getCurrentCate(){
+        for(var i in $scope.categories){
+            if($scope.categories[i].CHID==$scope.categoryId){
+                $scope.currentCate=$scope.categories[i];
+                $scope.cateImg="http://gsonhub.coding.me/avmoo/cates/"+$scope.currentCate.CHID+".jpg";
+            }
+         }
+     }
+
+     $scope.viewCate=function(){
+        $scope.change($scope.categoryId);
+     }
      $scope.change = function(categoryId) {
-         $scope.getVideoByCHID(categoryId);
+         $scope.page = 0;
+         $scope.videos = [];
+         $scope.categoryId=categoryId;
+         getCurrentCate();
+         $scope.option={c:categoryId};
+         $scope.getVideoByCHID($scope.option,$scope.page);
+         $ionicScrollDelegate.$getByHandle('listScroll').scrollTop();
      }
      $scope.$on('$ionicView.loaded', function() {
          console.log("list", "$ionicView.loaded")
          init();
      });
-
-     $scope.scroll = function() {
-         var content = $ionicScrollDelegate.$getByHandle('listScroll');
-         var pos = content.getScrollPosition();
-         if (pos.top > 600) {
-             $timeout(function() { $scope.isBtnTop = true }, 300);
-         } else {
-             $timeout(function() { $scope.isBtnTop = false }, 300);
-         }
+     /*浮动框用于筛选*/
+     $ionicPopover.fromTemplateUrl('tpl/filter.popover.html', {
+         scope: $scope
+     }).then(function(popover) {
+         $scope.popover = popover;
+     });
+     $scope.openPopover = function($event) {
+         $scope.popover.show($event);
+     };
+     $scope.closePopover = function() {
+         $scope.popover.hide();
+     };
+     $scope.$on('$destroy', function() {
+         $scope.popover.remove();
+     });
+     $scope.reset=function(){
+         $scope.option={c:$scope.categoryId};
+         $scope.page=0;
+         $scope.videos=[];
+         $scope.getVideoByCHID($scope.option,$scope.page);
+         $ionicScrollDelegate.$getByHandle('listScroll').scrollTop();
+         $scope.popover.hide();
      }
-     $scope.scrollTop = function($event) {
-         var ele = $event.target;
-         if (ele.classList) ele.classList.add("activated");
-         else ele.className += " activated";
-         $timeout(function() {
-             if (ele.classList) ele.classList.remove("activated");
-             else ele.className = ele.className.replace('activated', '');
-         }, 300);
-         $ionicScrollDelegate.$getByHandle('listScroll').scrollTop(true);
+     $scope.surePopover = function(form_o, form_t, form_type) {
+         var option={
+            o:form_o,
+            t:form_t,
+            type:form_type,
+            c:$scope.categoryId,
+         }
+         $scope.page=0;
+         $scope.videos=[];
+         $scope.option=option;
+         $scope.getVideoByCHID($scope.option,$scope.page);
+         $ionicScrollDelegate.$getByHandle('listScroll').scrollTop();
+         $scope.popover.hide();
      }
  }]);
 app.controller("personCtrl",['$state', '$scope', '$ionicViewSwitcher', function($state,$scope,$ionicViewSwitcher){
@@ -915,35 +1052,28 @@ app.controller("personCtrl",['$state', '$scope', '$ionicViewSwitcher', function(
     	$ionicViewSwitcher.nextDirection("forward");
     }
 }]);
-app.controller("searchCtrl", ['$timeout', 'Api', '$location', '$ionicScrollDelegate', '$scope', function($timeout,Api, $location, $ionicScrollDelegate, $scope) {
-    $scope.searchVideo = function(_keyword, _page, _limit) {
-        var page = _page || 1;
-        if (page == 1) {
-            $scope.page = 1;
-            $scope.videos = [];
-            $ionicScrollDelegate.$getByHandle('searchScroll').scrollTop(true);
-        }
-        var keyword = _keyword || '';
-        if(!keyword) return;
-        var limit = _limit || 15;
-        var path = ($location.search().key == $scope.searchKey) ? 'jav' : 'search';
-        Api.get(path + '/' + encodeURIComponent(keyword) + '/' + page + '?limit=' + limit).then(function(data) {
-            if (data.success) {
-                $scope.has_more = data.response.has_more;
-                $scope.videos = $scope.videos.concat(data.response.videos);
-                $scope.$broadcast('scroll.infiniteScrollComplete');
-            }
-        });
+app.controller("searchCtrl", ['$ionicPopover', '$timeout', 'videoApi', '$location', '$ionicScrollDelegate', '$scope', function($ionicPopover,$timeout,videoApi, $location, $ionicScrollDelegate, $scope) {
+    $scope.searchVideo = function(_option,_keyword, _page) {
+        videoApi.search(_option,_keyword,_page,15).then(function(data) {
+            $scope.has_more = data.response.has_more;
+            $scope.videos = $scope.videos.concat(data.response.videos);
+            $scope.$broadcast('scroll.infiniteScrollComplete');
+         });
     }
 
     $scope.submit = function(searchKey) {
+        $scope.searchKey=searchKey;
+        $scope.option={};
+        $scope.page=0;
+        $scope.videos=[];
         $ionicScrollDelegate.$getByHandle('searchScroll').scrollTop(true);
-        $scope.searchVideo(searchKey);
+        $scope.searchVideo($scope.option,searchKey,$scope.page);
+        $timeout(function(){document.getElementById("input_key").blur();},500);
     }
 
     $scope.loadNextPage = function(searchKey) {
         $scope.page++;
-        $scope.searchVideo(searchKey, $scope.page);
+        $scope.searchVideo($scope.option,searchKey, $scope.page);
     }
 
     $scope.$on('$ionicView.enter', function(e) {
@@ -953,33 +1083,49 @@ app.controller("searchCtrl", ['$timeout', 'Api', '$location', '$ionicScrollDeleg
 
     function init() {
         $scope.searchKey=$location.search().key;
-        if($scope.searchKey)$scope.has_more=true;
-        document.getElementById("input_key").focus();
-    }
-    $scope.scroll = function() {
-        var content = $ionicScrollDelegate.$getByHandle('searchScroll');
-        var pos = content.getScrollPosition();
-        if (pos.top > 600) {
-            $timeout(function() { $scope.isBtnTop = true },300);
-        } else {
-            $timeout(function() { $scope.isBtnTop = false },300);
+        $scope.option={};
+        $scope.videos=[];
+        if($scope.searchKey){$scope.has_more=true;$scope.page=-1;}
+        else {
+            $timeout(function(){document.getElementById("input_key").focus();},500);
         }
-    }
-    $scope.scrollTop = function($event) {
-        var ele = $event.target;
-        if (ele.classList) ele.classList.add("activated");
-        else ele.className += " activated";
-        $timeout(function() {
-            if (ele.classList) ele.classList.remove("activated");
-            else ele.className = ele.className.replace('activated', '');
-        },300);
-        $ionicScrollDelegate.$getByHandle('searchScroll').scrollTop(true);
-    }
-    
-    $scope.search=function(keyword){
-        $scope.searchKey=keyword;
-        $scope.searchVideo(keyword);
-    }
+    }  
+    /*浮动框用于筛选*/
+     $ionicPopover.fromTemplateUrl('tpl/filter.popover.html', {
+         scope: $scope
+     }).then(function(popover) {
+         $scope.popover = popover;
+     });
+     $scope.openPopover = function($event) {
+         $scope.popover.show($event);
+     };
+     $scope.closePopover = function() {
+         $scope.popover.hide();
+     };
+     $scope.$on('$destroy', function() {
+         $scope.popover.remove();
+     });
+     $scope.reset=function(){
+         $scope.option={};
+         $scope.page=0;
+         $scope.videos=[];
+         $scope.searchVideo($scope.option,$scope.searchKey,$scope.page);
+         $ionicScrollDelegate.$getByHandle('listScroll').scrollTop();
+         $scope.popover.hide();
+     }
+     $scope.surePopover = function(form_o, form_t, form_type) {
+         var option={
+            o:form_o,
+            t:form_t,
+            type:form_type,
+         }
+         $scope.page=0;
+         $scope.videos=[];
+         $scope.option=option;
+         $scope.searchVideo($scope.option,$scope.searchKey,$scope.page);
+         $ionicScrollDelegate.$getByHandle('listScroll').scrollTop();
+         $scope.popover.hide();
+     }
 }]);
 app.controller("starCtrl", ['$timeout', '$ionicScrollDelegate', '$scope', '$localStorage', function($timeout,$ionicScrollDelegate, $scope,$localStorage) {
     function init() {
@@ -990,27 +1136,8 @@ app.controller("starCtrl", ['$timeout', '$ionicScrollDelegate', '$scope', '$loca
             init();
             console.log("star","$ionicView.enter");
       });
-   $scope.scroll=function(){
-         var content=$ionicScrollDelegate.$getByHandle('starScroll');
-         var pos=content.getScrollPosition();
-         if(pos.top>500){
-              $timeout(function(){$scope.isBtnTop=true},600);
-           }else{
-              $timeout(function(){$scope.isBtnTop=false},600);
-         }
-    }
-    $scope.scrollTop=function($event){
-        var ele=$event.target;
-        if(ele.classList) ele.classList.add("activated");
-        else ele.className +=" activated";
-        $timeout(function(){
-            if(ele.classList) ele.classList.remove("activated"); 
-            else ele.className=ele.className.replace('activated','');
-        },600);
-        $ionicScrollDelegate.$getByHandle('starScroll').scrollTop(true);
-    }
 }]);
-app.controller('viewCtrl', ['$timeout', 'Toast', '$state', '$localStorage', '$scope', 'Api', '$ionicScrollDelegate', '$sce', function($timeout,Toast, $state, $localStorage, $scope, Api, $ionicScrollDelegate, $sce) {
+app.controller('viewCtrl', ['$timeout', 'Toast', '$state', '$localStorage', '$scope', 'videoApi', '$ionicScrollDelegate', '$sce', function($timeout, Toast, $state, $localStorage, $scope, videoApi, $ionicScrollDelegate, $sce) {
     $scope.$on('$ionicView.enter', function(e) {
         init();
         console.log("view", "$ionicView.enter");
@@ -1023,56 +1150,22 @@ app.controller('viewCtrl', ['$timeout', 'Toast', '$state', '$localStorage', '$sc
 
 
     function init() {
-        $scope.page = 0;
+        $scope.page = -1;
         $scope.isBtnTop = false;
         $scope.has_more = true;
         $scope.videos = [];
         $scope.video = $localStorage.video;
-        $scope.allVideo($scope.page);
         $scope.video_src = $sce.trustAsResourceUrl($scope.video.embedded_url);
-    }
-    $scope.allVideo = function(_order, _page, _limit) {
-        var order = _order || 'mv';
-        var page = _page || 1;
-        if (page == 1) {
-            $scope.searchKey = '';
-            $scope.page = 1;
-            $scope.videos = [];
-            $ionicScrollDelegate.$getByHandle('listScroll').scrollTop(true);
-        }
-        var limit = _limit || 15;
-        Api.get('videos/' + page + '?o=' + order + '&limit=' + limit).then(function(data) {
-            if (data.success) {
-                $scope.has_more = data.response.has_more;
-                $scope.videos = $scope.videos.concat(data.response.videos);
-                $scope.$broadcast('scroll.infiniteScrollComplete');
-            }
-        });
+        var keywordArr=$scope.video.keyword.split(" ");
+        $scope.keyword=keywordArr[0];
     }
 
     $scope.loadNextPage = function() {
         $scope.page++;
-        $scope.allVideo('', $scope.page);
-    }
-
-    $scope.scroll = function() {
-        var content = $ionicScrollDelegate.$getByHandle('viewScroll');
-        var pos = content.getScrollPosition();
-        if (pos.top > 1000) {
-            $timeout(function() { $scope.isBtnTop = true }, 600);
-        } else {
-            $timeout(function() { $scope.isBtnTop = false }, 600);
-        }
-        $scope.isBtnTop = true 
-    }
-    $scope.scrollTop = function($event) {
-        var ele = $event.target;
-        if (ele.classList) ele.classList.add("activated");
-        else ele.className += " activated";
-        $timeout(function() {
-            if (ele.classList) ele.classList.remove("activated");
-            else ele.className = ele.className.replace('activated', '');
-        }, 600);
-        $ionicScrollDelegate.$getByHandle('viewScroll').scrollTop(true);
+        videoApi.search({},$scope.keyword,$scope.page,15).then(function(data) {
+            $scope.has_more = data.response.has_more;
+            $scope.videos = $scope.videos.concat(data.response.videos);
+            $scope.$broadcast('scroll.infiniteScrollComplete');
+         });
     }
 }])

@@ -107,103 +107,215 @@
 
 
      });
-     app.factory('Api', ["$http", "WAP_CONFIG", "$q", "$log","$ionicLoading","$timeout",function($http, WAP_CONFIG, $q, $log,$ionicLoading,$timeout) {  
-        var _api = WAP_CONFIG;  
-        var endpoint = _api.host + ':' + _api.port+_api.path;  
-  
-        // public api  
-        return {  
-            //发送服务器的域名+端口， 
-            endpoint: endpoint,  
-  
-            //post请求，第一个参数是URL，第二个参数是向服务器发送的参数（JSON对象），  
-            post: function(url, data) {  
-                url = endpoint + url;  
-                var _timeout=5000;
-                var deferred = $q.defer();  
-                var tempPromise;  
-                //显示加载进度  
-                $ionicLoading.show({  
-                    template: '加载中...'  
-                });  
-                //判断用户是否传递了参数，如果有参数需要传递参数  
-                if(data != null && data != undefined && data != ""){  
-                    tempPromise = $http.post(url,data,{timeout:_timeout});  
-                }else{  
-                    tempPromise = $http.post(url,{timeout:_timeout});  
-                }  
-                tempPromise.success(function(data,header,config,status) {  
-                    deferred.resolve(data);  
-                    $ionicLoading.hide();  
-                }).error(function(msg, code) {  
-                    deferred.reject(msg);  
-                    $log.error(msg, code);  
-                    $ionicLoading.hide(); 
-                    $ionicLoading.show({  
-                    template: '出错了...'  
-                    });
-                    $timeout(function(){$ionicLoading.hide()},1000);  
-                });  
-                return deferred.promise;  
-            },  
-  
-            //get请求，第一个参数是URL，第二个参数是向服务器发送的参数（JSON对象），  
-            get: function(url, data) {  
-                url = endpoint + url;  
-                var deferred = $q.defer();  
-                var tempPromise;  
-                var _timeout=5000;
-                //显示加载进度  
-                $ionicLoading.show({  
-                    template: '加载中...'  
-                });  
-                //判断用户是否传递了参数，如果有参数需要传递参数  
-                if(data != null && data != undefined && data != ""){  
-                    tempPromise = $http.get(url,data,{timeout:_timeout});  
-                }else{  
-                    tempPromise = $http.get(url,{timeout:_timeout});  
-                }  
-                tempPromise.success(function(data,header,config,status) {  
-                    deferred.resolve(data);  
-                    $ionicLoading.hide();  
-                }).error(function(msg, code) {  
-                    deferred.reject(msg);  
-                    $ionicLoading.hide();  
-                    $log.error(msg, code);  
-                    $ionicLoading.show({  
-                    template: '<i class="icon ion-android-warning assertive"></i> 出错了'  
-                    });
-                    $timeout(function(){$ionicLoading.hide()},1000);  
-                });  
-                return deferred.promise;  
-            }  
-        };  
-  
-    }]);
-   app.factory("Toast",function($timeout,$ionicLoading){
-      return {
-         show:function(content,_status){
-             var status=_status||'info';
-             if(status=='error'){
-                var _class="icon ion-android-alert assertive";
+     app.factory('Api', function($http,Toast,WAP_CONFIG, $q, $log, $ionicLoading, $timeout) {
+         var _api = WAP_CONFIG;
+         var endpoint = _api.host + ':' + _api.port + _api.path;
+
+         // public api  
+         return {
+             //发送服务器的域名+端口， 
+             endpoint: endpoint,
+
+             //post请求，第一个参数是URL，第二个参数是向服务器发送的参数（JSON对象），  
+             post: function(url, data) {
+                 url = endpoint + url;
+                 var _timeout = 5000;
+                 var deferred = $q.defer();
+                 var tempPromise;
+                 //显示加载进度  
+                 $ionicLoading.show({
+                     template: '加载中...'
+                 });
+                 //判断用户是否传递了参数，如果有参数需要传递参数  
+                 if (data != null && data != undefined && data != "") {
+                     tempPromise = $http.post(url, data, { timeout: _timeout });
+                 } else {
+                     tempPromise = $http.post(url, { timeout: _timeout });
+                 }
+                 tempPromise.success(function(data, header, config, status) {
+                     deferred.resolve(data);
+                     $ionicLoading.hide();
+                 }).error(function(msg, code) {
+                     deferred.reject(msg);
+                     $log.error(msg, code);
+                     $ionicLoading.hide();
+                     var errorTitle;
+                     if(code=='-1') errorTitle="请求超时,请检查你的网络连接情况";
+                     else if(code=="400") errorTitle="错误的请求";
+                     else if(code=="404") errorTitle="404 Not Found";
+                     else if(code=="500"||code=="502") errorTitle="出错了,请稍后再试";
+                     else if(code=="503") errorTitle="您的操作太频繁了,休息一下再试吧";
+                     else errorTitle="发生了未知错误,请稍后再试";
+                     Toast.show(errorTitle,"error");
+                 });
+                 return deferred.promise;
+             },
+
+             //get请求，第一个参数是URL，第二个参数是向服务器发送的参数（JSON对象），  
+             get: function(url, data) {
+                 url = endpoint + url;
+                 var deferred = $q.defer();
+                 var tempPromise;
+                 var _timeout = 5000;
+                 //显示加载进度  
+                 $ionicLoading.show({
+                     template: '加载中...'
+                 });
+                 //判断用户是否传递了参数如果有参数需要传递参数  
+                 if (data != null && data != undefined && data != "") {
+                     tempPromise = $http.get(url, data, { timeout: _timeout });
+                 } else {
+                     tempPromise = $http.get(url, { timeout: _timeout });
+                 }
+                 tempPromise.success(function(data, header, config, status) {
+                     deferred.resolve(data);
+                     $ionicLoading.hide();
+                 }).error(function(msg, code) {
+                     deferred.reject(msg);
+                     $log.error(msg, code);
+                     $ionicLoading.hide();
+                     var errorTitle;
+                     if(code=='-1') errorTitle="请求超时,请检查你的网络连接情况";
+                     else if(code=="400") errorTitle="错误的请求";
+                     else if(code=="404") errorTitle="404 Not Found";
+                     else if(code=="500"||code=="502") errorTitle="出错了,请稍后再试";
+                     else if(code=="503") errorTitle="您的操作太频繁了,休息一下再试吧";
+                     else errorTitle="发生了未知错误,请稍后再试";
+
+                     Toast.show(errorTitle,"error");
+                 });
+                 return deferred.promise;
              }
-             else if(status=="success"){
-                var _class="icon ion-android-alert positive";
+         };
+
+     });
+     
+     app.factory('videoApi', function(Api, $q) {
+         function getQuery(_option, _page) {
+             var option = {
+                 o: _option.o || 'mr',
+                 t: _option.t || 'a',
+                 type: _option.type || '',
+                 c: _option.c || '',
+                 limit: _option.limit || 15
              }
-             else if(status=="info"){
-                var _class="icon ion-android-alert calm";
+             var query = '?';
+             for (var key in option) {
+                 query += (key + '=' + option[key] + '&');
              }
-             $ionicLoading.show({  
-                 template: '<i class="'+_class+'">  '+content+'</i>'
-             });
-             $timeout(function(){$ionicLoading.hide()},1500);
+             return query.substr(0, query.length - 1);
          }
-      }
-   });
-app.filter('keyWord', function() {
-     return function(keyWord){
-         var arr1=keyWord.split(" ");
-         var arr2=keyWord.split(",");
-         return arr1[0]||arr2[0]||' ';
-     }
-});
+         return {
+             videos: function(_option, _page) {
+                 var deferred = $q.defer();
+                 var query = getQuery(_option, _page);
+                 var page = _page || 0;
+                 Api.get('videos/'+page+query).then(function(data) {
+                     if (data.success) {
+                         deferred.resolve(data);
+                     } else {
+                         deferred.reject(data);
+                     }
+                 }, function(data) {
+                     deferred.reject(data);
+                 });
+                 return deferred.promise;
+             },
+             search: function(_option, _keyword, _page) {
+                 var deferred = $q.defer();
+                 var query = getQuery(_option, _page);
+                 var page = _page || 0;
+                 var keyword = _keyword || '';
+                 keyword = encodeURIComponent(keyword);
+                 Api.get('search/'+keyword+'/'+page+query).then(function(data) {
+                     if (data.success) {
+                         deferred.resolve(data);
+                     } else {
+                         deferred.reject(data);
+                     }
+                 }, function(data) {
+                     deferred.reject(data);
+                 });
+                 return deferred.promise;
+             },
+             jav: function(_option, _keyword, _page) {
+                 var deferred = $q.defer();
+                 var query = getQuery(_option, _page);
+                 var page = _page || 0;
+                 var keyword = _keyword || '';
+                 keyword = encodeURIComponent(keyword);
+                 Api.get('jav/'+keyword+'/'+page+query).then(function(data) {
+                     if (data.success) {
+                         deferred.resolve(data);
+                     } else {
+                         deferred.reject(data);
+                     }
+                 }, function(data) {
+                     deferred.reject(data);
+                 });
+                 return deferred.promise;
+             },
+             categories: function() {
+                 var deferred = $q.defer();
+                 Api.get('categories').then(function(data) {
+                     if (data.success) {
+                         deferred.resolve(data);
+                     } else {
+                         deferred.reject(data);
+                     }
+                 }, function(data) {
+                     deferred.reject(data);
+                 });
+                 return deferred.promise;
+             },
+             video: function(vid) {
+                 if(!vid) return;
+                 var deferred = $q.defer();
+                 Api.get('video/'+vid).then(function(data) {
+                     if (data.success) {
+                         deferred.resolve(data);
+                     } else {
+                         deferred.reject(data);
+                     }
+                 }, function(data) {
+                     deferred.reject(data);
+                 });
+                 return deferred.promise;
+             },
+              collections: function(_page,_limit) {
+                 var page=_page||0;
+                 var limit=_limt||15;
+                 var deferred = $q.defer();
+                 Api.get('collections/'+page+"?limit="+limit).then(function(data) {
+                     if (data.success) {
+                         deferred.resolve(data);
+                     } else {
+                         deferred.reject(data);
+                     }
+                 }, function(data) {
+                     deferred.reject(data);
+                 });
+                 return deferred.promise;
+             }
+
+         }
+     });
+
+     app.factory("Toast", function($timeout, $ionicLoading) {
+         return {
+             show: function(content, _status) {
+                 var status = _status || 'info';
+                 if (status == 'error') {
+                     var _class = "icon ion-android-alert assertive";
+                 } else if (status == "success") {
+                     var _class = "icon ion-android-alert positive";
+                 } else if (status == "info") {
+                     var _class = "icon ion-android-alert calm";
+                 }
+                 $ionicLoading.show({
+                     template: '<i class="' + _class + '">  ' + content + '</i>'
+                 });
+                 $timeout(function() { $ionicLoading.hide() }, 1500);
+             }
+         }
+     });

@@ -64,7 +64,7 @@
              url: '/search?key',
              templateUrl: 'tpl/search.html?v=' + $tplVersion,
              controller: 'searchCtrl',
-             cache:true
+             cache:false
          })
 
 

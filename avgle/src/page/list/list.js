@@ -1,71 +1,97 @@
- app.controller('listCtrl', function( $timeout, $scope, Api, $ionicScrollDelegate) {
-
+ app.controller('listCtrl', function($ionicPopover, $scope, videoApi, $ionicScrollDelegate) {
      function init() {
          $scope.categoryId = "1";
+         $scope.option={c:$scope.categoryId};
          $scope.videos = [];
          $scope.has_more = true;
          initCategories();
          $scope.isBtnTop = false;
+         $scope.page=-1;
      }
 
      function initCategories() {
-         Api.get('categories').then(function(data) {
-             if (data.success) {
-                 $scope.categories = data.response.categories;
-                 $scope.categoryId = "1";
-             }
+         videoApi.categories().then(function(data) {
+             $scope.categories = data.response.categories;
+             $scope.categoryId = "1";
+             getCurrentCate();
+
          });
      }
 
-     $scope.getVideoByCHID = function(chid, _page, _limit) {
-         $scope.categoryId = chid;
-         $scope.has_more = true;
-         var page = _page || 1;
-         if (page == 1) {
-             $scope.page = 1;
-             $scope.videos = [];
-         }
-         var limit = _limit || 10;
-         Api.get('videos/' + page + '?c=' + chid + '&limit=' + limit).then(function(data) {
-             if (data.success) {
-                 $scope.$broadcast('scroll.infiniteScrollComplete');
-                 $scope.has_more = data.response.has_more;
-                 $scope.videos = $scope.videos.concat(data.response.videos);
-             }
+     $scope.getVideoByCHID = function(option, page) {
+         videoApi.videos(option, page).then(function(data) {
+             $scope.$broadcast('scroll.infiniteScrollComplete');
+             $scope.has_more = data.response.has_more;
+             $scope.videos = $scope.videos.concat(data.response.videos);
          });
      }
 
 
      $scope.loadNextPage = function() {
          $scope.page++;
-         $scope.getVideoByCHID($scope.categoryId, $scope.page);
+         $scope.getVideoByCHID($scope.option, $scope.page);
      }
 
+     function getCurrentCate(){
+        for(var i in $scope.categories){
+            if($scope.categories[i].CHID==$scope.categoryId){
+                $scope.currentCate=$scope.categories[i];
+                $scope.cateImg="http://gsonhub.coding.me/avmoo/cates/"+$scope.currentCate.CHID+".jpg";
+            }
+         }
+     }
+
+     $scope.viewCate=function(){
+        $scope.change($scope.categoryId);
+     }
      $scope.change = function(categoryId) {
-         $scope.getVideoByCHID(categoryId);
+         $scope.page = 0;
+         $scope.videos = [];
+         $scope.categoryId=categoryId;
+         getCurrentCate();
+         $scope.option={c:categoryId};
+         $scope.getVideoByCHID($scope.option,$scope.page);
+         $ionicScrollDelegate.$getByHandle('listScroll').scrollTop();
      }
      $scope.$on('$ionicView.loaded', function() {
          console.log("list", "$ionicView.loaded")
          init();
      });
-
-     $scope.scroll = function() {
-         var content = $ionicScrollDelegate.$getByHandle('listScroll');
-         var pos = content.getScrollPosition();
-         if (pos.top > 600) {
-             $timeout(function() { $scope.isBtnTop = true }, 300);
-         } else {
-             $timeout(function() { $scope.isBtnTop = false }, 300);
-         }
+     /*浮动框用于筛选*/
+     $ionicPopover.fromTemplateUrl('tpl/filter.popover.html', {
+         scope: $scope
+     }).then(function(popover) {
+         $scope.popover = popover;
+     });
+     $scope.openPopover = function($event) {
+         $scope.popover.show($event);
+     };
+     $scope.closePopover = function() {
+         $scope.popover.hide();
+     };
+     $scope.$on('$destroy', function() {
+         $scope.popover.remove();
+     });
+     $scope.reset=function(){
+         $scope.option={c:$scope.categoryId};
+         $scope.page=0;
+         $scope.videos=[];
+         $scope.getVideoByCHID($scope.option,$scope.page);
+         $ionicScrollDelegate.$getByHandle('listScroll').scrollTop();
+         $scope.popover.hide();
      }
-     $scope.scrollTop = function($event) {
-         var ele = $event.target;
-         if (ele.classList) ele.classList.add("activated");
-         else ele.className += " activated";
-         $timeout(function() {
-             if (ele.classList) ele.classList.remove("activated");
-             else ele.className = ele.className.replace('activated', '');
-         }, 300);
-         $ionicScrollDelegate.$getByHandle('listScroll').scrollTop(true);
+     $scope.surePopover = function(form_o, form_t, form_type) {
+         var option={
+            o:form_o,
+            t:form_t,
+            type:form_type,
+            c:$scope.categoryId,
+         }
+         $scope.page=0;
+         $scope.videos=[];
+         $scope.option=option;
+         $scope.getVideoByCHID($scope.option,$scope.page);
+         $ionicScrollDelegate.$getByHandle('listScroll').scrollTop();
+         $scope.popover.hide();
      }
  });

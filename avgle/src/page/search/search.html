@@ -1,6 +1,8 @@
 <ion-view class="page-search" ng-controller="searchCtrl">
     <ion-header-bar class="bar-assertive item-input-inset">
         <button class="button button-assertive icon ion-android-arrow-back" ng-click="$goback()"></button>
+        &nbsp;
+        <button ng-show="searchKey&&videos.length>=15" class="button button-assertive icon ion-ios-flask-outline" ng-click="openPopover()"></button>
         <label class="item-input-wrapper assertive-bg label">
             <i class="icon ion-ios-search placeholder-icon"></i>
             <form ng-submit="submit(searchKey)">
@@ -24,5 +26,5 @@
         <ion-infinite-scroll ng-if="has_more" on-infinite="loadNextPage(searchKey)" distance="3%">
         </ion-infinite-scroll>
     </ion-content>
-    <div class="button-top ng-hide" ng-show="isBtnTop" ng-click="scrollTop($event)"><i class="icon ion-arrow-up-a"></i></div>
+<btn-scroll-top ng-init="handle='searchScroll'"></btn-scroll-top>
 </ion-view>

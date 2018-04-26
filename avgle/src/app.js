@@ -35,6 +35,7 @@ app.run(function($ionicViewSwitcher,$window, $rootScope, $state, $stateParams, $
     }
     $rootScope.$refresh = function() {
         $window.location.reload();
+        // $state.reload();
     }
     $rootScope.$search = function() {
         $state.go("search");

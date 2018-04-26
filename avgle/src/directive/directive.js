@@ -25,25 +25,7 @@ app.directive('ionImg', function() {
         },
     };
 });
-app.directive('ionInput', ['$compile', function($compile) {
-    // Runs during compile
-    return {
-        restrict: 'AE',
-        replace: false,
-        scope: {
-            model: '=',
-        },
-        link: function(scope, element, attrs, controller) {
-            scope.data = 1;
-            scope.show = function() {
-                scope.data++;
-            };
-            var template = "<input type='number' ng-model='data'> <button ng-click='show()'>show</button>";
-            var html = $compile(template)(scope);
-            element.append(html);
-        }
-    };
-}])
+
 /**
  *rjHoldActive指令
  *产生一种数据动态涟漪效果
@@ -77,7 +59,7 @@ app.directive('ionMovie', function($confirm, $state, $localStorage, Toast, $ioni
         replace: false,
         scope: false,
         priority: 1001,
-        templateUrl: "tpl/component.html",
+        templateUrl: "tpl/movie.component.html",
         // template:'<ion-item  class="item-thumbnail-left" ng-click="view(vo)"><img image-lazy-src="{{vo.preview_url}}" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACcAAAAnCAIAAAADwcZiAAAAW0lEQVRYCe3SMQ7AMAzDwLb//6k/UWTnyGQJPWqQgIPfmXmO33d8cQ22ups94YQ9gb7Js+SmhNnFSxP2LLkpYXbx0oQ9S25KmF28NGHPkpsSZhcvTdiz5KabhH9OFAMPqToRyQAAAABJRU5ErkJggg=="><h3 style="white-space: initial;max-height: 62px;line-height:20px;">{{vo.title}}</h3><p><button class="button-assertive button button-small btn-keyword" ng-click="$event.stopPropagation()" ui-sref="search({key:vo.keyword})">{{vo.keyword}}</button></p><ion-option-button class="button-calm" ng-click="save(vo)">收藏</ion-option-button></ion-item>',
         link: function(scope, element, attrs, controller) {
             scope.btnOption=scope.btnOption||1;
@@ -118,12 +100,17 @@ app.directive('ionMovie', function($confirm, $state, $localStorage, Toast, $ioni
                 $state.go("view", {}, { reload: true })
             }
 
-            scope.delete = function(index) {
+            scope.delete = function(vo) {
+                var index=scope.videos.indexOf(vo);
                 $confirm.show({ title: "确定要删除吗" }, function() {
-                    $scope.videos.splice(index, 1);
-                    $localStorage.saveList = $scope.videos;
+                    scope.videos.splice(index, 1);
+                    $localStorage.saveList = scope.videos;
                     $ionicListDelegate.closeOptionButtons();
                 }, function() { $ionicListDelegate.closeOptionButtons(); });
+            }
+            scope.preview=function(vo){
+                window.open(vo.preview_video_url);  
+                $ionicListDelegate.closeOptionButtons();           
             }
         }
     };
@@ -139,7 +126,45 @@ app.directive('labelKeyword', ['$compile', function($compile) {
         },
         template: '<button ng-repeat="vo in keywordArr" class="button-assertive button button-small btn-keyword" ng-click="$event.stopPropagation()" ui-sref="search({key:vo})">{{vo}}</button>',
         link: function(scope, element, attrs, controller) {
-            scope.keywordArr = scope.keywords.split(' ');
+            scope.keywordArr=[];
+            var keywordArr = scope.keywords.split(' ');
+            for(var i in keywordArr){
+                 if(scope.keywordArr.indexOf(keywordArr[i])==-1){
+                    scope.keywordArr.push(keywordArr[i]);
+                 }
+            }
         }
     };
-}])
+}]);
+
+app.directive('btnScrollTop',function($timeout,$ionicScrollDelegate,$timeout) {
+        return {
+            restrict: 'AE',
+            replace: false,
+            scope: false,
+            priority: 1001,
+            template:'<div class="button-top ng-hide" ng-show="isBtnTop" ng-click="scrollTop($event)"><i class="icon ion-arrow-up-a"></i></div>',
+            link: function(scope, element, iAttrs, controller) {
+                scope.isBtnTop=false;
+                scope.scroll=function(){
+                     var content=$ionicScrollDelegate.$getByHandle(scope.handle);
+                     var pos=content.getScrollPosition();
+                     if(pos.top>600){
+                          $timeout(function(){scope.isBtnTop=true},300);
+                       }else{
+                          $timeout(function(){scope.isBtnTop=false},300);
+                     }
+                }
+                scope.scrollTop=function($event){
+                    var ele=$event.target;
+                    if(ele.classList) ele.classList.add("activated");
+                    else ele.className +=" activated";
+                    $timeout(function(){
+                        if(ele.classList) ele.classList.remove("activated"); 
+                        else ele.className=ele.className.replace('activated','');
+                    },300);
+                    $ionicScrollDelegate.$getByHandle(scope.handle).scrollTop(true);
+                }
+            }
+        };
+})

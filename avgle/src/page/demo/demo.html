@@ -20,13 +20,13 @@
     border-bottom:2px solid #FFF;
 }
 </style>
-<ion-header-bar class="bar-assertive has-tabs-top">
-    <button class="button button-assertive icon ion-ios-search-strong" ng-click="$search()"></button>
+<ion-header-bar class="bar-stable has-tabs-top">
+    <button class="button button-stable icon ion-ios-search-strong" ng-click="$search()"></button>
     <div class="h1 title">分类</div>
-  <button class="button button-assertive icon ion-refresh" ng-click="$refresh()"></button>
+  <button class="button button-stable icon ion-refresh" ng-click="$refresh()"></button>
 </ion-header-bar>
-<div class="tabs-background-assertive">
-    <div class="tabs tabs-assertive">
+<div class="tabs-background-stable">
+    <div class="tabs tabs-stable">
         <ion-scroll overflow-scroll=false direction="x" delegate-handle="slideScroll">
             <a id="tab-cate-{{$index}}" ng-repeat="vo in categories track by $index" class="tab-item" ng-class="{'active':showItem==$index}" href="javascript:;" ng-click="toggleShow($index)">
 	          {{vo.name}}

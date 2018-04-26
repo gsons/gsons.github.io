@@ -9,6 +9,9 @@
     <p class="p-key">
         <label-keyword keywords={{vo.keyword}}></label-keyword>
     </p>
+     <ion-option-button class="button-dark" ng-click="$event.stopPropagation();preview(vo)">
+        预览
+     </ion-option-button>
     <ion-option-button class="button-calm" ng-if="btnOption==1" ng-click="$event.stopPropagation();save(vo)">收藏</ion-option-button>
     <ion-option-button class="button-assertive" ng-if="btnOption==-1" ng-click="$event.stopPropagation();delete(vo)">删除</ion-option-button>
 </ion-item>
