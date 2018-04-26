@@ -983,7 +983,7 @@ app.controller('homeCtrl', ['$scope', 'videoApi', '$ionicScrollDelegate', functi
         for(var i in $scope.categories){
             if($scope.categories[i].CHID==$scope.categoryId){
                 $scope.currentCate=$scope.categories[i];
-                $scope.cateImg="http://gsonhub.coding.me/avmoo/cates/"+$scope.currentCate.CHID+".jpg";
+                $scope.cateImg="https://gsons.github.io/shop/cates/"+$scope.currentCate.CHID+".jpg";
             }
          }
      }
