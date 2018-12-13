@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+	<title>处方二维码</title>
+	<script src="http://weixin.tcmtrust.com/user/lib/ionic/js/jquery.min.js"></script>
+</head>
+<style>
+*{
+    margin: 0;
+    padding: 0;
+}
+html,body{
+    width: 100%;
+    /*height: 100%;*/
+}
+body{
+    background-image: url('bg.png');
+}
+img{
+    display: block;
+    margin: 0 auto;
+}
+ul{
+    list-style: none;
+}
+#logo img{
+    margin-top: 0.28rem;
+}
+.title{
+    font-size: 0.44rem;
+    text-align: center;
+}
+.code{
+    width: 2.8rem;
+    height: 2.8rem;
+    display: table;
+    margin: 0 auto;
+    position: relative;
+}
+.code img{
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+}
+.code div{
+    position: relative;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    width: 100%;
+    font-size: 0.24rem;
+}
+.tis{
+    font-size: 0.24rem;
+    text-align: center;
+}
+.bu{
+    width: 5.55rem;
+    height: 2.6rem;
+    padding: 0 0.17rem;
+    box-sizing:border-box;
+    background-color: rgba(170,117,72,.5);
+    margin: 0 auto;
+    border-radius: 0.26rem;
+    margin-top: 0.15rem;
+}
+.bu p{
+    font-size: 0.3rem;
+    line-height: 0.68rem;
+}
+.bu li{
+    font-size: 0.24rem;
+    line-height: 0.44rem;
+}
+button{
+    width: 2.77rem;
+    height: 0.62rem;
+    border: none;
+    border-radius: 0.23rem;
+    background-color: #aa7548;
+    color: #fff;
+    text-align: center;
+    font-size: 0.3rem;
+    display: block;
+    margin: 0.26rem auto 0;
+}
+a{
+    font-size: 0.28rem;
+    margin-left: 0.8rem;
+}
+</style>
+<body><img id="qrimg" src="http://image.tcmtrust.cn/medicalsys/photoPic/2018-11-27/1543290633.png" alt="">
+    <div id="logo">
+        <img src="logo.png" alt="">
+    </div>
+    <p class="title">微信支付方式</p>
+    <div class="code">
+        <div>图片无法显示，请检查网络或javascript设置<br>Safari浏览器请打开javascript选项<br>(设置->Safari->高级->javascript)</div>
+        <img id="qrimg" src="http://image.tcmtrust.cn/medicalsys/photoPic/2018-11-27/1543290633.png" alt="">
+    </div>
+    <p class="tis">↑点击二维码保存</p>
+    <div class="bu">
+        <p>使用步骤</p>
+        <ul>
+            <li>一、点击二维码，保存到手机。</li>
+            <li>二、使用微信“扫一扫”，扫描该二维码。</li>
+            <li>三、公众号内点击链接进行支付。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;（首次使用须关注公众号进行支付）</li>
+        </ul>
+    </div>
+    <button>查看详细教程</button>
+    <a href="tel:02036683593">咨询请拨打020-36683593</a>
+</body>
+</html>
+<script src="rem.js"></script>
+<script>
+//该方法手机无效
+function GetQueryString(name){
+	var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+	var r = window.location.search.substr(1).match(reg);
+	if(r!=null)return  unescape(r[2]); return null;
+}
+function isWeiXin(){ 
+    var ua = window.navigator.userAgent.toLowerCase(); 
+    if(ua.match(/MicroMessenger/i) == 'micromessenger'){ 
+        //alert( '使用的微信浏览器'); 
+        return true;
+    }else{
+        return false;
+    }
+    // else if (ua.match(/QQ/i) == "qq"){
+    //     alert('使用qq浏览器打开');
+    // }
+}
+//isWeiXin();
+var bg='http://image.tcmtrust.com/medicalsys/tempQrcodPic/'+GetQueryString('code')+'.png';
+$('#qrimg').attr('src',bg);
+// var c = document.getElementById("canvas");
+// var canvas=c.getContext("2d");
+// var sampleImage = document.getElementById("qrimg");
+// sampleImage.onload=function(){
+//     $('#qrimg2').css({
+//         width:sampleImage.width,
+//         height:sampleImage.height,
+//         background:'url('+bg+')'
+//     });
+
+// }
+// function Download(){
+//     //cavas 保存图片到本地  js 实现
+//     //------------------------------------------------------------------------
+//     //1.确定图片的类型  获取到的图片格式 data:image/Png;base64,......
+//     var type ='png';//你想要什么图片格式 就选什么吧
+//     //var d=document.getElementById("canvas");
+//     var imgdata=c.toDataURL(type);
+//     //2.0 将mime-type改为image/octet-stream,强制让浏览器下载
+//     var fixtype=function(type){
+//         type=type.toLocaleLowerCase().replace(/jpg/i,'jpeg');
+//         var r=type.match(/png|jpeg|bmp|gif/)[0];
+//         return 'image/'+r;
+//     };
+//     imgdata=imgdata.replace(fixtype(type),'image/octet-stream');
+//     //3.0 将图片保存到本地
+//     var savaFile=function(data,filename){
+//         var save_link=document.createElementNS('http://www.w3.org/1999/xhtml', 'a');
+//         save_link.href=data;
+//         save_link.download=filename;
+//         var event=document.createEvent('MouseEvents');
+//         event.initMouseEvent('click',true,false,window,0,0,0,0,0,false,false,false,false,0,null);
+//         save_link.dispatchEvent(event);
+//     };
+//     var filename=''+new Date().getDate()+'.'+type;  
+//     //注意咯 由于图片下载的比较少 就直接用当前几号做的图片名字
+//     savaFile(imgdata,filename);
+// };
+</script>
+<script>
+//$('#qrimg').attr('src','http://image.tcmtrust.com/medicalsys/tempQrcodPic/'+GetQueryString('code')+'.png');
+var triggerEvent = "touchstart"; //指定下载方式
+ 
+function saveAs(Url){
+    var blob=new Blob([''], {type:'application/octet-stream'});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = Url;
+    a.download = Url.replace(/(.*\/)*([^.]+.*)/ig,"$2").split("?")[0];
+    var e = document.createEvent('MouseEvents');
+    e.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+    a.dispatchEvent(e);
+    URL.revokeObjectURL(url);
+}
+
+var imgs = document.getElementById("qrimg");
+//var div=document.getElementById("qrimg2");
+
+// div.addEventListener(triggerEvent,function(){
+//         //var url = $(this).css('backgroundImage');
+//         //saveAs(bg);
+//         alert('点击了');
+//     },false);
+var u = navigator.userAgent;
+var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+if(isWeiXin()){
+    $('h2').html('长按识别二维码');
+    $('#jj').hide();
+}else{
+    $('h2').html("一：点击保存二维码到手机<br>二：使用微信“扫一扫”该图片，自动关注“至诚金方”公众号<br>三：公众号内点击链接进行支付<br><span style='font-size:16px;'>（首次使用须关注公众号进行支付）</span>");
+}
+if(isiOS){
+    $('#tis').hide();
+}else{
+    imgs.addEventListener(triggerEvent,function(){
+        var url = this.getAttribute("src");
+        saveAs(url);
+    },false);
+}
+</script>
