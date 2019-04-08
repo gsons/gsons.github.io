@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+    <script src="html5sql.js"></script>
+</head>
+
+<body>
+    <script>
+    if (!html5sql.database) {
+        html5sql.openDatabase("test", "Testing Database", 5 * 1024 * 1024);
+    };
+
+    $.get('video.sql', function(sqlStatements) {
+
+        html5sql.process(
+            sqlStatements, //text of the SQL file you retrieved
+            function() {
+                // Success Function
+                // executed after all statements are processed
+            },
+            function(error) {
+                // Handle any errors here
+            }
+        );
+    });
+    </script>
+</body>
+
+</html>
