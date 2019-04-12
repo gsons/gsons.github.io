@@ -1,0 +1,6 @@
+{
+    "require": {
+        "owner888/phpspider": "^2.1",
+        "gsons/douyu-danmu": "^0.4.0"
+    }
+}
