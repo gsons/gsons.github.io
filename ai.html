@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- 添加viewport元标签 -->
+    <meta name="referrer" content="no-referrer" />
+    <title>人工智能聊天机器人 ChatGPT3.5</title>
+    <style>
+        /* 设置整体背景色和字体颜色 */
+        body {
+            background-color: #222;
+            color: #fff;
+        }
+
+        /* 设置标题字体大小和下划线 */
+        h1 {
+            font-size: 20px;
+            text-align: center;
+            text-decoration: underline;
+        }
+
+        /* 设置链接列表的外边距和内边距 */
+        ul {
+            margin: 50px auto;
+            padding: 0;
+            max-width: 800px;
+        }
+
+        /* 设置链接列表项的外边距和内边距 */
+        li {
+            margin: 10px 0;
+            padding: 10px;
+            list-style: none;
+            background-color: #444;
+            border-radius: 5px;
+        }
+
+        /* 设置链接列表项中的超链接 */
+        a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 18px;
+            transition: all 0.2s ease-in-out;
+        }
+
+        /* 设置链接在鼠标悬停时的效果 */
+        a:hover {
+            color: #00ffea;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <h1>人工智能聊天机器人 ChatGPT3.5</h1>
+    <ul id="link-list"></ul>
+
+    <script>
+        const links = [
+            'https://chatgpt-web-production-fd4b.up.railway.app',
+            'https://chatgpt-web-production-f695.up.railway.app',
+            'https://chatgpt-web-production-f625.up.railway.app',
+            'https://chatgpt-web-production-ed40.up.railway.app',
+            'https://chatgpt-web-production-ecd1.up.railway.app',
+            'https://chatgpt-web-production-eb65.up.railway.app',
+            'https://chatgpt-web-production-e7dc.up.railway.app',
+            'https://chatgpt-web-production-e1ee.up.railway.app',
+            'https://chatgpt-web-production-e1d4.up.railway.app',
+            'https://chatgpt-web-production-e1a3.up.railway.app',
+            'https://chatgpt-web-production-e080.up.railway.app',
+            'https://chatgpt-web-production-dbe3.up.railway.app',
+            'https://chatgpt-web-production-d4c3.up.railway.app',
+            'https://chatgpt-web-production-cc10.up.railway.app',
+            'https://chatgpt-web-production-d43d.up.railway.app',
+            'https://chatgpt-web-production-cbc3.up.railway.app',
+            'https://chatgpt-web-production-c97a.up.railway.app',
+            'https://chatgpt-web-production-c70d.up.railway.app',
+            'https://chatgpt-web-production-c62c.up.railway.app'
+        ];
+
+        const linkList = document.getElementById('link-list');
+        for (let i = 0; i < links.length; i++) {
+            const link = links[i];
+            const listItem = document.createElement('li');
+            const linkItem = document.createElement('a');
+            linkItem.setAttribute('href', link);
+            linkItem.textContent = `AI机器人 ${i+1}`;
+            listItem.appendChild(linkItem);
+            linkList.appendChild(listItem);
+        }
+    </script>
+</body>
+</html>
