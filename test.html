@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vconsole@latest/dist/vconsole.min.js"></script> -->
+</head>
+
+<body>
+    <script>
+
+        let socket = new WebSocket('ws://22c730ff.r3.cpolar.cn');
+
+
+        let peerConnection;
+
+        let dataChannel;
+
+
+        // 初始化
+        async function init() {
+            var config = {
+                'iceServers': [
+                    {
+                        'urls': 'stun:stun.callwithus.com:3478'
+                    }
+                ]
+            };
+
+            peerConnection = new RTCPeerConnection();
+
+            //if(stream) stream.getTracks().forEach((track)=>{peerConnection.addTrack(track,stream)});
+
+            peerConnection.addEventListener('icecandidate', event => {
+                if (event.candidate) {
+                    const message = {
+                        type: 'iceCandidate',
+                        candidate: event.candidate
+                    };
+                    socket.send(JSON.stringify(message));
+                }
+            });
+
+            dataChannel = peerConnection.createDataChannel("chat");
+
+            peerConnection.ondatachannel = function (event) {
+                console.log('数据通道开了');
+                event.channel.onopen = function () {
+                    dataChannel.send('测试消息！');
+                    console.log('Data channel is open and ready to be used.');
+                };
+
+                event.channel.onmessage = function (event) {
+                    console.log('onmessage', event);
+                };
+            }
+
+            dataChannel.onerror = (e) => {
+                console.error("onclose event", e);
+            }
+
+            dataChannel.onclose = (e) => {
+                console.error("onclose event", e);
+            }
+
+            dataChannel.onopen = function () {
+                console.log('恭喜 建立连接了！');
+                setTimeout(function () {
+                    if (dataChannel.readyState === "open") {
+                        console.info("数据通道开了", dataChannel);
+                        dataChannel.send('发送信息了1');
+                        setInterval(function () {
+                            console.info("ping", dataChannel);
+                            dataChannel.send('发送信息了2');
+                        }, 1000)
+                    } else {
+                        console.error("数据通道不是open状态");
+                    }
+                }, 1000);
+            }
+            //dataChannel.send()
+            dataChannel.onmessage = function (event) {
+                console.log('onmessage');
+                //alert('dataChannel.onmessage');
+            };
+
+            const offer = await peerConnection.createOffer();
+            await peerConnection.setLocalDescription(offer);
+            const msg = {
+                type: 'sdpOffer',
+                offer: offer
+            };
+            //
+            console.log('发送sdpOffer');
+            socket.send(JSON.stringify(msg));
+        }
+
+        socket.onopen = async function () {
+            //let stream=await window.navigator.mediaDevices.getUserMedia({audio:false,video:false});
+            // init();
+
+            try {
+                await init();
+            } catch (e) {
+                console.error("Failed to initialize: ", e);
+            }
+        }
+
+        socket.onmessage = async function (event) {
+            const message = JSON.parse(event.data);
+            switch (message.type) {
+                case 'iceCandidate':
+                    const candidate = new RTCIceCandidate(message.candidate);
+                    peerConnection.addIceCandidate(candidate);
+                    break;
+
+                case 'sdpOffer':
+                    console.log("读取sdpOffer", message.offer);
+                    await peerConnection.setRemoteDescription(new RTCSessionDescription(message.offer));
+                    let answer = await peerConnection.createAnswer();
+                    await peerConnection.setLocalDescription(answer);
+                    const msg = {
+                        type: 'sdpAnswer',
+                        answer: peerConnection.localDescription
+                    };
+                    socket.send(JSON.stringify(msg));
+                    break;
+
+                case 'sdpAnswer':
+                    console.log("读取sdpAnswer", message.answer);
+                    await peerConnection.setRemoteDescription(new RTCSessionDescription(message.answer))
+                    break;
+                default:
+                    console.warn('Received unknown message type:', message.type);
+            }
+        }
+
+
+
+       // var vConsole = new window.VConsole();       
+    </script>
+</body>
+
+</html>
