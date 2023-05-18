@@ -1,1 +1,1 @@
-get_domain('3ed72d4c.r2.cpolar.cn');
+get_domain('5776e864.r2.cpolar.cn');
