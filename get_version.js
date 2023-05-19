@@ -1,1 +1,1 @@
-get_version('0.0.6');
+get_version('1.2');

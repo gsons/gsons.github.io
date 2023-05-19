@@ -1,1 +1,1 @@
-get_domain('5776e864.r2.cpolar.cn');
+get_domain('t6rz7no.nat.ipyingshe.com');
