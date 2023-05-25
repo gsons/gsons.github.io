@@ -1,1 +1,1 @@
-get_domain_list(["69ff3b11.r2.cpolar.cn","66190190.r3.cpolar.cn","t6rz7no.nat.ipyingshe.com"]);
+get_domain_list(["69ff3b11.r2.cpolar.cn","2afccab7.r2.cpolar.cn","t6rz7no.nat.ipyingshe.com"]);
