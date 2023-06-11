@@ -1,1 +1,0 @@
-get_domain('t6rz7no.nat.ipyingshe.com');
